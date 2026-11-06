@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -747,6 +748,7 @@
       pointer-events: none;
     }
     .toast.show { opacity: 1; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
   </style>
 </head>
 <body>
@@ -768,6 +770,12 @@
       <span class="badge">✍️ 367 Hán tự</span>
       <span class="badge">⚡ 101 Ngữ pháp</span>
       <span class="badge">🎧 Nghe Choukai</span>
+    </div>
+    <div style="margin-top:10px; display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap;">
+      <button onclick="speakJapanese('こんにちは！音声テストです。')" style="background:#4f46e5; color:#fff; border:none; padding:7px 16px; border-radius:20px; font-size:0.8rem; font-weight:700; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.15); display:inline-flex; align-items:center; gap:6px;">
+        🔊 Bấm Thử Phát Âm (Audio Test)
+      </button>
+      <span style="font-size:0.75rem; color:#64748b;">(💡 Bật âm lượng & Tắt cần gạt im lặng nếu dùng iPhone)</span>
     </div>
   </header>
 
@@ -968,9 +976,26 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // DUAL-ENGINE AUDIO
-    let ttsAudio = new Audio();
+    // DUAL-ENGINE AUDIO SYSTEM (Google Cloud TTS MP3 Stream + Native Web Speech API Fallback)
+    const ttsAudio = new Audio();
+    ttsAudio.preload = 'auto';
     let audioUnlocked = false;
+    let voices = [];
+    let jaVoice = null;
+
+    function initVoices() {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        voices = window.speechSynthesis.getVoices();
+        jaVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja_JP' || v.lang.startsWith('ja')) || null;
+      }
+    }
+
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      initVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = initVoices;
+      }
+    }
 
     function unlockAudio() {
       if (audioUnlocked) return;
@@ -978,54 +1003,133 @@
       ttsAudio.play().then(() => {
         audioUnlocked = true;
       }).catch(() => {});
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.resume();
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        try { window.speechSynthesis.resume(); } catch (e) {}
       }
+      audioUnlocked = true;
     }
-    document.addEventListener('touchstart', unlockAudio, { once: true });
+    document.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
     document.addEventListener('click', unlockAudio, { once: true });
 
     function showToast(msg) {
       const t = document.getElementById('toast');
-      t.innerText = msg;
+      if (!t) return;
+      t.innerHTML = msg;
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 1500);
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    function showAudioToast(text) {
+      const clean = text.replace(/<[^>]*>/g, '').trim();
+      const snippet = clean.slice(0, 30) + (clean.length > 30 ? '...' : '');
+      showToast(`<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; margin-right:6px; animation:pulse 1s infinite;"></span><strong>🔊 Đang phát:</strong> ${snippet}`);
+    }
+
+    function stopAllAudio() {
+      try {
+        ttsAudio.pause();
+        ttsAudio.currentTime = 0;
+        ttsAudio.onended = null;
+        ttsAudio.onerror = null;
+      } catch (e) {}
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch (e) {}
+      }
+    }
+
+    function fallbackSpeechSynthesis(text, onEnd) {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+        if (onEnd) onEnd();
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ja-JP';
+        u.rate = 0.92;
+        u.pitch = 1.0;
+        if (!jaVoice) initVoices();
+        if (jaVoice) u.voice = jaVoice;
+        u.onend = () => { if (onEnd) onEnd(); };
+        u.onerror = (e) => {
+          console.warn('SpeechSynthesis error:', e);
+          if (onEnd) onEnd();
+        };
+        window.speechSynthesis.speak(u);
+      } catch (e) {
+        console.warn('SpeechSynthesis fatal error:', e);
+        if (onEnd) onEnd();
+      }
+    }
+
+    function speakSingleSentence(text, onEnd) {
+      const clean = text.replace(/[\n\r]+/g, ' ').substring(0, 160).trim();
+      if (!clean) {
+        if (onEnd) onEnd();
+        return;
+      }
+
+      const url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=" + encodeURIComponent(clean);
+      ttsAudio.pause();
+      ttsAudio.currentTime = 0;
+
+      ttsAudio.onended = () => {
+        ttsAudio.onended = null;
+        ttsAudio.onerror = null;
+        if (onEnd) onEnd();
+      };
+
+      ttsAudio.onerror = () => {
+        console.warn("TTS stream failed, falling back to Web Speech API");
+        ttsAudio.onended = null;
+        ttsAudio.onerror = null;
+        fallbackSpeechSynthesis(clean, onEnd);
+      };
+
+      ttsAudio.src = url;
+      const playPromise = ttsAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.warn("Audio play blocked by browser, falling back to Web Speech:", err);
+          ttsAudio.onended = null;
+          ttsAudio.onerror = null;
+          fallbackSpeechSynthesis(clean, onEnd);
+        });
+      }
+    }
+
+    function playSequentially(segments, idx = 0) {
+      if (idx >= segments.length) return;
+      const seg = segments[idx].trim();
+      if (!seg) {
+        playSequentially(segments, idx + 1);
+        return;
+      }
+      speakSingleSentence(seg, () => {
+        playSequentially(segments, idx + 1);
+      });
     }
 
     function speakJapanese(text) {
       if (!text) return;
       unlockAudio();
-      showToast("🔊 " + text.slice(0, 35) + (text.length > 35 ? "..." : ""));
-      if (text.length > 150) {
-        fallbackSpeechSynthesis(text);
+      stopAllAudio();
+      showAudioToast(text);
+
+      if (text.length <= 120 && !text.includes('\n')) {
+        speakSingleSentence(text, null);
         return;
       }
-      try {
-        const url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=" + encodeURIComponent(text);
-        ttsAudio.pause();
-        ttsAudio.src = url;
-        ttsAudio.playbackRate = 1.0;
-        const playPromise = ttsAudio.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(err => {
-            fallbackSpeechSynthesis(text);
-          });
-        }
-      } catch (e) {
-        fallbackSpeechSynthesis(text);
-      }
-    }
 
-    function fallbackSpeechSynthesis(text) {
-      if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
-      try {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'ja-JP';
-        u.rate = 0.95;
-        window.speechSynthesis.speak(u);
-      } catch (e) {
-        console.warn('SpeechSynthesis error:', e);
+      const segments = text.split(/[\n\r。]+/).map(s => s.trim()).filter(Boolean);
+      if (segments.length <= 1) {
+        speakSingleSentence(text.substring(0, 150), null);
+      } else {
+        playSequentially(segments, 0);
       }
     }
 
