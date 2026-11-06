@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Luyện Thi JLPT N3 Toàn Diện - Từ Vựng, Ngữ Pháp, Hán Tự & Choukai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .jp-font {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .card-flip {
+      perspective: 1000px;
+    }
+    .card-inner {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen pb-24">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-4xl mx-auto px-4 py-2.5">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-pink-600 to-amber-500 flex items-center justify-center text-white shadow-sm shadow-rose-200">
+            <i class="fa-solid fa-award text-sm"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h1 class="text-base font-bold text-slate-900 leading-tight">Luyện Thi JLPT N3</h1>
+              <span class="bg-rose-500 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow-2xs">Trọng Tâm</span>
+            </div>
+            <p class="text-[11px] text-rose-700 font-semibold flex items-center gap-1">
+              <span>103 Từ Vựng</span> &bull; 
+              <span>55 Ngữ Pháp</span> &bull; 
+              <span>30 Hán Tự</span> &bull; 
+              <span>Choukai Luyện Nghe</span>
+            </p>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-1.5">
+          <a href="https://tranthingocha-teo.github.io/tieng-nhat-chuyen-nganh-4/" class="px-2 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center gap-1 transition">
+            <i class="fa-solid fa-arrow-right-arrow-left text-[10px]"></i>
+            <span>CN 4 (N3)</span>
+          </a>
+          <a href="jlpt_n3_tong_hop_toan_dien.md" download class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 transition">
+            <i class="fa-solid fa-download text-rose-600"></i>
+            <span>.MD</span>
+          </a>
+          <a href="jlpt_n3_tu_vung_ngu_phap.csv" download class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1 transition">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>Anki</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- SEARCH BOX -->
+      <div class="mt-2 relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        <input 
+          id="searchInput" 
+          type="text" 
+          placeholder="Tìm từ vựng, phó từ, ngữ pháp, kanji, nghĩa tiếng Việt, romaji..." 
+          class="w-full bg-slate-100 focus:bg-white pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm font-medium border border-transparent focus:border-rose-500 focus:outline-none transition shadow-2xs"
+        />
+        <button id="clearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- AUDIO TIP BANNER -->
+    <div class="bg-amber-50 border-y border-amber-200/80 px-4 py-2 text-[11px] text-amber-900">
+      <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+        <span class="flex items-center gap-1.5 font-medium leading-tight">
+          <i class="fa-solid fa-volume-high text-amber-600 shrink-0"></i>
+          <span>Nếu không nghe tiếng: Hãy <strong>tăng âm lượng</strong> và <strong>gạt tắt chế độ Im lặng/Rung (trên iPhone)</strong> nhé!</span>
+        </span>
+        <button onclick="speakJapanese('こんにちは、N3の合格を目指して頑張りましょう')" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-[10px] shrink-0 active:scale-95 transition shadow-xs flex items-center gap-1">
+          <i class="fa-solid fa-play text-[9px]"></i> Thử loa 🔊
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW MODE TABS -->
+    <div class="max-w-4xl mx-auto px-4 flex items-center justify-between text-xs font-semibold overflow-x-auto no-scrollbar">
+      <div class="flex space-x-3 sm:space-x-5 py-0.5 whitespace-nowrap">
+        <button onclick="switchTab('vocab')" id="tabBtnVocab" class="py-2.5 border-b-2 border-rose-600 text-rose-600 flex items-center gap-1.5 transition font-bold">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Từ vựng N3 (<span id="vocabCountBadge">103</span>)</span>
+        </button>
+        <button onclick="switchTab('grammar')" id="tabBtnGrammar" class="py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-book-bookmark text-amber-500"></i>
+          <span>Ngữ pháp N3 (<span id="grammarCountBadge">55</span>)</span>
+        </button>
+        <button onclick="switchTab('kanji')" id="tabBtnKanji" class="py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-shapes text-violet-500"></i>
+          <span>Hán tự N3 (<span id="kanjiCountBadge">30</span>)</span>
+        </button>
+        <button onclick="switchTab('choukai')" id="tabBtnChoukai" class="py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-headphones text-blue-500"></i>
+          <span class="text-blue-700 font-bold">Luyện Nghe Choukai</span>
+        </button>
+        <button onclick="switchTab('flashcard')" id="tabBtnFlashcard" class="py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-layer-group text-purple-500"></i>
+          <span>Flashcard</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- HORIZONTAL FILTER CHIPS -->
+    <div class="bg-slate-50 border-t border-slate-200/60 py-2 px-4 overflow-x-auto no-scrollbar flex items-center space-x-1.5 max-w-4xl mx-auto" id="filterChipsContainer">
+      <!-- Injected by JS -->
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-4xl mx-auto px-4 pt-3">
+
+    <!-- VIEW 1: VOCABULARY LIST -->
+    <section id="vocabView" class="space-y-2">
+      <div class="bg-rose-50/70 border border-rose-100 rounded-xl px-3 py-2 text-xs text-rose-900 flex items-center justify-between">
+        <span class="flex items-center gap-1.5 font-medium">
+          <i class="fa-solid fa-circle-info text-rose-600"></i>
+          <span>Chạm vào <strong>bất kỳ từ vựng nào</strong> để nghe phát âm tiếng Nhật chuẩn Google TTS!</span>
+        </span>
+        <span class="text-[10px] bg-white px-2 py-0.5 rounded-full font-bold text-rose-700 shadow-2xs">ja-JP</span>
+      </div>
+      <div id="vocabListContainer" class="space-y-2"></div>
+      <div id="vocabEmpty" class="hidden text-center py-16">
+        <p class="text-sm font-semibold text-slate-600">Không tìm thấy từ vựng phù hợp</p>
+      </div>
+    </section>
+
+    <!-- VIEW 2: GRAMMAR LIST -->
+    <section id="grammarView" class="hidden space-y-2.5">
+      <div id="grammarListContainer" class="space-y-2.5"></div>
+      <div id="grammarEmpty" class="hidden text-center py-16">
+        <p class="text-sm font-semibold text-slate-600">Không tìm thấy mẫu ngữ pháp phù hợp</p>
+      </div>
+    </section>
+
+    <!-- VIEW 3: KANJI LIST -->
+    <section id="kanjiView" class="hidden space-y-2.5">
+      <div id="kanjiListContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+      <div id="kanjiEmpty" class="hidden text-center py-16">
+        <p class="text-sm font-semibold text-slate-600">Không tìm thấy chữ Hán phù hợp</p>
+      </div>
+    </section>
+
+    <!-- VIEW 4: CHOUKAI LISTENING PRACTICE -->
+    <section id="choukaiView" class="hidden space-y-3">
+      <div id="choukaiContainer" class="space-y-3.5"></div>
+    </section>
+
+    <!-- VIEW 5: FLASHCARD MODE -->
+    <section id="flashcardView" class="hidden">
+      <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm max-w-md mx-auto">
+        <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-3">
+          <span id="fcProgress">Thẻ 1 / 103</span>
+          <span id="fcTag" class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-bold">N3 Vocab</span>
+        </div>
+
+        <div class="card-flip w-full h-64 cursor-pointer" onclick="flipCard()">
+          <div id="fcInner" class="card-inner relative w-full h-full rounded-2xl shadow-sm border border-slate-200/80 bg-gradient-to-br from-rose-50/50 to-white">
+            <div class="card-front absolute inset-0 p-6 flex flex-col items-center justify-center text-center">
+              <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider mb-2">Chạm để lật &bull; Bấm để nghe</span>
+              <h2 id="fcFrontVocab" class="text-3xl font-bold text-slate-900 jp-font tracking-tight mb-2">思い付く</h2>
+              <p id="fcFrontYomi" class="text-sm text-slate-400 jp-font">おもいつく</p>
+              <button onclick="event.stopPropagation(); speakJapanese(document.getElementById('fcFrontVocab').innerText)" class="mt-4 w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center hover:scale-105 active:scale-95 transition shadow-sm shadow-rose-300">
+                <i class="fa-solid fa-volume-high text-xs"></i>
+              </button>
+            </div>
+            <div class="card-back absolute inset-0 p-6 flex flex-col items-center justify-center text-center bg-white rounded-2xl">
+              <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-2">Ý nghĩa & Ví dụ</span>
+              <p id="fcBackVie" class="text-xl font-bold text-slate-900 mb-2">Nghĩ ra, nảy ra ý tưởng</p>
+              <p id="fcBackEx" class="text-xs text-slate-600 font-medium mb-3 jp-font">いいアイデアを思い付いた。</p>
+              <div class="px-3 py-1 bg-slate-100 rounded-lg text-xs font-semibold text-slate-600 jp-font" id="fcBackReading">
+                おもいつく
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between mt-5">
+          <button onclick="prevCard()" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm font-bold transition active:scale-95">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button onclick="shuffleCards()" class="px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+            <i class="fa-solid fa-shuffle"></i>
+            <span>Xáo trộn</span>
+          </button>
+          <button onclick="nextCard()" class="w-12 h-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center text-sm font-bold transition shadow-sm shadow-rose-300 active:scale-95">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const VOCAB_DATA = [{"cat": "Động từ ghép", "vocab": "思い付く", "yomi": "おもいつく", "hanviet": "TƯ PHÓ", "mean": "Nghĩ ra, nảy ra (ý tưởng)", "ex": "いいアイデアを思い付いた。"}, {"cat": "Động từ ghép", "vocab": "立ち止まる", "yomi": "たちどまる", "hanviet": "LẬP CHỈ", "mean": "Đứng lại, dừng bước", "ex": "足を止めて立ち止まる。"}, {"cat": "Động từ ghép", "vocab": "飛び出す", "yomi": "とびだす", "hanviet": "PHI XUẤT", "mean": "Phi ra, lao ra đột ngột", "ex": "子供が道に飛び出した。"}, {"cat": "Động từ ghép", "vocab": "引き受ける", "yomi": "ひきうける", "hanviet": "DẪN THỤ", "mean": "Đảm nhận, nhận làm (trách nhiệm)", "ex": "新しい仕事を引き受ける。"}, {"cat": "Động từ ghép", "vocab": "取り上げる", "yomi": "とりあげる", "hanviet": "THỦ THƯỢNG", "mean": "Cầm lên, tịch thu, đưa ra bàn luận", "ex": "会議でそのテーマを取り上げる。"}, {"cat": "Động từ ghép", "vocab": "追い越す", "yomi": "おいこす", "hanviet": "TRUY VIỆT", "mean": "Vượt qua (xe cộ, thành tích)", "ex": "前の車を追い越した。"}, {"cat": "Động từ ghép", "vocab": "見直す", "yomi": "みなおす", "hanviet": "KIẾN TRỰC", "mean": "Xem xét lại, đánh giá lại", "ex": "計画をもう一度見直す。"}, {"cat": "Động từ ghép", "vocab": "受け入れる", "yomi": "うけいれる", "hanviet": "THỤ NHẬP", "mean": "Tiếp nhận, chấp nhận (ý kiến)", "ex": "留学生を受け入れる。"}, {"cat": "Động từ ghép", "vocab": "差し引く", "yomi": "さしひく", "hanviet": "SAI DẪN", "mean": "Khấu trừ, trừ đi", "ex": "給料から税金を差し引く。"}, {"cat": "Động từ ghép", "vocab": "打ち合わせる", "yomi": "うちあわせる", "hanviet": "ĐẢ HỢP", "mean": "Bàn bạc, họp thảo luận trước", "ex": "事前に詳細を打ち合わせる。"}, {"cat": "Động từ ghép", "vocab": "問い合わせる", "yomi": "といあわせる", "hanviet": "VẤN HỢP", "mean": "Hỏi thăm, liên hệ hỏi thông tin", "ex": "窓口に問い合わせる。"}, {"cat": "Động từ ghép", "vocab": "立て替える", "yomi": "たてかえる", "hanviet": "LẬP THẾ", "mean": "Trả tiền trước, ứng trước", "ex": "交通費を立て替えておく。"}, {"cat": "Động từ ghép", "vocab": "申し込む", "yomi": "もうしこむ", "hanviet": "THÂN NHẬP", "mean": "Đăng ký (thi, khóa học)", "ex": "試験の受験を申し込む。"}, {"cat": "Động từ ghép", "vocab": "乗り換える", "yomi": "のりかえる", "hanviet": "THỪA HOÁN", "mean": "Đổi tàu/xe, chuyển đổi hãng", "ex": "新宿駅で電車を乗り換える。"}, {"cat": "Động từ ghép", "vocab": "問い合わせ", "yomi": "といあわせ", "hanviet": "VẤN HỢP", "mean": "Nơi tiếp nhận thắc mắc", "ex": "ホームページから問い合わせる。"}, {"cat": "Phó từ N3", "vocab": "さっぱり", "yomi": "さっぱり", "hanviet": "Phó từ", "mean": "Sảng khoái / Hoàn toàn không (〜ない)", "ex": "シャワーを浴びてさっぱりした。説明を聞いてもさっぱりわからない。"}, {"cat": "Phó từ N3", "vocab": "すっかり", "yomi": "すっかり", "hanviet": "Phó từ", "mean": "Hoàn toàn, sạch trơn", "ex": "約束をすっかり忘れていた。"}, {"cat": "Phó từ N3", "vocab": "ぴったり", "yomi": "ぴったり", "hanviet": "Phó từ", "mean": "Vừa vặn, khớp hoàn toàn", "ex": "サイズがぴったり合っている。"}, {"cat": "Phó từ N3", "vocab": "ぐっすり", "yomi": "ぐっすり", "hanviet": "Phó từ", "mean": "Ngủ say sưa, ngủ say", "ex": "昨夜はぐっすり眠れた。"}, {"cat": "Phó từ N3", "vocab": "うっかり", "yomi": "うっかり", "hanviet": "Phó từ", "mean": "Lơ đễnh, vô ý, lỡ làm", "ex": "うっかり秘密を話してしまった。"}, {"cat": "Phó từ N3", "vocab": "がっかり", "yomi": "がっかり", "hanviet": "Phó từ", "mean": "Thất vọng, nản lòng", "ex": "試験に落ちてがっかりした。"}, {"cat": "Phó từ N3", "vocab": "そっくり", "yomi": "そっくり", "hanviet": "Phó từ", "mean": "Giống hệt như đúc", "ex": "彼は父親にそっくりだ。"}, {"cat": "Phó từ N3", "vocab": "ぼんやり", "yomi": "ぼんやり", "hanviet": "Phó từ", "mean": "Mờ ảo, mơ màng, lơ đãng", "ex": "遠くがぼんやり見える。ぼんやり過ごす。"}, {"cat": "Phó từ N3", "vocab": "きっぱり", "yomi": "きっぱり", "hanviet": "Phó từ", "mean": "Dứt khoát, thẳng thừng", "ex": "断るときはきっぱり断る。"}, {"cat": "Phó từ N3", "vocab": "あっさり", "yomi": "あっさり", "hanviet": "Phó từ", "mean": "Thanh đạm (vị) / Dễ dàng, chóng vánh", "ex": "あっさりした味。あっさり負けた。"}, {"cat": "Phó từ N3", "vocab": "たまたま", "yomi": "たまたま", "hanviet": "Phó từ", "mean": "Tình cờ, ngẫu nhiên", "ex": "駅でたまたま友達に会った。"}, {"cat": "Phó từ N3", "vocab": "せっかく", "yomi": "せっかく", "hanviet": "Phó từ", "mean": "Đã mất công / Hiếm có dịp", "ex": "せっかくの休みなのに雨だ。"}, {"cat": "Phó từ N3", "vocab": "めったに", "yomi": "めったに", "hanviet": "Phó từ", "mean": "Hiếm khi (đi với phủ định 〜ない)", "ex": "こんなチャンスはめったにない。"}, {"cat": "Phó từ N3", "vocab": "まさか", "yomi": "まさか", "hanviet": "Phó từ", "mean": "Không đời nào, làm sao có chuyện", "ex": "まさか彼が犯人だとは。"}, {"cat": "Phó từ N3", "vocab": "いったい", "yomi": "いったい", "hanviet": "NHẤT THỂ", "mean": "Rốt cuộc là (câu hỏi)", "ex": "いったい何が起こったのか。"}, {"cat": "Phó từ N3", "vocab": "とうとう", "yomi": "とうとう", "hanviet": "Phó từ", "mean": "Cuối cùng thì (kết quả sau thời gian dài)", "ex": "とうとう完成した。"}, {"cat": "Phó từ N3", "vocab": "ついに", "yomi": "ついに", "hanviet": "Phó từ", "mean": "Cuối cùng thì (nỗ lực đạt được)", "ex": "ついに夢が実現した。"}, {"cat": "Phó từ N3", "vocab": "いきなり", "yomi": "いきなり", "hanviet": "Phó từ", "mean": "Bất thình lình, đột ngột", "ex": "いきなり大声を出された。"}, {"cat": "Phó từ N3", "vocab": "ようやく", "yomi": "ようやく", "hanviet": "Phó từ", "mean": "Cuối cùng thì (đợi chờ mòn mỏi)", "ex": "ようやく春がやってきた。"}, {"cat": "Phó từ N3", "vocab": "いよいよ", "yomi": "いよいよ", "hanviet": "Phó từ", "mean": "Càng ngày càng / Giờ G đã đến", "ex": "いよいよ明日が本番だ。"}, {"cat": "Phó từ N3", "vocab": "わざわざ", "yomi": "わざわざ", "hanviet": "Phó từ", "mean": "Cất công, đặc biệt làm vì ai", "ex": "わざわざ来てくれてありがとう。"}, {"cat": "Phó từ N3", "vocab": "思い切り", "yomi": "おもいきり", "hanviet": "TƯ THIẾT", "mean": "Hết mình, thỏa thích", "ex": "休日は思い切り遊ぶ。"}, {"cat": "Phó từ N3", "vocab": "いっぺんに", "yomi": "いっぺんに", "hanviet": "NHẤT BIẾN", "mean": "Cùng một lúc, một lượt", "ex": "いっぺんにたくさんの事を頼むな。"}, {"cat": "Tính từ N3", "vocab": "大ざっぱ", "yomi": "おおざっぱ", "hanviet": "ĐẠI", "mean": "Đại khái, sơ sài, qua loa", "ex": "大ざっぱな性格で細かいことを気にしない。"}, {"cat": "Tính từ N3", "vocab": "わがまま", "yomi": "わがまま", "hanviet": "Tính từ", "mean": "Ích kỷ, bướng bỉnh theo ý mình", "ex": "わがままを言って周りを困らせる。"}, {"cat": "Tính từ N3", "vocab": "くだらない", "yomi": "くだらない", "hanviet": "Tính từ", "mean": "Vô vị, tầm phào, nhảm nhí", "ex": "くだらない冗談はやめてくれ。"}, {"cat": "Tính từ N3", "vocab": "みっともない", "yomi": "みっともない", "hanviet": "Tính từ", "mean": "Khó coi, xấu hổ, mất thể diện", "ex": "そんなみっともない格好をするな。"}, {"cat": "Tính từ N3", "vocab": "険しい", "yomi": "けわしい", "hanviet": "HIỂM", "mean": "Hiểm trở / Gay gắt (vẻ mặt)", "ex": "険しい山道。険しい表情。"}, {"cat": "Tính từ N3", "vocab": "惜しい", "yomi": "おしい", "hanviet": "TÍCH", "mean": "Đáng tiếc (sát nút) / Tiếc của", "ex": "あと1点で合格だったのに惜しかった。"}, {"cat": "Tính từ N3", "vocab": "悔しい", "yomi": "くやしい", "hanviet": "HỐI", "mean": "Cay cú, tiếc nuối, bực bội", "ex": "負けてとても悔しい。"}, {"cat": "Tính từ N3", "vocab": "怪しい", "yomi": "あやしい", "hanviet": "QUÁI", "mean": "Đáng ngờ, khả nghi", "ex": "怪しい男が家の前を歩いている。"}, {"cat": "Tính từ N3", "vocab": "鋭い", "yomi": "するどい", "hanviet": "NHUỆ", "mean": "Sắc bén, nhạy bén (dao, trực giác)", "ex": "鋭い指摘を受ける。"}, {"cat": "Tính từ N3", "vocab": "鈍い", "yomi": "にぶい", "hanviet": "ĐỘN", "mean": "Cùn / Chậm chạp, đờ đẫn", "ex": "反応が鈍い。刃が鈍い。"}, {"cat": "Tính từ N3", "vocab": "曖昧", "yomi": "あいまい", "hanviet": "ÁI MUỘI", "mean": "Mơ hồ, mập mờ, không rõ ràng", "ex": "曖昧な返事をするな。"}, {"cat": "Tính từ N3", "vocab": "厄介", "yomi": "やっかい", "hanviet": "ÁCH GIỚI", "mean": "Phiền phức, rắc rối", "ex": "厄介な問題に巻き込まれた。"}, {"cat": "Tính từ N3", "vocab": "慎重", "yomi": "しんちょう", "hanviet": "THẬN TRỌNG", "mean": "Thận trọng, cẩn thận", "ex": "慎重に行動する。"}, {"cat": "Tính từ N3", "vocab": "頑固", "yomi": "がんこ", "hanviet": "NGOAN CỐ", "mean": "Ngoan cố, cứng đầu", "ex": "自分の意見を曲げない頑固な人。"}, {"cat": "Tính từ N3", "vocab": "謙虚", "yomi": "けんきょ", "hanviet": "KHIÊM HƯ", "mean": "Khiêm tốn, khiêm nhường", "ex": "どんな時も謙虚な態度を忘れない。"}, {"cat": "Danh từ N3", "vocab": "きっかけ", "yomi": "きっかけ", "hanviet": "Danh từ", "mean": "Cơ duyên, động cơ, bước ngoặt", "ex": "日本のアニメをきっかけに勉強を始めた。"}, {"cat": "Danh từ N3", "vocab": "影響", "yomi": "えいきょう", "hanviet": "ẢNH HƯỞNG", "mean": "Ảnh hưởng", "ex": "気候変動が農業に大きな影響を与える。"}, {"cat": "Danh từ N3", "vocab": "効果", "yomi": "こうか", "hanviet": "HIỆU QUẢ", "mean": "Hiệu quả, tác dụng", "ex": "薬の効果がすぐに現れた。"}, {"cat": "Danh từ N3", "vocab": "印象", "yomi": "いんしょう", "hanviet": "ẤN TƯỢNG", "mean": "Ấn tượng", "ex": "第一印象がとても良かった。"}, {"cat": "Danh từ N3", "vocab": "態度", "yomi": "たいど", "hanviet": "THÁI ĐỘ", "mean": "Thái độ", "ex": "仕事に対する真面目な態度。"}, {"cat": "Danh từ N3", "vocab": "状態", "yomi": "じょうたい", "hanviet": "TRẠNG THÁI", "mean": "Trạng thái, tình trạng", "ex": "健康状態を良好に保つ。"}, {"cat": "Danh từ N3", "vocab": "傾向", "yomi": "けいこう", "hanviet": "KHUYNH HƯỚNG", "mean": "Xu hướng, khuynh hướng", "ex": "若者の読書離れの傾向がある。"}, {"cat": "Danh từ N3", "vocab": "割合", "yomi": "わりあい", "hanviet": "CÁT HỢP", "mean": "Tỷ lệ / Tương đối", "ex": "女性社員の割合が増加した。"}, {"cat": "Danh từ N3", "vocab": "基準", "yomi": "きじゅん", "hanviet": "CƠ CHUẨN", "mean": "Tiêu chuẩn, chuẩn mực", "ex": "合格の基準を明確にする。"}, {"cat": "Danh từ N3", "vocab": "限界", "yomi": "げんかい", "hanviet": "HẠN GIỚI", "mean": "Giới hạn (sức chịu đựng, năng lực)", "ex": "体力の限界まで頑張った。"}, {"cat": "Danh từ N3", "vocab": "事情", "yomi": "じじょう", "hanviet": "SỰ TÌNH", "mean": "Hoàn cảnh, lý do riêng", "ex": "家庭の事情で早退する。"}, {"cat": "Danh từ N3", "vocab": "規模", "yomi": "きぼ", "hanviet": "QUY MÔ", "mean": "Quy mô", "ex": "会社が大規模に事業を展開する。"}, {"cat": "Danh từ N3", "vocab": "予算", "yomi": "よさん", "hanviet": "DỰ TOÁN", "mean": "Ngân sách", "ex": "予算オーバーにならないよう気をつける。"}, {"cat": "Danh từ N3", "vocab": "利益", "yomi": "りえき", "hanviet": "LỢI ÍCH", "mean": "Lợi nhuận, lợi ích", "ex": "会社の利益を最大化する。"}, {"cat": "Danh từ N3", "vocab": "苦情", "yomi": "くじょう", "hanviet": "KHỔ TÌNH", "mean": "Phàn nàn, khiếu nại (Claim)", "ex": "顧客からの苦情に対応する。"}, {"cat": "Danh từ N3", "vocab": "支障", "yomi": "ししょう", "hanviet": "CHI CHƯỚNG", "mean": "Trở ngại, ảnh hưởng xấu", "ex": "業務に支障をきたす。"}, {"cat": "Katakana N3", "vocab": "スケジュール", "yomi": "スケジュール", "hanviet": "Schedule", "mean": "Lịch trình, kế hoạch", "ex": "スケジュールを調整する。"}, {"cat": "Katakana N3", "vocab": "アイデア", "yomi": "アイデア", "hanviet": "Idea", "mean": "Ý tưởng sáng tạo", "ex": "画期的なアイデアを出す。"}, {"cat": "Katakana N3", "vocab": "アピール", "yomi": "アピール", "hanviet": "Appeal", "mean": "Quảng bá, thể hiện thế mạnh (PR)", "ex": "自分の強みをアピールする。"}, {"cat": "Katakana N3", "vocab": "キャンセル", "yomi": "キャンセル", "hanviet": "Cancel", "mean": "Hủy bỏ", "ex": "予約をキャンセルする。"}, {"cat": "Katakana N3", "vocab": "トラブル", "yomi": "トラブル", "hanviet": "Trouble", "mean": "Sự cố, rắc rối", "ex": "思わぬトラブルが発生した。"}, {"cat": "Katakana N3", "vocab": "メリット", "yomi": "メリット", "hanviet": "Merit", "mean": "Lợi ích, ưu điểm", "ex": "この方法には多くのメリットがある。"}, {"cat": "Katakana N3", "vocab": "デメリット", "yomi": "デメリット", "hanviet": "Demerit", "mean": "Nhược điểm, điểm bất lợi", "ex": "メリットとデメリットを比較する。"}, {"cat": "Động từ ghép", "vocab": "受け持つ", "yomi": "うけもつ", "hanviet": "THỤ TRÌ", "mean": "Đảm nhiệm, phụ trách (lớp, phần việc)", "ex": "3年生のクラスを受け持つ。"}, {"cat": "Động từ ghép", "vocab": "取り消す", "yomi": "とりけす", "hanviet": "THỦ TIÊU", "mean": "Hủy bỏ (lời nói, đơn đặt hàng)", "ex": "注文を取り消す。"}, {"cat": "Động từ ghép", "vocab": "見送る", "yomi": "みおくる", "hanviet": "KIẾN TỐNG", "mean": "Tiễn đưa / Hoãn lại (chưa làm vội)", "ex": "空港で友を見送る。計画の実行を見送る。"}, {"cat": "Động từ ghép", "vocab": "割り引く", "yomi": "わりびく", "hanviet": "CÁT DẪN", "mean": "Chiết khấu, giảm giá", "ex": "定価から2割割り引く。"}, {"cat": "Động từ ghép", "vocab": "張り切る", "yomi": "はりきる", "hanviet": "TRƯƠNG THIẾT", "mean": "Hăng hái, đầy khí thế", "ex": "新入社員が張り切って仕事をしている。"}, {"cat": "Động từ ghép", "vocab": "思い込む", "yomi": "おもいこむ", "hanviet": "TƯ NHẬP", "mean": "Đinh ninh, ngộ nhận (nghĩ sai mà tưởng thật)", "ex": "彼が独身だと思い込んでいた。"}, {"cat": "Động từ ghép", "vocab": "引き返す", "yomi": "ひきかえす", "hanviet": "DẪN PHẢN", "mean": "Quay trở lại, đi ngược lại", "ex": "忘れ物に気づいて家に引き返した。"}, {"cat": "Động từ ghép", "vocab": "差し出す", "yomi": "さしだす", "hanviet": "SAI XUẤT", "mean": "Đưa ra, chìa ra (danh thiếp, tay)", "ex": "名刺を両手で差し出す。"}, {"cat": "Động từ ghép", "vocab": "当てはまる", "yomi": "あてはまる", "hanviet": "ĐƯƠNG", "mean": "Phù hợp, thỏa mãn điều kiện", "ex": "条件に当てはまる人を選ぶ。"}, {"cat": "Động từ ghép", "vocab": "見合わせる", "yomi": "みあわせる", "hanviet": "KIẾN HỢP", "mean": "Nhìn nhau / Hoãn tạm thời (chờ tình hình)", "ex": "大雨のため電車の運転を見合わせる。"}, {"cat": "Phó từ N3", "vocab": "ぎっしり", "yomi": "ぎっしり", "hanviet": "Phó từ", "mean": "Chật ních, kín mít (lịch trình, vali)", "ex": "予定がぎっしり詰まっている。"}, {"cat": "Phó từ N3", "vocab": "ばったり", "yomi": "ばったり", "hanviet": "Phó từ", "mean": "Tình cờ bắt gặp / Ngã bất thình lình", "ex": "街でばったり旧友に会った。"}, {"cat": "Phó từ N3", "vocab": "こっそり", "yomi": "こっそり", "hanviet": "Phó từ", "mean": "Lén lút, vụng trộm", "ex": "夜中にこっそり部屋を出る。"}, {"cat": "Phó từ N3", "vocab": "あっという間に", "yomi": "あっというまに", "hanviet": "NHẤT GIAN", "mean": "Thoáng một cái, trong chớp mắt", "ex": "楽しい時間はあっという間に過ぎる。"}, {"cat": "Phó từ N3", "vocab": "じっくり", "yomi": "じっくり", "hanviet": "Phó từ", "mean": "Kỹ càng, thong thả suy nghĩ", "ex": "今後の進路についてじっくり考える。"}, {"cat": "Phó từ N3", "vocab": "いらいら", "yomi": "いらいら", "hanviet": "Phó từ", "mean": "Sốt ruột, bực bội nóng ruột", "ex": "バスが遅れていらいらする。"}, {"cat": "Phó từ N3", "vocab": "うろうろ", "yomi": "うろうろ", "hanviet": "Phó từ", "mean": "Đi quanh quẩn, lảng vảng", "ex": "道に迷ってうろうろ歩き回る。"}, {"cat": "Phó từ N3", "vocab": "のろのろ", "yomi": "のろのろ", "hanviet": "Phó từ", "mean": "Chậm chạp, rùa bò", "ex": "渋滞で車がのろのろ進む。"}, {"cat": "Phó từ N3", "vocab": "ぴかぴか", "yomi": "ぴかぴか", "hanviet": "Phó từ", "mean": "Sáng bóng, lấp lánh (sạch sẽ)", "ex": "靴をぴかぴかに磨く。"}, {"cat": "Phó từ N3", "vocab": "ぺらぺら", "yomi": "ぺらぺら", "hanviet": "Phó từ", "mean": "Lưu loát (ngoại ngữ) / Mỏng manh", "ex": "日本語がぺらぺら話せるようになりたい。"}, {"cat": "Danh từ N3", "vocab": "気配", "yomi": "けはい", "hanviet": "KHÍ PHỐI", "mean": "Dấu hiệu, cảm giác linh tính", "ex": "秋の気配が感じられる。人の気配がする。"}, {"cat": "Danh từ N3", "vocab": "手腕", "yomi": "しゅわん", "hanviet": "THỦ OẢN", "mean": "Năng lực, tài cán lãnh đạo", "ex": "経営の手腕を発揮する。"}, {"cat": "Danh từ N3", "vocab": "手配", "yomi": "てはい", "hanviet": "THỦ PHỐI", "mean": "Sắp xếp, chuẩn bị (vé, phòng, xe)", "ex": "出張用のホテルを手配する。"}, {"cat": "Danh từ N3", "vocab": "手間", "yomi": "てま", "hanviet": "THỦ GIAN", "mean": "Công sức, thời gian bỏ ra", "ex": "手間がかかる料理。"}, {"cat": "Danh từ N3", "vocab": "方針", "yomi": "ほうしん", "hanviet": "PHƯƠNG CHÂM", "mean": "Phương châm, định hướng chính sách", "ex": "会社の方針に従って行動する。"}, {"cat": "Danh từ N3", "vocab": "要領", "yomi": "ようりょう", "hanviet": "YẾU LÃNH", "mean": "Điểm mấu chốt, sự tháo vát lanh lợi", "ex": "要領がいい人。話の要領を得ない。"}, {"cat": "Danh từ N3", "vocab": "予感", "yomi": "よかん", "hanviet": "DỰ CẢM", "mean": "Linh cảm, dự cảm trước", "ex": "嫌な予感が当たる。"}];
+    const GRAMMAR_DATA = [{"cat": "1. Lý do & Nguyên nhân", "pattern": "〜おかげで", "connect": "V(普) / イA / ナAな / Nの + おかげで", "meaning": "Nhờ có... (kết quả tích cực)", "ex": "先生のご指導のおかげで、無事に合格できました。"}, {"cat": "1. Lý do & Nguyên nhân", "pattern": "〜せいで", "connect": "V(普) / イA / ナAな / Nの + せいで", "meaning": "Do, tại... (kết quả tiêu cực, đổ lỗi)", "ex": "寝坊したせいで、電車に乗り遅れてしまった。"}, {"cat": "1. Lý do & Nguyên nhân", "pattern": "〜によって / 〜により", "connect": "N + によって / により", "meaning": "Do / Bằng cách / Tùy theo (3 nghĩa)", "ex": "台風によって、電車が運転を見合わせている。人によって考え方が違う。"}, {"cat": "1. Lý do & Nguyên nhân", "pattern": "〜につき", "connect": "N + につき", "meaning": "Vì lý do... (dùng trong văn bản thông báo)", "ex": "店内改装中につき、本日は休業いたします。"}, {"cat": "1. Lý do & Nguyên nhân", "pattern": "〜あまり", "connect": "Vる / Vた / Nの + あまり", "meaning": "Vì quá... nên dẫn đến kết quả khác thường", "ex": "驚きのあまり、声も出なかった。"}, {"cat": "1. Lý do & Nguyên nhân", "pattern": "〜ばかりに", "connect": "Vた + ばかりに", "meaning": "Chỉ vì... mà chuốc lấy kết quả tồi tệ", "ex": "嘘をついたばかりに、信用を失ってしまった。"}, {"cat": "1. Lý do & Nguyên nhân", "pattern": "〜ものだから / 〜もので", "connect": "普通形 (ナAな / Nな) + ものだから", "meaning": "Tại vì... (phân trần, biện bạch lịch sự)", "ex": "道が混んでいたものですから、遅れてしまいました。"}, {"cat": "2. Đối lập & Tương phản", "pattern": "〜に対して", "connect": "N / 普(ナAな・である/Nな・である) + に対して", "meaning": "Ngược lại với... / Đối với...", "ex": "兄が社交的なのに対して、弟は物静かだ。"}, {"cat": "2. Đối lập & Tương phản", "pattern": "〜反面", "connect": "V(普) / イA / ナAな・である + 反面", "meaning": "Mặt khác, ngược lại (2 mặt của 1 vấn đề)", "ex": "都会は便利な反面、生活費が高くつく。"}, {"cat": "2. Đối lập & Tương phản", "pattern": "〜一方で", "connect": "V(普) / イA / ナAな・である + 一方で", "meaning": "Một mặt thì... mặt khác thì...", "ex": "彼は仕事を頑張る一方で、趣味の時間も大切にしている。"}, {"cat": "2. Đối lập & Tương phản", "pattern": "〜わりに（は）", "connect": "V(普) / イA / ナAな / Nの + わりに", "meaning": "So với... thì khá là (bất ngờ so với tiêu chuẩn)", "ex": "彼は年のわりには、とても若く見える。"}, {"cat": "2. Đối lập & Tương phản", "pattern": "〜くせに", "connect": "V(普) / イA / ナAな / Nの + くせに", "meaning": "Thế mà lại... (trách móc, khinh thị tiêu cực)", "ex": "何も知らないくせに、偉そうに口を出すな。"}, {"cat": "2. Đối lập & Tương phản", "pattern": "〜ものの", "connect": "V(普) / イA / ナAな / Nである + ものの", "meaning": "Tuy là... thật đấy nhưng mà...", "ex": "車の免許は取ったものの、まだ運転していない。"}, {"cat": "2. Đối lập & Tương phản", "pattern": "〜といっても", "connect": "普通形 + といっても", "meaning": "Dẫu nói là... nhưng thực tế không đến mức đó", "ex": "料理ができるといっても、簡単なものしか作れません。"}, {"cat": "3. Điều kiện & Giả định", "pattern": "〜としたら / 〜とすれば", "connect": "普通形 + としたら / とすれば", "meaning": "Giả sử nếu như... thì...", "ex": "生まれ変われるとしたら、鳥になりたい。"}, {"cat": "3. Đối lập & Tương phản", "pattern": "〜としても", "connect": "普通形 + としても", "meaning": "Cho dù là... đi chăng nữa thì...", "ex": "失敗したとしても、諦めずに挑戦し続ける。"}, {"cat": "3. Điều kiện & Giả định", "pattern": "〜ないことには〜ない", "connect": "Vない / イAくない / ナAでない + ことには", "meaning": "Nếu không... thì không thể...", "ex": "実際にやってみないことには、できるかどうかわからない。"}, {"cat": "3. Điều kiện & Giả định", "pattern": "〜さえ〜ば", "connect": "Nさえ + Vば / イAければ / ナAなら", "meaning": "Chỉ cần... là được (điều kiện duy nhất)", "ex": "体さえ健康なら、何でもできる。"}, {"cat": "3. Điều kiện & Giả định", "pattern": "〜ぬきで / 〜ぬきにしては", "connect": "N + ぬきで", "meaning": "Không có... / Bỏ qua... (thì không thể thành lập)", "ex": "冗談はぬきにして、本題に入りましょう。"}, {"cat": "4. Thời gian & Diễn tiến", "pattern": "〜うちに", "connect": "Vる / Vない / Vている / イA / ナAな / Nの + うちに", "meaning": "Trong khi còn... (tranh thủ trước khi đổi trạng thái)", "ex": "若いうちに、色々な経験をしておいたほうがいい。"}, {"cat": "4. Thời gian & Diễn tiến", "pattern": "〜最中に", "connect": "Vている / Nの + 最中に", "meaning": "Đúng vào lúc đang... thì sự việc bất ngờ chen ngang", "ex": "食事の最中に、突然地震が起きた。"}, {"cat": "4. Thời gian & Diễn tiến", "pattern": "〜際（に）", "connect": "Vる / Vた / Nの + 際（に）", "meaning": "Khi, lúc... (trang trọng hơn とき)", "ex": "非常の際は、エレベーターを使わないでください。"}, {"cat": "4. Thời gian & Diễn tiến", "pattern": "〜たとたん（に）", "connect": "Vた + とたん（に）", "meaning": "Vừa mới... thì ngay lập tức...", "ex": "窓を開けたとたんに、冷たい風が入ってきた。"}, {"cat": "4. Thời gian & Diễn tiến", "pattern": "〜て以来", "connect": "Vて + 以来", "meaning": "Kể từ sau khi... suốt từ đó đến nay", "ex": "日本に来て以来、ずっと一人暮らしをしている。"}, {"cat": "4. Thời gian & Diễn tiến", "pattern": "〜てはじめて", "connect": "Vて + はじめて", "meaning": "Sau khi... thì mới nhận ra / mới hiểu được", "ex": "病気になってはじめて、健康のありがたさを知った。"}, {"cat": "4. Thời gian & Diễn tiến", "pattern": "〜次第", "connect": "Vます(bỏ ます) + 次第", "meaning": "Ngay sau khi V xong sẽ lập tức làm... (công việc)", "ex": "詳しいことがわかり次第、すぐにご連絡いたします。"}, {"cat": "5. Mức độ & Phạm vi", "pattern": "〜にわたって", "connect": "N + にわたって", "meaning": "Suốt, trải khắp (thời gian, không gian rộng)", "ex": "3日間にわたって、国際会議が開催された。"}, {"cat": "5. Mức độ & Phạm vi", "pattern": "〜を通じて / 〜を通して", "connect": "N + を通じて / を通して", "meaning": "Suốt (thời gian) / Thông qua (phương tiện, người trung gian)", "ex": "四季を通じて、花が絶えない。友人の紹介を通じて知り合った。"}, {"cat": "5. Mức độ & Phạm vi", "pattern": "〜ばかりか / 〜ばかりでなく", "connect": "普通形 + ばかりか", "meaning": "Không chỉ... mà còn...", "ex": "彼は英語ばかりか、中国語も流暢に話せる。"}, {"cat": "5. Mức độ & Phạm vi", "pattern": "〜どころか", "connect": "普通形 / N + どころか", "meaning": "Nói gì đến... ngay cả... cũng không / Trái lại", "ex": "貯金どころか、借金が増える一方だ。"}, {"cat": "5. Mức độ & Phạm vi", "pattern": "〜をはじめ（として）", "connect": "N + をはじめ", "meaning": "Trước tiên phải kể đến là... (đại diện tiêu biểu)", "ex": "富士山をはじめ、日本には美しい山が多い。"}, {"cat": "6. Phán đoán & Nhận định", "pattern": "〜に違いない", "connect": "普通形 (ナA/N bỏ だ) + に違いない", "meaning": "Chắc chắn là... (phán đoán chủ quan mạnh mẽ)", "ex": "あんなに努力したのだから、彼なら合格するに違いない。"}, {"cat": "6. Phán đoán & Nhận định", "pattern": "〜はずがない / 〜わけがない", "connect": "普通形 (ナAな / Nの) + はずがない", "meaning": "Làm sao mà... được / Tuyệt đối không thể có chuyện...", "ex": "あんなに真面目な人が、嘘をつくはずがない。"}, {"cat": "6. Phán đoán & Nhận định", "pattern": "〜っこない", "connect": "Vます(bỏ ます) + っこない", "meaning": "Tuyệt đối không thể nào... (văn nói thân mật)", "ex": "一日で1000個の単語なんて、覚えられっこない。"}, {"cat": "6. Phán đoán & Nhận định", "pattern": "〜恐れがある", "connect": "Vる / Nの + 恐れがある", "meaning": "E rằng, có nguy cơ... (lo lắng điều tiêu cực)", "ex": "大雨で川が氾濫する恐れがある。"}, {"cat": "6. Phán đoán & Nhận định", "pattern": "〜に決まっている", "connect": "普通形 (ナA/N bỏ だ) + に決まっている", "meaning": "Nhất định là, không trật đi đâu được", "ex": "そんな甘い話、詐欺に決まっている。"}, {"cat": "7. Khuyên nhủ & Ý chí", "pattern": "〜べきだ / 〜べきではない", "connect": "Vる + べきだ (する→すべき)", "meaning": "Nên / Không nên... (về mặt đạo đức, thường thức)", "ex": "約束は絶対に守るべきだ。"}, {"cat": "7. Khuyên nhủ & Ý chí", "pattern": "〜ことだ", "connect": "Vる / Vない + ことだ", "meaning": "Nên / Tốt nhất là nên... (lời khuyên trực tiếp)", "ex": "早く日本語が上手になりたければ、毎日話すことだ。"}, {"cat": "7. Khuyên nhủ & Ý chí", "pattern": "〜ものだ / 〜ものではない", "connect": "Vる / Vない + ものだ", "meaning": "Bản chất tự nhiên là... / Đương nhiên là...", "ex": "人の悪口は言うものではない。"}, {"cat": "7. Khuyên nhủ & Ý chí", "pattern": "〜ようとする", "connect": "V ý chí + とする", "meaning": "Đang định làm gì / Cố gắng làm gì", "ex": "出かけようとしたときに、電話が鳴った。"}, {"cat": "7. Khuyên nhủ & Ý chí", "pattern": "〜ようにする", "connect": "Vる / Vない + ようにする", "meaning": "Cố gắng tạo thói quen làm gì...", "ex": "健康のために、毎日野菜を食べるようにしている。"}, {"cat": "8. Kính ngữ JLPT N3", "pattern": "お〜になる / ご〜になる", "connect": "お + Vます(bỏ ます) + になる", "meaning": "Tôn kính ngữ (Nâng cao hành động của cấp trên/khách hàng)", "ex": "社長はすでに資料をお読みになりました。"}, {"cat": "8. Kính ngữ JLPT N3", "pattern": "お〜する / ご〜する", "connect": "お + Vます(bỏ ます) + する", "meaning": "Khiêm nhường ngữ (Hạ thấp hành động của bản thân)", "ex": "私が荷物をお持ちいたします。"}, {"cat": "8. Kính ngữ JLPT N3", "pattern": "お〜いただく / ご〜いただく", "connect": "お + Vます(bỏ ます) + いただく", "meaning": "Kính thưa nhờ ai làm gì cho mình (bằng もらう)", "ex": "アンケートにご協力いただき、ありがとうございます。"}, {"cat": "8. Kính ngữ JLPT N3", "pattern": "お〜ください / ご〜ください", "connect": "お + Vます(bỏ ます) + ください", "meaning": "Xin mời quý khách / cấp trên làm...", "ex": "少々お待ちください。"}, {"cat": "6. Phán đoán & Nhận định", "pattern": "〜わけにはいかない", "connect": "Vる + わけにはいかない", "meaning": "Không thể (vì đạo đức, trách nhiệm, chuẩn mực xã hội)", "ex": "大事な会議だから、休むわけにはいかない。"}, {"cat": "6. Phán đoán & Nhận định", "pattern": "〜ないわけにはいかない", "connect": "Vない + わけにはいかない", "meaning": "Đành phải, buộc phải làm (dù không thích)", "ex": "お世話になった先輩の結婚式だから、行かないわけにはいかない。"}, {"cat": "7. Khuyên nhủ & Ý chí", "pattern": "〜ざるを得ない", "connect": "Vない(bỏ ない) + ざるを得ない (する→せざる)", "meaning": "Đành phải ngậm ngùi chấp nhận...", "ex": "証拠がある以上、罪を認めざるを得ない。"}, {"cat": "8. Cảm xúc & Tâm lý", "pattern": "〜てたまらない / 〜てならない", "connect": "Vて / イAくて / ナAで + たまらない", "meaning": "Vô cùng... không chịu nổi (tự nhiên trào dâng)", "ex": "合格できるかどうか、心配でたまらない。"}, {"cat": "8. Cảm xúc & Tâm lý", "pattern": "〜気味（ぎみ）", "connect": "Vます(bỏ ます) / N + 気味", "meaning": "Có vẻ hơi... (hơi hướng tiêu cực nhẹ)", "ex": "風邪気味なので、今日は早く寝ます。"}, {"cat": "8. Cảm xúc & Tâm lý", "pattern": "〜っぽい", "connect": "Vます(bỏ ます) / イA(bỏ い) / N + っぽい", "meaning": "Hay có tính chất... (dễ cáu, giống con nít)", "ex": "彼は怒りっぽい性格だ。子供っぽい言動。"}, {"cat": "9. Liên quan & Đối tượng", "pattern": "〜に関して / 〜に関する", "connect": "N + に関して / に関するN", "meaning": "Liên quan đến, về vấn đề...", "ex": "環境問題に関する本を読む。"}, {"cat": "9. Liên quan & Đối tượng", "pattern": "〜をめぐって", "connect": "N + をめぐって", "meaning": "Xoay quanh (tranh cãi, bàn luận nhiều phía)", "ex": "遺産をめぐって、兄弟で争いが起きた。"}, {"cat": "9. Liên quan & Đối tượng", "pattern": "〜に基づいて", "connect": "N + に基づいて", "meaning": "Dựa trên cơ sở (pháp luật, dữ liệu)", "ex": "調査の結果に基づいて、計画を立てる。"}, {"cat": "9. Liên quan & Đối tượng", "pattern": "〜に応えて", "connect": "N + に応えて", "meaning": "Đáp lại (kỳ vọng, yêu cầu, nguyện vọng)", "ex": "ファンの期待に応えて、アンコールを歌った。"}];
+    const KANJI_DATA = [{"kanji": "政", "hanviet": "CHÍNH", "on": "セイ・ショウ", "kun": "まつりごと", "words": "政治 (せいじ - Chính trị), 政府 (せいふ - Chính phủ), 政策 (せいさく - Chính sách)"}, {"kanji": "経", "hanviet": "KINH", "on": "ケイ・キョウ", "kun": "へる", "words": "経済 (けいざい - Kinh tế), 経験 (けいけん - Kinh nghiệm), 経営 (けいえい - Kinh doanh)"}, {"kanji": "済", "hanviet": "TẾ", "on": "サイ・ザイ", "kun": "すむ・すます", "words": "経済 (けいざい - Kinh tế), 返済 (へんさい - Hoàn trả), 救済 (きゅうさい - Cứu tế)"}, {"kanji": "歴", "hanviet": "LỊCH", "on": "レキ", "kun": "-", "words": "歴史 (れきし - Lịch sử), 経歴 (けいれき - Quá trình làm việc), 履歴書 (りれきしょ - Sơ yếu lý lịch)"}, {"kanji": "史", "hanviet": "SỬ", "on": "シ", "kun": "-", "words": "歴史 (れきし - Lịch sử), 日本史 (にほんし - Lịch sử Nhật Bản)"}, {"kanji": "現", "hanviet": "HIỆN", "on": "ゲン", "kun": "あらわれる・あらわす", "words": "現在 (げんざい - Hiện tại), 現場 (げんば - Hiện trường), 現象 (げんしょう - Hiện tượng)"}, {"kanji": "象", "hanviet": "TƯỢNG", "on": "ショウ・ゾウ", "kun": "-", "words": "対象 (たいしょう - Đối tượng), 印象 (いんしょう - Ấn tượng), 気象 (きしょう - Khí tượng)"}, {"kanji": "責", "hanviet": "TRÁCH", "on": "セキ", "kun": "せめる", "words": "責任 (せきにん - Trách nhiệm), 責任感 (せきにんかん - Tinh thần trách nhiệm)"}, {"kanji": "任", "hanviet": "NHIỆM", "on": "ニン", "kun": "まかせる・まかす", "words": "任務 (にんむ - Nhiệm vụ), 任命 (にんめい - Bổ nhiệm), 後任 (こうにん - Người kế nhiệm)"}, {"kanji": "備", "hanviet": "BỊ", "on": "ビ", "kun": "そなえる・そなわる", "words": "準備 (じゅんび - Chuẩn bị), 設備 (せつび - Trang thiết bị), 予備 (よび - Dự bị)"}, {"kanji": "導", "hanviet": "ĐẠO", "on": "ドウ", "kun": "みちびく", "words": "指導 (しどう - Chỉ đạo/hướng dẫn), 導入 (どうにゅう - Áp dụng/đưa vào)"}, {"kanji": "制", "hanviet": "CHẾ", "on": "セイ", "kun": "-", "words": "制度 (せいど - Chế độ), 制限 (せいげん - Giới hạn), 制作 (せいさく - Chế tác)"}, {"kanji": "規", "hanviet": "QUY", "on": "キ", "kun": "-", "words": "規則 (きそく - Quy tắc), 規定 (きてい - Quy định), 規模 (きぼ - Quy mô)"}, {"kanji": "則", "hanviet": "TẮC", "on": "ソク", "kun": "-", "words": "規則 (きそく - Quy tắc), 原則 (げんそく - Nguyên tắc), 法則 (ほうそく - Định luật)"}, {"kanji": "割", "hanviet": "CÁT", "on": "カツ", "kun": "わる・わかれる・わり", "words": "割合 (わりあい - Tỷ lệ), 役割 (やくわり - Vai trò), 割引 (わりびき - Giảm giá)"}, {"kanji": "基", "hanviet": "CƠ", "on": "キ", "kun": "もと・もとい", "words": "基本 (きほん - Cơ bản), 基準 (きじゅん - Tiêu chuẩn), 基礎 (きそ - Cơ sở/nền tảng)"}, {"kanji": "準", "hanviet": "CHUẨN", "on": "ジュン", "kun": "-", "words": "基準 (きじゅん - Tiêu chuẩn), 準備 (じゅんび - Chuẩn bị), 水準 (すいじゅん - Tiêu chuẩn/mực nước)"}, {"kanji": "限", "hanviet": "HẠN", "on": "ゲン", "kun": "かぎる", "words": "限界 (げんかい - Giới hạn), 期限 (きげん - Thời hạn), 制限 (せいげん - Hạn chế)"}, {"kanji": "態", "hanviet": "THÁI", "on": "タイ", "kun": "-", "words": "態度 (たいど - Thái độ), 状態 (じょうたい - Trạng thái), 事態 (じたい - Tình hình xấu)"}, {"kanji": "境", "hanviet": "CẢNH", "on": "キョウ・ケイ", "kun": "さかい", "words": "環境 (かんきょう - Môi trường), 国境 (こっきょう - Biên giới), 境目 (さかいめ - Ranh giới)"}, {"kanji": "率", "hanviet": "SUẤT", "on": "ソツ・リツ", "kun": "ひきいる", "words": "確率 (かくりつ - Xác suất), 能率 (のうりつ - Năng suất), 率直 (そっちょく - Thẳng thắn)"}, {"kanji": "常", "hanviet": "THƯỜNG", "on": "ジョウ", "kun": "つね・とこ", "words": "正常 (せいじょう - Bình thường), 非常 (ひじょう - Khẩn cấp/phi thường), 常識 (じょうしき - Thường thức)"}, {"kanji": "識", "hanviet": "THỨC", "on": "シキ", "kun": "-", "words": "知識 (ちしき - Tri thức), 意識 (いしき - Ý thức), 常識 (じょうしき - Kiến thức thông thường)"}, {"kanji": "責", "hanviet": "TRÁCH", "on": "セキ", "kun": "せめる", "words": "責任 (せきにん - Trách nhiệm), 責める (せめる - Khiển trách/đổ tội)"}, {"kanji": "任", "hanviet": "NHIỆM", "on": "ニン", "kun": "まかせる", "words": "担任 (たんにん - Chủ nhiệm), 辞任 (じにん - Từ nhiệm), 任せる (まかせる - Giao phó)"}, {"kanji": "疑", "hanviet": "NGHI", "on": "ギ", "kun": "うたがう", "words": "疑問 (ぎもん - Nghi vấn), 容疑者 (ようぎしゃ - Nghi phạm), 疑う (うたがう - Nghi ngờ)"}, {"kanji": "資", "hanviet": "TƯ", "on": "シ", "kun": "-", "words": "資料 (しりょう - Tài liệu), 資格 (しかく - Tư cách/bằng cấp), 資源 (しげん - Tài nguyên)"}, {"kanji": "格", "hanviet": "CÁCH", "on": "カク・コウ", "kun": "-", "words": "合格 (ごうかく - Đỗ/trúng tuyển), 性格 (せいかく - Tính cách), 価格 (かかく - Giá cả)"}, {"kanji": "過", "hanviet": "QUÁ", "on": "カ", "kun": "すぎる・すごす・あやまつ", "words": "過去 (かこ - Quá khứ), 過程 (かてい - Quá trình), 過ち (あやまち - Lỗi lầm)"}, {"kanji": "程", "hanviet": "TRÌNH", "on": "テイ", "kun": "ほど", "words": "程度 (ていど - Mức độ), 日程 (にってい - Lịch trình), 過程 (かてい - Quá trình)"}];
+    const CHOUKAI_DATA = [{"id": "mondai1_task", "type": "Mondai 1: 課題理解 (Hiểu nhiệm vụ tiếp theo)", "situation": "Tại công ty, trưởng nhóm (田中部長) đang phân công công việc gấp cho cấp dưới (山田さん).", "question": "男の人はこのあと、まず何をしなければなりませんか？ (Người đàn ông tiếp theo phải làm gì TRƯỚC TIÊN?)", "script": [{"speaker": "田中部長", "role": "boss", "jp": "山田くん、明日のクライアント向けのプレゼン資料、チェックしたよ。よくできているね。", "vie": "Yamada này, tài liệu thuyết trình cho khách hàng ngày mai anh đã check rồi nhé. Làm tốt lắm."}, {"speaker": "山田", "role": "staff", "jp": "ありがとうございます！印刷して準備しておきましょうか？", "vie": "Em cảm ơn trưởng phòng! Em in sẵn ra để chuẩn bị luôn nhé ạ?"}, {"speaker": "田中部長", "role": "boss", "jp": "あ、その前にね、3ページの売上グラフの数字に1箇所古いデータが混ざっていたんだ。そこを最新のデータに修正してくれるかい？印刷と会議室のセッティングはそのあとでいいから。", "vie": "À, trước đó thì ở trang 3 có một chỗ số liệu biểu đồ doanh thu bị lẫn dữ liệu cũ. Em sửa lại chỗ đó sang dữ liệu mới nhất giúp anh nhé? Việc in ấn và chuẩn bị phòng họp làm sau cũng được."}, {"speaker": "山田", "role": "staff", "jp": "承知いたしました。すぐにデータを差し替えて修正いたします！", "vie": "Dạ em rõ rồi ạ. Em sẽ thay số liệu và chỉnh sửa lại ngay bây giờ ạ!"}], "answer": "3ページのグラフの数字を最新データに修正する (Sửa số liệu biểu đồ trang 3)", "trap_hint": "Bẫy nghe N3: Nhân viên đề xuất in ấn trước (印刷), nhưng sếp dùng từ then chốt 'その前に' (Trước đó thì) chỉ hành động số 1 phải làm ngay lập tức."}, {"id": "mondai2_point", "type": "Mondai 2: ポイント理解 (Hiểu điểm mấu chốt)", "situation": "Hai nhân viên đồng nghiệp đang nói chuyện về việc đổi sang hình thức làm việc từ xa (リモートワーク).", "question": "女の人がリモートワークで一番よかったと言っている理由は何ですか？ (Lý do người phụ nữ nói là điều tốt nhất khi làm việc từ xa là gì?)", "script": [{"speaker": "佐藤 (Nam)", "role": "colleague", "jp": "鈴木さん、今月からリモートワークを始めたって聞いたけど、どう？", "vie": "Suzuki này, nghe bảo từ tháng này bạn bắt đầu làm remote hả, thấy thế nào?"}, {"speaker": "鈴木 (Nữ)", "role": "colleague", "jp": "うん！最初はコミュニケーションが減るかなって心配だったんだけど、Slackですぐ連絡取れるから全然問題なかったよ。", "vie": "Ừ! Ban đầu mình cũng lo giao tiếp sẽ bị giảm, nhưng nhắn qua Slack cái là được ngay nên chẳng vấn đề gì."}, {"speaker": "佐藤 (Nam)", "role": "colleague", "jp": "へえ、通勤時間がなくなるのも楽でしょ？", "vie": "Hè, không phải chen chúc đi làm cũng nhàn hẳn nhỉ?"}, {"speaker": "鈴木 (Nữ)", "role": "colleague", "jp": "もちろん満員電車に乗らなくていいのも助かるけど、何より自分のペースで静かな環境で集中して作業できるのが一番嬉しいかな。以前より生産性が上がった気がする。", "vie": "Tất nhiên không phải đi tàu đông đúc thì đỡ bao nhiêu rồi, nhưng điều mình thích nhất là được làm việc trong không gian yên tĩnh và theo tốc độ của riêng mình để tập trung cao độ. Cảm giác năng suất cao hơn hẳn trước kia."}, {"speaker": "佐藤 (Nam)", "role": "colleague", "jp": "なるほど、集中できる環境が一番のメリットなんだね。", "vie": "Ra là vậy, môi trường tập trung được chính là lợi ích số 1 nhỉ."}], "answer": "静かな環境で集中して仕事ができること (Có thể tập trung làm việc trong môi trường yên tĩnh)", "trap_hint": "Bẫy nghe N3: Người hỏi gợi ý chuyện không phải đi làm (通勤), người nghe công nhận nhưng dùng '何より...一番' (Hơn tất cả... điều số 1 là) để đưa ra câu trả lời thực sự."}, {"id": "mondai4_speech", "type": "Mondai 4: 発話表現 (Cách diễn đạt trong ngữ cảnh)", "situation": "Bạn muốn nhờ cấp trên xem qua bản thảo kế hoạch của mình trước cuộc họp.", "question": "上司に企画書を見てほしいとき、何と言いますか？ (Khi muốn sếp xem bản kế hoạch, bạn sẽ nói thế nào?)", "script": [{"speaker": "1 (Sai)", "role": "wrong", "jp": "課長、この企画書を見てあげます。", "vie": "❌ Sai: Dùng '〜てあげる' với cấp trên là bất kính."}, {"speaker": "2 (Đúng)", "role": "correct", "jp": "課長、お時間のあるときに、この企画書に目を通していただけないでしょうか。", "vie": "✅ Đúng: Dùng khiêm nhường ngữ '目を通す' (xem qua) + kính ngữ xin phép '〜ていただけないでしょうか'."}, {"speaker": "3 (Sai)", "role": "wrong", "jp": "課長、この企画書をごらんになりますか。", "vie": "❌ Sai: 'ご覧になる' là tôn kính ngữ hỏi hành động sếp xem, nhưng không mang ý nghĩa cầu khiến xin nhờ sếp xem giúp mình."}], "answer": "2番: 課長、お時間のあるときに、この企画書に目を通していただけないでしょうか。", "trap_hint": "Bẫy kính ngữ N3: Muốn nhờ sếp xem giùm thì dùng cấu trúc khiêm nhường + xin phép: '目を通していただけないでしょうか' hoặc '見ていただけないでしょうか'."}, {"id": "mondai5_instant", "type": "Mondai 5: 即時応答 (Phản xạ tức thời - Nghe 1 câu đối đáp ngay)", "situation": "Luyện phản xạ 5 câu giao tiếp cực hay thi trong Mondai 5 Chokai N3:", "question": "Nghe câu thoại và chọn câu đối đáp lịch sự, chính xác nhất:", "script": [{"speaker": "Câu 1", "role": "prompt", "jp": "「山田さん、この書類のチェック、手伝っていただけないでしょうか。」", "vie": "Yamada ơi, bạn có thể giúp tôi kiểm tra xấp tài liệu này một chút được không?"}, {"speaker": "Đáp án 1", "role": "correct", "jp": "「ええ、喜んで。今すぐやりましょうか。」", "vie": "✅ 'Vâng, rất sẵn lòng. Giờ làm luôn nhé?'"}, {"speaker": "Câu 2", "role": "prompt", "jp": "「雨がひどくなってきましたね。傘、お貸ししましょうか。」", "vie": "Mưa to dần rồi nhỉ. Để tôi cho bạn mượn ô nhé?"}, {"speaker": "Đáp án 2", "role": "correct", "jp": "「すみません、助かります。明日お返ししますね。」", "vie": "✅ 'Cảm ơn bạn, may quá. Mai tôi trả lại nhé!'"}, {"speaker": "Câu 3", "role": "prompt", "jp": "「田中さん、昨日の会議、出られなくて本当に申し訳ありませんでした。」", "vie": "Tanaka này, cuộc họp hôm qua tôi không tham dự được thật sự rất xin lỗi bạn."}, {"speaker": "Đáp án 3", "role": "correct", "jp": "「いえ、大丈夫ですよ。資料は後でお渡ししますね。」", "vie": "✅ 'Không sao đâu mà. Tài liệu tôi sẽ gửi bạn sau nhé.'"}, {"speaker": "Câu 4", "role": "prompt", "jp": "「このプロジェクト、納期に間に合いそうにないんですが...」", "vie": "Dự án này, có vẻ không kịp thời hạn bàn giao rồi..."}, {"speaker": "Đáp án 4", "role": "correct", "jp": "「えっ、本当ですか？すぐにリーダーに相談しましょう！」", "vie": "✅ 'Hả, thật á? Mau đi báo với Leader ngay đi!'"}, {"speaker": "Câu 5", "role": "prompt", "jp": "「本日はお忙しい中、お越しいただき誠にありがとうございました。」", "vie": "Hôm nay giữa lúc bận rộn quý khách đã bớt chút thời gian ghé qua, chúng tôi vô cùng cảm kích."}, {"speaker": "Đáp án 5", "role": "correct", "jp": "「いいえ、こちらこそお招きいただきありがとうございました。」", "vie": "✅ 'Không có chi, chúng tôi mới là người phải cảm ơn vì lời mời chu đáo ạ.'"}], "answer": "Nắm vững phản xạ kính ngữ và nghi thức trả lời chuẩn văn hóa doanh nghiệp Nhật", "trap_hint": "Mondai 5 không có thời gian suy nghĩ, phải nhận diện ngay trợ từ và ngữ điệu để chọn câu đối xứng."}];
+
+    let activeTab = 'vocab';
+    let selectedFilter = 'ALL';
+    let searchQuery = '';
+    let filteredVocab = [...VOCAB_DATA];
+    let filteredGrammar = [...GRAMMAR_DATA];
+    let filteredKanji = [...KANJI_DATA];
+    let fcIndex = 0;
+
+    const vocabFilters = [
+      { id: 'ALL', name: 'Tất cả từ vựng' },
+      { id: 'Động từ ghép', name: 'Động từ ghép' },
+      { id: 'Phó từ N3', name: 'Phó từ N3 hay thi' },
+      { id: 'Tính từ N3', name: 'Tính từ N3' },
+      { id: 'Danh từ N3', name: 'Danh từ N3' },
+      { id: 'Katakana N3', name: 'Katakana N3' },
+    ];
+
+    const grammarFilters = [
+      { id: 'ALL', name: 'Tất cả 55 mẫu' },
+      { id: '1. Lý do & Nguyên nhân', name: '1. Lý do / Nguyên nhân' },
+      { id: '2. Đối lập & Tương phản', name: '2. Đối lập / Tương phản' },
+      { id: '3. Điều kiện & Giả định', name: '3. Điều kiện / Giả định' },
+      { id: '4. Thời gian & Diễn tiến', name: '4. Thời gian / Diễn tiến' },
+      { id: '5. Mức độ & Phạm vi', name: '5. Mức độ / Phạm vi' },
+      { id: '6. Phán đoán & Nhận định', name: '6. Phán đoán / Nhận định' },
+      { id: '7. Khuyên nhủ & Ý chí', name: '7. Khuyên nhủ / Ý chí' },
+      { id: '8. Kính ngữ JLPT N3', name: '8. Kính ngữ thi N3' },
+      { id: '9. Liên quan & Đối tượng', name: '9. Liên quan / Đối tượng' },
+    ];
+
+    function init() {
+      renderFilterChips();
+      renderVocab();
+      renderGrammar();
+      renderKanji();
+      renderChoukai();
+      setupSearch();
+      updateFlashcard();
+    }
+
+    function renderFilterChips() {
+      const container = document.getElementById('filterChipsContainer');
+      const list = (activeTab === 'grammar') ? grammarFilters : vocabFilters;
+
+      container.innerHTML = list.map(c => `
+        <button onclick="selectFilter('${c.id}')" class="px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition ${
+          selectedFilter === c.id 
+            ? 'bg-rose-600 text-white shadow-xs' 
+            : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+        }">
+          ${c.name}
+        </button>
+      `).join('');
+    }
+
+    function selectFilter(id) {
+      selectedFilter = id;
+      renderFilterChips();
+      applyFilters();
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      selectedFilter = 'ALL';
+      renderFilterChips();
+
+      const views = {
+        vocab: document.getElementById('vocabView'),
+        grammar: document.getElementById('grammarView'),
+        kanji: document.getElementById('kanjiView'),
+        choukai: document.getElementById('choukaiView'),
+        flashcard: document.getElementById('flashcardView')
+      };
+      const btns = {
+        vocab: document.getElementById('tabBtnVocab'),
+        grammar: document.getElementById('tabBtnGrammar'),
+        kanji: document.getElementById('tabBtnKanji'),
+        choukai: document.getElementById('tabBtnChoukai'),
+        flashcard: document.getElementById('tabBtnFlashcard')
+      };
+
+      Object.keys(views).forEach(k => {
+        if (k === tab) {
+          views[k].classList.remove('hidden');
+          btns[k].className = 'py-2.5 border-b-2 border-rose-600 text-rose-600 flex items-center gap-1.5 transition font-bold';
+        } else {
+          views[k].classList.add('hidden');
+          btns[k].className = 'py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition font-semibold';
+        }
+      });
+
+      if (tab === 'flashcard') {
+        fcIndex = 0;
+        updateFlashcard();
+      }
+    }
+
+    function setupSearch() {
+      const input = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearSearch');
+
+      input.addEventListener('input', (e) => {
+        searchQuery = e.target.value.trim().toLowerCase();
+        if (searchQuery) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+        applyFilters();
+      });
+
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        searchQuery = '';
+        clearBtn.classList.add('hidden');
+        applyFilters();
+      });
+    }
+
+    function applyFilters() {
+      // Vocab
+      filteredVocab = VOCAB_DATA.filter(item => {
+        const matchCat = (selectedFilter === 'ALL' || item.cat === selectedFilter);
+        if (!matchCat) return false;
+        if (!searchQuery) return true;
+        return (
+          item.vocab.toLowerCase().includes(searchQuery) ||
+          item.yomi.toLowerCase().includes(searchQuery) ||
+          item.mean.toLowerCase().includes(searchQuery) ||
+          item.hanviet.toLowerCase().includes(searchQuery) ||
+          item.ex.toLowerCase().includes(searchQuery)
+        );
+      });
+
+      // Grammar
+      filteredGrammar = GRAMMAR_DATA.filter(item => {
+        const matchCat = (selectedFilter === 'ALL' || item.cat === selectedFilter);
+        if (!matchCat) return false;
+        if (!searchQuery) return true;
+        return (
+          item.pattern.toLowerCase().includes(searchQuery) ||
+          item.meaning.toLowerCase().includes(searchQuery) ||
+          item.ex.toLowerCase().includes(searchQuery)
+        );
+      });
+
+      // Kanji
+      filteredKanji = KANJI_DATA.filter(item => {
+        if (!searchQuery) return true;
+        return (
+          item.kanji.toLowerCase().includes(searchQuery) ||
+          item.hanviet.toLowerCase().includes(searchQuery) ||
+          item.words.toLowerCase().includes(searchQuery)
+        );
+      });
+
+      document.getElementById('vocabCountBadge').innerText = filteredVocab.length;
+      document.getElementById('grammarCountBadge').innerText = filteredGrammar.length;
+
+      renderVocab();
+      renderGrammar();
+      renderKanji();
+      fcIndex = 0;
+      updateFlashcard();
+    }
+
+    function renderVocab() {
+      const container = document.getElementById('vocabListContainer');
+      const empty = document.getElementById('vocabEmpty');
+
+      if (filteredVocab.length === 0) {
+        container.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      container.innerHTML = filteredVocab.map((item) => `
+        <div onclick="speakJapanese('${item.vocab}')" class="cursor-pointer active:bg-rose-50/70 bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs flex items-center justify-between hover:border-rose-400 hover:shadow-sm transition group">
+          <div class="flex-1 pr-3">
+            <div class="flex items-center gap-1.5 mb-1">
+              <span class="px-2 py-0.5 rounded-md bg-rose-50 text-rose-800 text-[10px] font-bold">
+                ${item.cat}
+              </span>
+              <span class="px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold uppercase">
+                ${item.hanviet}
+              </span>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <h3 class="text-base font-bold text-slate-900 jp-font leading-snug">${item.vocab}</h3>
+              <span class="text-xs text-rose-700 jp-font font-medium">${item.yomi}</span>
+            </div>
+            <p class="text-xs text-slate-700 font-semibold mt-0.5">${item.mean}</p>
+            <p class="text-[11px] text-slate-500 jp-font mt-1 bg-slate-50 p-1.5 rounded-lg border border-slate-100">${item.ex}</p>
+          </div>
+
+          <div class="w-8 h-8 rounded-full bg-slate-50 group-hover:bg-rose-600 group-hover:text-white text-slate-400 flex items-center justify-center transition active:scale-90 shrink-0 shadow-2xs">
+            <i class="fa-solid fa-volume-high text-xs"></i>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderGrammar() {
+      const container = document.getElementById('grammarListContainer');
+      const empty = document.getElementById('grammarEmpty');
+
+      if (filteredGrammar.length === 0) {
+        container.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      container.innerHTML = filteredGrammar.map((item, idx) => `
+        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs hover:border-amber-300 transition">
+          <div class="flex items-center justify-between mb-2">
+            <span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[11px] font-bold">
+              ${item.cat} &bull; #${idx + 1}
+            </span>
+            <button onclick="speakJapanese('${item.pattern.replace(/〜/g, '')}')" class="w-7 h-7 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center text-xs transition">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+
+          <h3 class="text-base font-bold text-slate-900 jp-font text-indigo-900 mb-1">
+            ${item.pattern}
+          </h3>
+          <p class="text-xs font-semibold text-amber-900 bg-amber-50/50 p-2 rounded-lg border border-amber-100/60 mb-2">
+            👉 ${item.meaning}
+          </p>
+
+          <div class="text-[11px] space-y-1.5 text-slate-600">
+            <div>
+              <span class="font-bold text-slate-700">Cấu trúc / Kết hợp:</span>
+              <span class="font-mono text-indigo-700 bg-slate-50 px-1.5 py-0.5 rounded text-[10px]">${item.connect}</span>
+            </div>
+            <div class="mt-2 pt-2 border-t border-slate-100 bg-slate-50 p-2.5 rounded-xl">
+              <span class="font-bold text-slate-800 text-xs block mb-1">Ví dụ thực tế:</span>
+              <p class="jp-font text-xs text-slate-800 leading-relaxed">${item.ex}</p>
+              <button onclick="speakJapanese(\`${item.ex.replace(/\n/g, ' ').trim()}\`)" class="mt-1 text-[11px] text-rose-600 hover:text-rose-800 font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-play text-[9px]"></i> Nghe ví dụ
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderKanji() {
+      const container = document.getElementById('kanjiListContainer');
+      container.innerHTML = filteredKanji.map((item) => `
+        <div onclick="speakJapanese('${item.kanji}')" class="cursor-pointer bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs hover:border-violet-300 hover:shadow-sm transition group">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-12 h-12 rounded-xl bg-violet-50 group-hover:bg-violet-600 group-hover:text-white text-violet-700 flex items-center justify-center text-2xl font-bold jp-font shadow-xs transition">
+                ${item.kanji}
+              </div>
+              <div>
+                <span class="px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-bold uppercase">
+                  ${item.hanviet}
+                </span>
+                <p class="text-[11px] text-slate-500 mt-1 font-semibold">On: ${item.on} | Kun: ${item.kun}</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2.5 pt-2 border-t border-slate-100 text-[11px] text-slate-700 bg-slate-50 p-2 rounded-lg jp-font leading-relaxed">
+            ${item.words}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderChoukai() {
+      const container = document.getElementById('choukaiContainer');
+      container.innerHTML = CHOUKAI_DATA.map((item, idx) => `
+        <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-xs">
+              ${item.type}
+            </span>
+            <span class="text-[11px] text-slate-400 font-medium">JLPT N3 Simulation</span>
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/60">
+            <p class="text-xs text-slate-500 font-medium mb-1">📌 Ngữ cảnh:</p>
+            <p class="text-xs font-semibold text-slate-800">${item.situation}</p>
+            <p class="text-xs text-rose-600 font-bold mt-2 jp-font">❓ ${item.question}</p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700">Kịch bản thoại (Chạm để nghe):</span>
+              <button onclick="playFullChoukai(${idx})" class="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition active:scale-95 shadow-xs">
+                <i class="fa-solid fa-play text-[9px]"></i>
+                <span>Phát toàn bộ</span>
+              </button>
+            </div>
+            <div class="space-y-2">
+              ${item.script.map((line, lIdx) => `
+                <div onclick="speakJapanese(\`${line.jp}\`)" class="cursor-pointer p-2.5 rounded-xl border border-slate-100 hover:border-blue-300 hover:bg-blue-50/40 transition">
+                  <div class="flex items-center justify-between mb-0.5">
+                    <span class="text-[11px] font-bold text-blue-800">${line.speaker}</span>
+                    <i class="fa-solid fa-volume-high text-[10px] text-slate-400"></i>
+                  </div>
+                  <p class="text-xs sm:text-sm font-bold text-slate-900 jp-font">${line.jp}</p>
+                  <p class="text-[11px] text-slate-500 mt-0.5">${line.vie}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="bg-emerald-50/70 p-3 rounded-2xl border border-emerald-100 text-xs">
+            <p class="font-bold text-emerald-900">✅ Đáp án chính xác:</p>
+            <p class="text-emerald-800 font-semibold mt-0.5">${item.answer}</p>
+            <p class="text-[11px] text-emerald-700 mt-1 font-medium italic">💡 ${item.trap_hint}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function playFullChoukai(idx) {
+      const d = CHOUKAI_DATA[idx];
+      if (!d) return;
+      let lineIdx = 0;
+      function playStep() {
+        if (lineIdx >= d.script.length) return;
+        const line = d.script[lineIdx];
+        speakJapanese(line.jp, () => {
+          lineIdx++;
+          setTimeout(playStep, 800);
+        });
+      }
+      playStep();
+    }
+
+    // FLASHCARD
+    function flipCard() {
+      document.getElementById('fcInner').classList.toggle('flipped');
+    }
+
+    function updateFlashcard() {
+      const inner = document.getElementById('fcInner');
+      inner.classList.remove('flipped');
+
+      if (filteredVocab.length === 0) {
+        document.getElementById('fcFrontVocab').innerText = 'Không có thẻ';
+        document.getElementById('fcFrontYomi').innerText = '';
+        document.getElementById('fcBackVie').innerText = 'Hãy chọn nhóm khác';
+        document.getElementById('fcBackEx').innerText = '';
+        document.getElementById('fcBackReading').innerText = '';
+        document.getElementById('fcProgress').innerText = '0 / 0';
+        return;
+      }
+
+      const item = filteredVocab[fcIndex];
+      document.getElementById('fcFrontVocab').innerText = item.vocab;
+      document.getElementById('fcFrontYomi').innerText = item.yomi;
+      document.getElementById('fcBackVie').innerText = item.mean;
+      document.getElementById('fcBackEx').innerText = item.ex;
+      document.getElementById('fcBackReading').innerText = item.yomi;
+      document.getElementById('fcTag').innerText = item.cat;
+      document.getElementById('fcProgress').innerText = `Thẻ ${fcIndex + 1} / ${filteredVocab.length}`;
+    }
+
+    function nextCard() {
+      if (filteredVocab.length === 0) return;
+      fcIndex = (fcIndex + 1) % filteredVocab.length;
+      updateFlashcard();
+    }
+
+    function prevCard() {
+      if (filteredVocab.length === 0) return;
+      fcIndex = (fcIndex - 1 + filteredVocab.length) % filteredVocab.length;
+      updateFlashcard();
+    }
+
+    function shuffleCards() {
+      for (let i = filteredVocab.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filteredVocab[i], filteredVocab[j]] = [filteredVocab[j], filteredVocab[i]];
+      }
+      fcIndex = 0;
+      updateFlashcard();
+    }
+
+    // DUAL AUDIO ENGINE: Google TTS MP3 Stream + SpeechSynthesis Fallback
+    const audioPlayer = new Audio();
+    audioPlayer.preload = 'auto';
+    let audioUnlocked = false;
+
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      audioPlayer.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      audioPlayer.play().catch(() => {});
+      if (window.speechSynthesis) {
+        window.speechSynthesis.resume();
+      }
+      audioUnlocked = true;
+    }
+    document.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+    document.addEventListener('click', unlockAudio, { once: true });
+
+    function showAudioToast(text) {
+      let toast = document.getElementById('audioToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'audioToast';
+        toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-2xl border border-rose-500/50 backdrop-blur-md transition-all duration-300 pointer-events-none opacity-0';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-400 animate-ping"></span><span>Đang phát: <strong class="text-amber-300 jp-font">${text.substring(0, 25)}</strong></span>`;
+      toast.style.opacity = '1';
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => {
+        toast.style.opacity = '0';
+      }, 2500);
+    }
+
+    function speakJapanese(text, onEndCallback = null) {
+      if (!text) return;
+      unlockAudio();
+      showAudioToast(text);
+
+      const cleanQuery = text.replace(/[\n\r]/g, ' ').substring(0, 150).trim();
+      const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=${encodeURIComponent(cleanQuery)}`;
+      
+      audioPlayer.pause();
+      audioPlayer.currentTime = 0;
+      audioPlayer.src = ttsUrl;
+
+      const handleEnd = () => {
+        audioPlayer.onended = null;
+        audioPlayer.onerror = null;
+        if (onEndCallback) onEndCallback();
+      };
+
+      audioPlayer.onended = handleEnd;
+
+      audioPlayer.onerror = (e) => {
+        console.warn("Audio MP3 failed, using SpeechSynthesis fallback", e);
+        audioPlayer.onended = null;
+        audioPlayer.onerror = null;
+        fallbackSpeechSynthesis(text, onEndCallback);
+      };
+
+      const playPromise = audioPlayer.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.warn("Audio play blocked, using SpeechSynthesis fallback:", err);
+          fallbackSpeechSynthesis(text, onEndCallback);
+        });
+      }
+    }
+
+    function fallbackSpeechSynthesis(text, onEndCallback = null) {
+      if (!window.speechSynthesis) {
+        if (onEndCallback) onEndCallback();
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.95;
+        
+        const voices = window.speechSynthesis.getVoices();
+        const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja_JP' || v.lang.startsWith('ja'));
+        if (jpVoice) utterance.voice = jpVoice;
+
+        if (onEndCallback) {
+          utterance.onend = onEndCallback;
+          utterance.onerror = onEndCallback;
+        }
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.error("SpeechSynthesis error:", err);
+        if (onEndCallback) onEndCallback();
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
