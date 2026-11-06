@@ -959,10 +959,12 @@
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
+      const targetTab = document.getElementById('tab-' + tabId);
+      if (targetTab) targetTab.classList.add('active');
       const tabs = ['past-exams', 'vocab', 'grammar', 'kanji', 'choukai', 'flashcard'];
       const idx = tabs.indexOf(tabId);
-      if (idx !== -1) document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+      const btns = document.querySelectorAll('.tab-btn');
+      if (idx !== -1 && btns[idx]) btns[idx].classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -991,8 +993,13 @@
     }
 
     function speakJapanese(text) {
+      if (!text) return;
       unlockAudio();
-      showToast("🔊 " + text);
+      showToast("🔊 " + text.slice(0, 35) + (text.length > 35 ? "..." : ""));
+      if (text.length > 150) {
+        fallbackSpeechSynthesis(text);
+        return;
+      }
       try {
         const url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=" + encodeURIComponent(text);
         ttsAudio.pause();
@@ -1010,12 +1017,43 @@
     }
 
     function fallbackSpeechSynthesis(text) {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'ja-JP';
-      u.rate = 0.95;
-      window.speechSynthesis.speak(u);
+      if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ja-JP';
+        u.rate = 0.95;
+        window.speechSynthesis.speak(u);
+      } catch (e) {
+        console.warn('SpeechSynthesis error:', e);
+      }
+    }
+
+
+    // Audio Lookup Helpers (Prevents string escaping / newline issues in inline onclicks)
+    function playAudioForPast(qId) {
+      const q = PAST_QUESTIONS.find(item => item.id === qId);
+      if (q) speakJapanese(q.audio_text || q.question.replace(/<[^>]*>/g, ''));
+    }
+
+    function playAudioForBank(qId) {
+      const q = PRACTICE_BANK.find(item => item.id === qId);
+      if (q) speakJapanese(q.q.replace(/[\(\)（）\[\]]/g, ''));
+    }
+
+    function playAudioForChoukai(cId) {
+      const c = CHOUKAI_DATA.find(item => item.id === cId);
+      if (c) speakJapanese(c.audio_text);
+    }
+
+    function playAudioForGrammar(idx) {
+      const g = filteredGrammar[idx];
+      if (g) speakJapanese(g.pattern.replace(/〜/g, ''));
+    }
+
+    function playAudioForGrammarExample(gIdx, exIdx) {
+      const g = filteredGrammar[gIdx];
+      if (g && g.examples && g.examples[exIdx]) speakJapanese(g.examples[exIdx].ja);
     }
 
     // SUBMODE TOGGLE (PAST EXAMS vs PRACTICE BANK)
@@ -1037,17 +1075,19 @@
     let pastCorrectCount = 0;
     const answeredMap = {};
 
-    function filterExamYear(year) {
+    function filterExamYear(year, el) {
       curYearFilter = year;
-      document.querySelectorAll('#year-filter-bar .pill-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('#year-filter-bar .pill-btn').forEach(b => {
+        b.classList.toggle('active', b === el || b.getAttribute('onclick')?.includes(`'${year}'`));
+      });
       renderPastExams();
     }
 
-    function filterExamMondai(mondai) {
+    function filterExamMondai(mondai, el) {
       curMondaiFilter = mondai;
-      document.querySelectorAll('#mondai-filter-bar .pill-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('#mondai-filter-bar .pill-btn').forEach(b => {
+        b.classList.toggle('active', b === el || b.getAttribute('onclick')?.includes(`'${mondai}'`));
+      });
       renderPastExams();
     }
 
@@ -1077,8 +1117,8 @@
         });
 
         const audioBtn = q.audio_text
-          ? `<button class="btn-play-all" style="margin-bottom:8px;" onclick="speakJapanese('${q.audio_text.replace(/'/g, "\\'")}')">▶ Nghe Audio Câu Hỏi</button>`
-          : `<button class="btn-audio" onclick="speakJapanese('${q.question.replace(/<[^>]*>/g, '')}')">🔊</button>`;
+          ? `<button class="btn-play-all" style="margin-bottom:8px;" onclick="playAudioForPast('${q.id}')">▶ Nghe Audio Câu Hỏi</button>`
+          : `<button class="btn-audio" onclick="playAudioForPast('${q.id}')">🔊</button>`;
 
         const trapStyle = answeredMap[q.id] ? 'display:block;' : 'display:none;';
 
@@ -1156,10 +1196,11 @@
     const BANK_PAGE_SIZE = 25;
     const bankAnswers = {};
 
-    function filterBankCat(cat) {
+    function filterBankCat(cat, el) {
       curBankCat = cat;
-      document.querySelectorAll('#bank-cat-filter .pill-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('#bank-cat-filter .pill-btn').forEach(b => {
+        b.classList.toggle('active', b === el || b.getAttribute('onclick')?.includes(`'${cat}'`));
+      });
 
       if (cat === 'ALL') filteredBank = [...PRACTICE_BANK];
       else filteredBank = PRACTICE_BANK.filter(q => q.cat.includes(cat));
@@ -1175,8 +1216,8 @@
       const pageItems = filteredBank.slice(start, end);
       const totalPages = Math.ceil(filteredBank.length / BANK_PAGE_SIZE) || 1;
 
-      document.getElementById('bank-stats').innerText = `Đang hiển thị ${start + 1}-${Math.min(end, filteredBank.length)} / ${filteredBank.length:,} câu`;
-      document.getElementById('bank-page-info').innerText = `Trang ${bankPage} / ${totalPages:,}`;
+      document.getElementById('bank-stats').innerText = `Đang hiển thị ${start + 1}-${Math.min(end, filteredBank.length)} / ${filteredBank.length.toLocaleString()} câu`;
+      document.getElementById('bank-page-info').innerText = `Trang ${bankPage} / ${totalPages.toLocaleString()}`;
       document.getElementById('bank-btn-prev').disabled = bankPage <= 1;
       document.getElementById('bank-btn-next').disabled = bankPage >= totalPages;
 
@@ -1205,8 +1246,8 @@
               <span class="badge-mondai">${q.cat}</span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-              <div class="exam-question-text" onclick="speakJapanese('${q.q.replace(/[\(\)（）]/g, '')}')">${q.q}</div>
-              <button class="btn-audio" onclick="speakJapanese('${q.q.replace(/[\(\)（）]/g, '')}')">🔊</button>
+              <div class="exam-question-text" onclick="playAudioForBank('${q.id}')">${q.q}</div>
+              <button class="btn-audio" onclick="playAudioForBank('${q.id}')">🔊</button>
             </div>
             <div class="option-list">${optsHtml}</div>
           </div>
@@ -1271,8 +1312,8 @@
       const pageItems = filteredVocab.slice(start, end);
       const totalPages = Math.ceil(filteredVocab.length / VOCAB_PAGE_SIZE) || 1;
 
-      document.getElementById('vocab-count').innerText = `Hiển thị ${start + 1}-${Math.min(end, filteredVocab.length)} / ${filteredVocab.length:,} từ`;
-      document.getElementById('vocab-page-info').innerText = `Trang ${vocabPage} / ${totalPages:,}`;
+      document.getElementById('vocab-count').innerText = `Hiển thị ${start + 1}-${Math.min(end, filteredVocab.length)} / ${filteredVocab.length.toLocaleString()} từ`;
+      document.getElementById('vocab-page-info').innerText = `Trang ${vocabPage} / ${totalPages.toLocaleString()}`;
       document.getElementById('btn-prev').disabled = vocabPage <= 1;
       document.getElementById('btn-next').disabled = vocabPage >= totalPages;
 
@@ -1338,10 +1379,10 @@
       let html = '';
       filteredGrammar.forEach((g, idx) => {
         let examplesHtml = '';
-        (g.examples || []).forEach(ex => {
+        (g.examples || []).forEach((ex, exIdx) => {
           examplesHtml += `
             <div class="example-item">
-              <span class="example-ja" onclick="speakJapanese('${ex.ja}')">🔊 ${ex.ja}</span>
+              <span class="example-ja" onclick="playAudioForGrammarExample(${idx}, ${exIdx})">🔊 ${ex.ja}</span>
               <div class="example-en">${ex.en}</div>
             </div>
           `;
@@ -1351,10 +1392,10 @@
           <div class="grammar-card">
             <div class="card-header">
               <div>
-                <span class="grammar-pattern" onclick="speakJapanese('${g.pattern.replace(/〜/g, '')}')">${g.pattern}</span>
+                <span class="grammar-pattern" onclick="playAudioForGrammar(${idx})">${g.pattern}</span>
                 <span class="grammar-romaji">(${g.romaji})</span>
               </div>
-              <button class="btn-audio" onclick="speakJapanese('${g.pattern.replace(/〜/g, '')}')">🔊</button>
+              <button class="btn-audio" onclick="playAudioForGrammar(${idx})">🔊</button>
             </div>
             <div class="grammar-meaning">💡 ${g.meaning_en}</div>
             <div class="grammar-box"><strong>Cấu trúc:</strong> ${g.formation}</div>
@@ -1445,7 +1486,7 @@
             <div class="choukai-title">${c.title}</div>
             <div class="choukai-scenario"><strong>Tình huống:</strong> ${c.scenario}</div>
             <div class="audio-player-box">
-              <button class="btn-play-all" onclick="speakJapanese('${c.audio_text.replace(/'/g, "\\'")}')">
+              <button class="btn-play-all" onclick="playAudioForChoukai(${c.id})">
                 ▶ Nghe Toàn Bộ Bài Audio
               </button>
               <span style="font-size:0.78rem; color:#64748b;">(Giọng phát âm bản xứ mô phỏng thi)</span>
@@ -1488,10 +1529,11 @@
     let fcIndex = 0;
     let fcFlipped = false;
 
-    function setFcDeck(type) {
+    function setFcDeck(type, el) {
       fcDeckType = type;
-      document.querySelectorAll('.fc-deck-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('.fc-deck-btn').forEach(b => {
+        b.classList.toggle('active', b === el || b.getAttribute('onclick')?.includes(`'${type}'`));
+      });
 
       if (type === 'vocab') fcDeck = VOCAB_DATA;
       else if (type === 'kanji') fcDeck = KANJI_DATA;
@@ -1533,7 +1575,7 @@
         document.getElementById('fc-back-meaning').innerText = item.formation;
       }
 
-      document.getElementById('fc-counter').innerText = `Thẻ ${fcIndex + 1} / ${fcDeck.length:,}`;
+      document.getElementById('fc-counter').innerText = `Thẻ ${fcIndex + 1} / ${fcDeck.length.toLocaleString()}`;
     }
 
     function nextCard() {
