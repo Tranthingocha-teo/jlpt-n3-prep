@@ -1,9 +1,22 @@
-# BỘ TỔNG HỢP TOÀN DIỆN LUYỆN THI JLPT N3 (ĐẦY ĐỦ 100% TỪ VỰNG - HÁN TỰ - NGỮ PHÁP - CHOUKAI)
+# BỘ TỔNG HỢP CỰC ĐẠI LUYỆN THI JLPT N3 (MEGA SUITE)
 
-> **Học viên:** Trần Thị Ngọc Hà (`hattn.23itb@vku.udn.vn`)  
-> **Mục tiêu:** Thi đỗ JLPT N3 điểm tối đa, làm chủ tiếng Nhật thực chiến doanh nghiệp IT.  
+> **Học viên:** Trần Thị Ngọc Hà (`hattn.23itb@vku.udn.vn`) - Trường ĐH CNTT & Truyền thông Việt - Hàn (VKU)  
+> **Mục tiêu:** Thi đỗ JLPT N3 điểm tối đa, làm chủ từ vựng - ngữ pháp - Hán tự và thực chiến đề thi các năm.  
 > **Triết lý kỹ thuật:** `「動けばいい」ではなく、「バグを出さない丁寧な開発」を心がけています。`  
 > **Website học trực tiếp trên điện thoại:** [https://tranthingocha-teo.github.io/jlpt-n3-prep/](https://tranthingocha-teo.github.io/jlpt-n3-prep/)
+
+---
+
+### TỔNG QUAN DỮ LIỆU CỰC ĐẠI ĐÃ TÍCH HỢP:
+1. **📝 4,162 CÂU HỎI LUYỆN ĐỀ THỰC CHIẾN:**
+   - **63 Câu Đề Thi Chính Thức Các Năm (2018 - 2023):** Phân chia chi tiết theo 5 Mondai Moji-Goi, Bunpou, Sao ★, và Choukai có giải thích bẫy thi và audio phát âm.
+   - **4,099 Câu Hỏi Trắc Nghiệm Chuyên Đề Cực Đại:** Gồm 3,874 câu Chữ Hán/Từ vựng và 225 câu Ngữ pháp N3 chuẩn đề thi, có tính năng tạo đề thi thử 20 câu ngẫu nhiên.
+2. **📖 2,140 TỪ VỰNG JLPT N3:** 100% kho từ vựng master kèm âm Hán-Việt tự động cho từng từ ghép.
+3. **✍️ 367 HÁN TỰ JLPT N3:** 100% bảng chữ Hán N3 chuẩn KANJIDIC (số nét, âm On, âm Kun, Hán-Việt, ý nghĩa).
+4. **⚡ 101 MẪU NGỮ PHÁP JLPT N3:** Đầy đủ công thức kết hợp, chú thích bẫy và câu ví dụ furigana.
+5. **🔥 31 TỪ VỰNG & CHỮ HÁN TẦN SUẤT CAO NHẤT:** Xuất hiện lặp lại trong đề thi các năm kèm phân tích bẫy âm thanh.
+6. **🎧 CÁC MONDAI NGHE HIỂU (CHOUKAI):** Đầy đủ kịch bản (transcript), audio giọng bản xứ, câu hỏi và đáp án.
+7. **🎴 FLASHCARD 3D THÔNG MINH:** Hỗ trợ đổi linh hoạt giữa 3 bộ thẻ từ vựng, hán tự, ngữ pháp có xáo trộn ngẫu nhiên.
 
 ---
 
