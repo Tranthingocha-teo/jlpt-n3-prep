@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Candy Kanji Sweet - Game Ghép Hán Tự N3 Kẹo Ngọt</title>
+  <style>
+    :root {
+      --candy-pink: #ff5e97;
+      --candy-pink-light: #ff75a0;
+      --candy-purple: #9d4edd;
+      --candy-cyan: #00b4d8;
+      --candy-yellow: #ffb703;
+      --candy-green: #06d6a0;
+      --candy-orange: #fb8500;
+      --bg-gradient: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 50%, #fef3c7 100%);
+      --panel-bg: rgba(255, 255, 255, 0.92);
+      --dark: #1e1b4b;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 30px;
+      overflow-x: hidden;
+    }
+    .nav-switcher {
+      width: 100%;
+      background: #1e1b4b;
+      color: #c7d2fe;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .nav-switcher a {
+      color: #e0e7ff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .nav-switcher a:hover, .nav-switcher a.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .game-container {
+      width: 100%;
+      max-width: 480px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-box {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .header-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #ec4899, #8b5cf6, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(236, 72, 153, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .header-sub {
+      font-size: 0.78rem;
+      color: #6366f1;
+      font-weight: 700;
+    }
+
+    /* Top Stats Card */
+    .stats-card {
+      width: 100%;
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.15), 0 2px 6px rgba(0,0,0,0.05);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat-label {
+      font-size: 0.68rem;
+      color: #64748b;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #1e1b4b;
+      line-height: 1.2;
+    }
+    .stat-val.target {
+      color: #ec4899;
+    }
+    .stat-val.moves {
+      color: #8b5cf6;
+    }
+
+    /* Target Bar */
+    .target-bar-wrap {
+      width: 100%;
+      background: #e2e8f0;
+      height: 8px;
+      border-radius: 10px;
+      margin-top: 6px;
+      overflow: hidden;
+      grid-column: span 3;
+    }
+    .target-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ec4899, #f59e0b);
+      border-radius: 10px;
+      transition: width 0.3s ease-out;
+    }
+
+    /* Stage Pill */
+    .stage-pill {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Mode Pill Switcher */
+    .mode-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      background: rgba(255, 255, 255, 0.7);
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .mode-btn.active {
+      background: #4f46e5;
+      color: #fff;
+      border-color: #4f46e5;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+    }
+
+    /* CANDY GRID BOARD */
+    .board-wrapper {
+      position: relative;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 10px;
+      border-radius: 22px;
+      box-shadow: 0 12px 30px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0,0,0,0.06), inset 0 2px 4px rgba(255,255,255,0.8);
+      border: 3px solid #ffccd5;
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .candy-grid {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 5px;
+      position: relative;
+    }
+
+    /* CANDY TILE STYLING */
+    .candy-tile {
+      position: relative;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), inset 0 2px 3px rgba(255, 255, 255, 0.6), inset 0 -3px 3px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s, background-color 0.2s;
+      touch-action: none;
+    }
+    .candy-tile:hover {
+      transform: scale(1.05);
+      z-index: 2;
+    }
+    .candy-tile:active {
+      transform: scale(0.92);
+    }
+    .candy-tile.selected {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 3px #ffffff, 0 0 16px 4px #ec4899;
+      animation: candy-pulse 0.7s infinite alternate;
+      z-index: 5;
+    }
+    @keyframes candy-pulse {
+      from { transform: scale(1.06); filter: brightness(1.1); }
+      to { transform: scale(1.14); filter: brightness(1.25); }
+    }
+
+    .candy-tile.matched {
+      animation: candy-pop 0.35s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes candy-pop {
+      0% { transform: scale(1); filter: brightness(1.5); }
+      50% { transform: scale(1.3) rotate(8deg); filter: brightness(2); }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    .candy-tile.hint-pulse {
+      animation: hint-glow 0.8s infinite alternate ease-in-out;
+      z-index: 4;
+    }
+    @keyframes hint-glow {
+      from { box-shadow: 0 0 6px #f59e0b; transform: scale(1.02); }
+      to { box-shadow: 0 0 16px #f59e0b, 0 0 24px #ec4899; transform: scale(1.08); }
+    }
+
+    /* Candy Color Themes (Glossy jellies) */
+    .color-pink {
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      border: 1px solid #ff4d80;
+    }
+    .color-purple {
+      background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+      border: 1px solid #8b5cf6;
+      color: #3b0764;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    }
+    .color-blue {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      border: 1px solid #0284c7;
+    }
+    .color-green {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      border: 1px solid #059669;
+      color: #064e3b;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    }
+    .color-orange {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      border: 1px solid #ea580c;
+    }
+    .color-gold {
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      border: 1px solid #d97706;
+      color: #78350f;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Glossy reflection bubble */
+    .candy-tile::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 40%;
+      height: 30%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1));
+      border-radius: 8px 8px 12px 12px;
+      pointer-events: none;
+    }
+
+    /* Particle Canvas overlay */
+    #fx-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Action Buttons Bar */
+    .action-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      width: 100%;
+      max-width: 380px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 9px 10px;
+      border-radius: 14px;
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: all 0.15s;
+    }
+    .action-btn:active {
+      transform: scale(0.94);
+    }
+    .btn-hint {
+      background: linear-gradient(135deg, #fef08a, #fde047);
+      color: #854d0e;
+    }
+    .btn-shuffle {
+      background: linear-gradient(135deg, #c7d2fe, #a5b4fc);
+      color: #3730a3;
+    }
+    .btn-lexicon {
+      background: linear-gradient(135deg, #fbcfe8, #f472b6);
+      color: #831843;
+    }
+    .btn-sound {
+      background: #ffffff;
+      color: #475569;
+      flex: 0.6;
+    }
+
+    /* FLOATING MATCHED WORD POPUP CARD */
+    .word-card-popup {
+      margin-top: 12px;
+      width: 100%;
+      max-width: 380px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 10px 14px;
+      border: 2px solid #ec4899;
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: slide-up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes slide-up {
+      from { transform: translateY(12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .word-info-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .word-kanji-big {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #1e1b4b;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .word-furigana {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ec4899;
+    }
+    .word-hv {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #fdf2f8;
+      color: #be185d;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #fbcfe8;
+      display: inline-block;
+      margin-top: 2px;
+    }
+    .word-mean {
+      font-size: 0.8rem;
+      color: #334155;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .word-btn-audio {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: #fff;
+      font-size: 1.15rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.35);
+      flex-shrink: 0;
+    }
+    .word-btn-audio:active {
+      transform: scale(0.9);
+    }
+
+    /* Combo Banner */
+    .combo-banner {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: linear-gradient(135deg, #ec4899, #f59e0b);
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 900;
+      padding: 8px 24px;
+      border-radius: 30px;
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+      pointer-events: none;
+      z-index: 20;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .combo-banner.show {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    /* MODAL (STAGE WIN / GAME OVER / LEXICON) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      width: 100%;
+      max-width: 420px;
+      max-height: 85vh;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+      text-align: center;
+    }
+    .modal-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #1e1b4b;
+      margin-bottom: 6px;
+    }
+    .modal-stars {
+      font-size: 2.2rem;
+      margin: 8px 0;
+    }
+    .modal-body {
+      font-size: 0.92rem;
+      color: #475569;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .modal-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(236, 72, 153, 0.35);
+      transition: all 0.15s;
+    }
+    .modal-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Lexicon list */
+    .lexicon-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+      text-align: left;
+    }
+    .lexicon-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.92);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Switcher -->
+  <div class="nav-switcher">
+    <span>Hệ sinh thái học tập:</span>
+    <a href="index.html">📝 Luyện Thi JLPT N3</a>
+    <a href="candy-kanji.html" class="active">🍬 Kẹo Hán Tự (Kanji Sweet)</a>
+    <a href="https://tranthingocha-teo.github.io/tieng-nhat-chuyen-nganh-4/">Tiếng Nhật CN4 (N3)</a>
+    <a href="https://tranthingocha-teo.github.io/tieng-nhat-chuyen-nganh-n4/">Tiếng Nhật CN (N4)</a>
+  </div>
+
+  <div class="game-container">
+    <div class="header-box">
+      <div class="header-title">🍬 KANJI CANDY SWEET 🍭</div>
+      <div class="header-sub">Ghép Kẹo Hán Tự N3 • Nổ Từ Vựng Tức Thì</div>
+    </div>
+
+    <!-- Top Stats -->
+    <div class="stats-card">
+      <div class="stat-box">
+        <span class="stat-label">🏆 Điểm số</span>
+        <span class="stat-val" id="score-val">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">🎯 Mục tiêu</span>
+        <span class="stat-val target" id="target-val">0 / 5</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">⏳ Lượt đổi</span>
+        <span class="stat-val moves" id="moves-val">25</span>
+      </div>
+      <div class="target-bar-wrap">
+        <div class="target-bar-fill" id="target-bar"></div>
+      </div>
+    </div>
+
+    <!-- Stage Pill -->
+    <div class="stage-pill" id="stage-badge">
+      🌟 Màn 1: 報連相 & Giao Tiếp
+    </div>
+
+    <!-- Mode Selector -->
+    <div class="mode-bar">
+      <button class="mode-btn active" id="mode-swap-btn" onclick="setPlayMode('swap')">
+        🍬 Đổi Kẹo (Swap)
+      </button>
+      <button class="mode-btn" id="mode-connect-btn" onclick="setPlayMode('connect')">
+        👆 Chạm Nối Từ (Connect)
+      </button>
+    </div>
+
+    <!-- Candy Board -->
+    <div class="board-wrapper">
+      <div class="candy-grid" id="grid"></div>
+      <canvas id="fx-canvas"></canvas>
+      <div class="combo-banner" id="combo-banner">SWEET COMBO!</div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="action-btn btn-hint" onclick="giveHint()">
+        💡 Gợi ý
+      </button>
+      <button class="action-btn btn-shuffle" onclick="shuffleBoard()">
+        🔀 Đổi bàn
+      </button>
+      <button class="action-btn btn-lexicon" onclick="openLexiconModal()">
+        📖 Sổ từ (<span id="lexicon-count">0</span>)
+      </button>
+      <button class="action-btn btn-sound" id="sound-btn" onclick="toggleSound()">
+        🔊
+      </button>
+    </div>
+
+    <!-- Floating Word Card Popup -->
+    <div class="word-card-popup" id="word-card" style="display:none;">
+      <div class="word-info-left">
+        <div class="word-kanji-big">
+          <span id="popup-kanji">連絡</span>
+          <span class="word-furigana" id="popup-furi">れんらく</span>
+        </div>
+        <div>
+          <span class="word-hv" id="popup-hv">LIÊN LẠC</span>
+        </div>
+        <div class="word-mean" id="popup-mean">liên lạc, thông báo</div>
+      </div>
+      <button class="word-btn-audio" id="popup-audio-btn" onclick="playPopupAudio()">
+        🔊
+      </button>
+    </div>
+  </div>
+
+  <!-- Stage Win / Game Over Modal -->
+  <div class="modal-overlay" id="end-modal">
+    <div class="modal-content">
+      <div class="modal-title" id="modal-title">🎉 HOÀN THÀNH MÀN CHƠI!</div>
+      <div class="modal-stars" id="modal-stars">⭐⭐⭐</div>
+      <div class="modal-body" id="modal-body">
+        Bạn đã ghép đủ số từ vựng xuất sắc!
+      </div>
+      <button class="modal-btn" id="modal-action-btn" onclick="nextStageOrRetry()">
+        Tiếp Tục Sang Màn Mới ➡️
+      </button>
+    </div>
+  </div>
+
+  <!-- Lexicon Modal -->
+  <div class="modal-overlay" id="lexicon-modal">
+    <div class="modal-content">
+      <div class="modal-title">📖 Sổ Tay Kẹo Ngọt Đã Ghép</div>
+      <div style="font-size:0.8rem; color:#64748b; margin-bottom:10px;">
+        Các từ vựng N3 bạn đã nổ trong trận đấu:
+      </div>
+      <div class="lexicon-list" id="lexicon-list-content"></div>
+      <button class="modal-btn" style="margin-top:16px;" onclick="closeLexiconModal()">
+        Đóng Sổ Tay
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- SCRIPTS & GAME ENGINE -->
+  <script>
+    // Master Level Configuration & Dictionary
+    const LEVEL_CONFIG = {"1": [{"w": "連絡", "f": "れんらく", "hv": "LIÊN LẠC", "m": "liên lạc, thông báo"}, {"w": "報告", "f": "ほうこく", "hv": "BÁO CÁO", "m": "báo cáo"}, {"w": "相談", "f": "そうだん", "hv": "TƯƠNG ĐÀM", "m": "thảo luận, hỏi ý kiến"}, {"w": "挨拶", "f": "あいさつ", "hv": "AI TẠT", "m": "chào hỏi"}, {"w": "丁寧", "f": "ていねい", "hv": "ĐINH NINH", "m": "lịch sự, cẩn thận"}, {"w": "案内", "f": "あんない", "hv": "ÁN NỘI", "m": "hướng dẫn, chỉ đường"}, {"w": "準備", "f": "じゅんび", "hv": "CHUẨN BỊ", "m": "chuẩn bị"}, {"w": "参加", "f": "さんか", "hv": "THAM GIA", "m": "tham gia"}, {"w": "質問", "f": "しつもん", "hv": "CHẤT VẤN", "m": "câu hỏi, thắc mắc"}, {"w": "説明", "f": "せつめい", "hv": "THUYẾT MINH", "m": "giải thích, thuyết minh"}, {"w": "確認", "f": "かくにん", "hv": "XÁC NHẬN", "m": "kiểm tra, xác nhận"}, {"w": "解決", "f": "かいけつ", "hv": "GIẢI QUYẾT", "m": "giải quyết vấn đề"}, {"w": "協力", "f": "きょうりょく", "hv": "HIỆP LỰC", "m": "hợp tác, chung sức"}, {"w": "感謝", "f": "かんしゃ", "hv": "CẢM TẠ", "m": "cảm ơn, biết ơn"}, {"w": "予定", "f": "よてい", "hv": "DỰ ĐỊNH", "m": "dự định, lịch trình"}, {"w": "約束", "f": "やくそく", "hv": "ƯỚC THÚC", "m": "lời hứa, cuộc hẹn"}], "2": [{"w": "信頼", "f": "しんらい", "hv": "TÍN LẠI", "m": "tin cậy, tín nhiệm"}, {"w": "責任", "f": "せきにん", "hv": "TRÁCH NHIỆM", "m": "trách nhiệm"}, {"w": "失敗", "f": "しっぱい", "hv": "THẤT BẠI", "m": "thất bại, sai sót"}, {"w": "成功", "f": "せいこう", "hv": "THÀNH CÔNG", "m": "thành công"}, {"w": "努力", "f": "どりょく", "hv": "NỖ LỰC", "m": "nỗ lực, cố gắng"}, {"w": "経験", "f": "けいけん", "hv": "KINH NGHIỆM", "m": "kinh nghiệm"}, {"w": "技術", "f": "ぎじゅつ", "hv": "KỸ THUẬT", "m": "kỹ thuật, công nghệ"}, {"w": "専門", "f": "せんもん", "hv": "CHUYÊN MÔN", "m": "chuyên môn"}, {"w": "集中", "f": "しゅうちゅう", "hv": "TẬP TRUNG", "m": "tập trung"}, {"w": "意識", "f": "いしき", "hv": "Ý THỨC", "m": "ý thức, nhận thức"}, {"w": "変化", "f": "へんか", "hv": "BIẾN HÓA", "m": "thay đổi, biến đổi"}, {"w": "発展", "f": "はってん", "hv": "PHÁT TRIỂN", "m": "phát triển"}, {"w": "完成", "f": "かんせい", "hv": "HOÀN THÀNH", "m": "hoàn thành"}, {"w": "道具", "f": "どうぐ", "hv": "ĐẠO CỤ", "m": "dụng cụ, công cụ"}, {"w": "情報", "f": "じょうほう", "hv": "TÌNH BÁO", "m": "thông tin, dữ liệu"}, {"w": "記憶", "f": "きおく", "hv": "KÝ ỨC", "m": "ký ức, trí nhớ"}], "3": [{"w": "笑顔", "f": "えがお", "hv": "TIẾU NHAN", "m": "nụ cười, nét mặt vui vẻ"}, {"w": "緊張", "f": "きんちょう", "hv": "KHẨN TRƯƠNG", "m": "hồi hộp, căng thẳng"}, {"w": "安心", "f": "あんしん", "hv": "AN TÂM", "m": "yên tâm, thanh thản"}, {"w": "不安", "f": "ふあん", "hv": "BẤT AN", "m": "lo lắng, bất an"}, {"w": "満足", "f": "まんぞく", "hv": "MÃN TÚC", "m": "hài lòng, thỏa mãn"}, {"w": "尊敬", "f": "そんけい", "hv": "TÔN KÍNH", "m": "tôn kính, kính trọng"}, {"w": "敬語", "f": "けいご", "hv": "KÍNH NGỮ", "m": "kính ngữ Nhật Bản"}, {"w": "謙譲", "f": "けんじょう", "hv": "KHIÊM NHƯỢNG", "m": "khiêm nhường, nhún nhường"}, {"w": "態度", "f": "たいど", "hv": "THÁI ĐỘ", "m": "thái độ, cử chỉ"}, {"w": "習慣", "f": "しゅうかん", "hv": "TẬP QUÁN", "m": "thói quen, tập quán"}, {"w": "印象", "f": "いんしょう", "hv": "ẤN TƯỢNG", "m": "ấn tượng"}, {"w": "影響", "f": "えいきょう", "hv": "ẢNH HƯỞNG", "m": "ảnh hưởng, tác động"}, {"w": "関係", "f": "かんけい", "hv": "QUAN HỆ", "m": "mối quan hệ"}, {"w": "希望", "f": "きぼう", "hv": "HI VỌNG", "m": "hi vọng, mong ước"}, {"w": "理由", "f": "りゆう", "hv": "LÝ DO", "m": "lý do, nguyên nhân"}, {"w": "自由", "f": "じゆう", "hv": "TỰ DO", "m": "tự do"}], "4": [{"w": "環境", "f": "かんきょう", "hv": "HOÀN CẢNH", "m": "môi trường"}, {"w": "経済", "f": "けいざい", "hv": "KINH TẾ", "m": "kinh tế"}, {"w": "社会", "f": "しゃかい", "hv": "XÃ HỘI", "m": "xã hội"}, {"w": "法律", "f": "ほうりつ", "hv": "PHÁP LUẬT", "m": "luật pháp"}, {"w": "規則", "f": "きそく", "hv": "QUY TẮC", "m": "quy tắc, nội quy"}, {"w": "目的", "f": "もくてき", "hv": "MỤC ĐÍCH", "m": "mục đích"}, {"w": "結果", "f": "けっか", "hv": "KẾT QUẢ", "m": "kết quả"}, {"w": "限界", "f": "げんかい", "hv": "HẠN GIỚI", "m": "giới hạn"}, {"w": "判断", "f": "はんだん", "hv": "PHÁN ĐOÁN", "m": "phán đoán, nhận định"}, {"w": "決断", "f": "けつだん", "hv": "QUYẾT ĐOÁN", "m": "quyết đoán, quyết định"}, {"w": "状態", "f": "じょうたい", "hv": "TRẠNG THÁI", "m": "trạng thái, tình trạng"}, {"w": "状況", "f": "じょうきょう", "hv": "TÌNH HUỐNG", "m": "tình hình, bối cảnh"}, {"w": "作法", "f": "さほう", "hv": "TÁ PHÁP", "m": "nghi thức, phép tắc"}, {"w": "左右", "f": "さゆう", "hv": "TẢ HỮU", "m": "trái phải; chi phối"}, {"w": "四季", "f": "しき", "hv": "TỨ QUÝ", "m": "bốn mùa"}, {"w": "時期", "f": "じき", "hv": "THÌ CƠ", "m": "thời kỳ, giai đoạn"}], "5": [{"w": "専門家", "f": "せんもんか", "hv": "CHUYÊN MÔN GIA", "m": "chuyên gia"}, {"w": "説明会", "f": "せつめいかい", "hv": "THUYẾT MINH HỘI", "m": "buổi hướng dẫn, giải thích"}, {"w": "解決策", "f": "かいけつさく", "hv": "GIẢI QUYẾT SÁCH", "m": "biện pháp giải quyết"}, {"w": "計画書", "f": "けいかくしょ", "hv": "KẾ HOẠCH THƯ", "m": "bản kế hoạch"}, {"w": "報告書", "f": "ほうこくしょ", "hv": "BÁO CÁO THƯ", "m": "bản báo cáo"}, {"w": "案内図", "f": "あんないず", "hv": "ÁN NỘI ĐỒ", "m": "bản đồ, sơ đồ chỉ dẫn"}, {"w": "可能性", "f": "かのうせい", "hv": "KHẢ NĂNG TÍNH", "m": "khả năng, tính khả thi"}, {"w": "重要性", "f": "じゅうようせい", "hv": "TRỌNG YẾU TÍNH", "m": "tầm quan trọng"}, {"w": "安全性", "f": "あんぜんせい", "hv": "AN TOÀN TÍNH", "m": "độ an toàn"}, {"w": "安定感", "f": "あんていかん", "hv": "AN ĐỊNH CẢM", "m": "cảm giác ổn định"}, {"w": "緊張感", "f": "きんちょうかん", "hv": "KHẨN TRƯƠNG CẢM", "m": "cảm giác căng thẳng"}, {"w": "責任感", "f": "せきにんかん", "hv": "TRÁCH NHIỆM CẢM", "m": "tinh thần trách nhiệm"}, {"w": "違和感", "f": "いわかん", "hv": "VI HÒA CẢM", "m": "cảm giác gượng gạo, khác lạ"}, {"w": "満足感", "f": "まんぞくかん", "hv": "MÃN TÚC CẢM", "m": "cảm giác thỏa mãn"}, {"w": "積極的", "f": "せっきょくてき", "hv": "TÍCH CỰC ĐÍCH", "m": "tích cực, chủ động"}, {"w": "奨学金", "f": "しょうがくきん", "hv": "TƯỞNG HỌC KIM", "m": "học bổng"}, {"w": "教科書", "f": "きょうかしょ", "hv": "GIAO KHOA THƯ", "m": "sách giáo khoa"}, {"w": "不思議", "f": "ふしぎ", "hv": "BẤT TƯ NGHỊ", "m": "kỳ lạ, huyền bí"}]};
+    const FULL_DICTIONARY = {"連絡": {"w": "連絡", "f": "れんらく", "hv": "LIÊN LẠC", "m": "liên lạc, thông báo"}, "報告": {"w": "報告", "f": "ほうこく", "hv": "BÁO CÁO", "m": "báo cáo"}, "相談": {"w": "相談", "f": "そうだん", "hv": "TƯƠNG ĐÀM", "m": "thảo luận, hỏi ý kiến"}, "挨拶": {"w": "挨拶", "f": "あいさつ", "hv": "AI TẠT", "m": "chào hỏi"}, "丁寧": {"w": "丁寧", "f": "ていねい", "hv": "ĐINH NINH", "m": "lịch sự, cẩn thận"}, "案内": {"w": "案内", "f": "あんない", "hv": "ÁN NỘI", "m": "hướng dẫn, chỉ đường"}, "準備": {"w": "準備", "f": "じゅんび", "hv": "CHUẨN BỊ", "m": "chuẩn bị"}, "参加": {"w": "参加", "f": "さんか", "hv": "THAM GIA", "m": "tham gia"}, "質問": {"w": "質問", "f": "しつもん", "hv": "CHẤT VẤN", "m": "câu hỏi, thắc mắc"}, "説明": {"w": "説明", "f": "せつめい", "hv": "THUYẾT MINH", "m": "giải thích, thuyết minh"}, "確認": {"w": "確認", "f": "かくにん", "hv": "XÁC NHẬN", "m": "kiểm tra, xác nhận"}, "解決": {"w": "解決", "f": "かいけつ", "hv": "GIẢI QUYẾT", "m": "giải quyết vấn đề"}, "協力": {"w": "協力", "f": "きょうりょく", "hv": "HIỆP LỰC", "m": "hợp tác, chung sức"}, "感謝": {"w": "感謝", "f": "かんしゃ", "hv": "CẢM TẠ", "m": "cảm ơn, biết ơn"}, "予定": {"w": "予定", "f": "よてい", "hv": "DỰ ĐỊNH", "m": "dự định, lịch trình"}, "約束": {"w": "約束", "f": "やくそく", "hv": "ƯỚC THÚC", "m": "lời hứa, cuộc hẹn"}, "信頼": {"w": "信頼", "f": "しんらい", "hv": "TÍN LẠI", "m": "tin cậy, tín nhiệm"}, "責任": {"w": "責任", "f": "せきにん", "hv": "TRÁCH NHIỆM", "m": "trách nhiệm"}, "失敗": {"w": "失敗", "f": "しっぱい", "hv": "THẤT BẠI", "m": "thất bại, sai sót"}, "成功": {"w": "成功", "f": "せいこう", "hv": "THÀNH CÔNG", "m": "thành công"}, "努力": {"w": "努力", "f": "どりょく", "hv": "NỖ LỰC", "m": "nỗ lực, cố gắng"}, "経験": {"w": "経験", "f": "けいけん", "hv": "KINH NGHIỆM", "m": "kinh nghiệm"}, "技術": {"w": "技術", "f": "ぎじゅつ", "hv": "KỸ THUẬT", "m": "kỹ thuật, công nghệ"}, "専門": {"w": "専門", "f": "せんもん", "hv": "CHUYÊN MÔN", "m": "chuyên môn"}, "集中": {"w": "集中", "f": "しゅうちゅう", "hv": "TẬP TRUNG", "m": "tập trung"}, "意識": {"w": "意識", "f": "いしき", "hv": "Ý THỨC", "m": "ý thức, nhận thức"}, "変化": {"w": "変化", "f": "へんか", "hv": "BIẾN HÓA", "m": "thay đổi, biến đổi"}, "発展": {"w": "発展", "f": "はってん", "hv": "PHÁT TRIỂN", "m": "phát triển"}, "完成": {"w": "完成", "f": "かんせい", "hv": "HOÀN THÀNH", "m": "hoàn thành"}, "道具": {"w": "道具", "f": "どうぐ", "hv": "ĐẠO CỤ", "m": "dụng cụ, công cụ"}, "情報": {"w": "情報", "f": "じょうほう", "hv": "TÌNH BÁO", "m": "thông tin, dữ liệu"}, "記憶": {"w": "記憶", "f": "きおく", "hv": "KÝ ỨC", "m": "ký ức, trí nhớ"}, "笑顔": {"w": "笑顔", "f": "えがお", "hv": "TIẾU NHAN", "m": "nụ cười, nét mặt vui vẻ"}, "緊張": {"w": "緊張", "f": "きんちょう", "hv": "KHẨN TRƯƠNG", "m": "hồi hộp, căng thẳng"}, "安心": {"w": "安心", "f": "あんしん", "hv": "AN TÂM", "m": "yên tâm, thanh thản"}, "不安": {"w": "不安", "f": "ふあん", "hv": "BẤT AN", "m": "lo lắng, bất an"}, "満足": {"w": "満足", "f": "まんぞく", "hv": "MÃN TÚC", "m": "hài lòng, thỏa mãn"}, "尊敬": {"w": "尊敬", "f": "そんけい", "hv": "TÔN KÍNH", "m": "tôn kính, kính trọng"}, "敬語": {"w": "敬語", "f": "けいご", "hv": "KÍNH NGỮ", "m": "kính ngữ Nhật Bản"}, "謙譲": {"w": "謙譲", "f": "けんじょう", "hv": "KHIÊM NHƯỢNG", "m": "khiêm nhường, nhún nhường"}, "態度": {"w": "態度", "f": "たいど", "hv": "THÁI ĐỘ", "m": "thái độ, cử chỉ"}, "習慣": {"w": "習慣", "f": "しゅうかん", "hv": "TẬP QUÁN", "m": "thói quen, tập quán"}, "印象": {"w": "印象", "f": "いんしょう", "hv": "ẤN TƯỢNG", "m": "ấn tượng"}, "影響": {"w": "影響", "f": "えいきょう", "hv": "ẢNH HƯỞNG", "m": "ảnh hưởng, tác động"}, "関係": {"w": "関係", "f": "かんけい", "hv": "QUAN HỆ", "m": "mối quan hệ"}, "希望": {"w": "希望", "f": "きぼう", "hv": "HI VỌNG", "m": "hi vọng, mong ước"}, "理由": {"w": "理由", "f": "りゆう", "hv": "LÝ DO", "m": "lý do, nguyên nhân"}, "自由": {"w": "自由", "f": "じゆう", "hv": "TỰ DO", "m": "tự do"}, "環境": {"w": "環境", "f": "かんきょう", "hv": "HOÀN CẢNH", "m": "môi trường"}, "経済": {"w": "経済", "f": "けいざい", "hv": "KINH TẾ", "m": "kinh tế"}, "社会": {"w": "社会", "f": "しゃかい", "hv": "XÃ HỘI", "m": "xã hội"}, "法律": {"w": "法律", "f": "ほうりつ", "hv": "PHÁP LUẬT", "m": "luật pháp"}, "規則": {"w": "規則", "f": "きそく", "hv": "QUY TẮC", "m": "quy tắc, nội quy"}, "目的": {"w": "目的", "f": "もくてき", "hv": "MỤC ĐÍCH", "m": "mục đích"}, "結果": {"w": "結果", "f": "けっか", "hv": "KẾT QUẢ", "m": "kết quả"}, "限界": {"w": "限界", "f": "げんかい", "hv": "HẠN GIỚI", "m": "giới hạn"}, "判断": {"w": "判断", "f": "はんだん", "hv": "PHÁN ĐOÁN", "m": "phán đoán, nhận định"}, "決断": {"w": "決断", "f": "けつだん", "hv": "QUYẾT ĐOÁN", "m": "quyết đoán, quyết định"}, "状態": {"w": "状態", "f": "じょうたい", "hv": "TRẠNG THÁI", "m": "trạng thái, tình trạng"}, "状況": {"w": "状況", "f": "じょうきょう", "hv": "TÌNH HUỐNG", "m": "tình hình, bối cảnh"}, "作法": {"w": "作法", "f": "さほう", "hv": "TÁ PHÁP", "m": "nghi thức, phép tắc"}, "左右": {"w": "左右", "f": "さゆう", "hv": "TẢ HỮU", "m": "trái phải; chi phối"}, "四季": {"w": "四季", "f": "しき", "hv": "TỨ QUÝ", "m": "bốn mùa"}, "時期": {"w": "時期", "f": "じき", "hv": "THÌ CƠ", "m": "thời kỳ, giai đoạn"}, "専門家": {"w": "専門家", "f": "せんもんか", "hv": "CHUYÊN MÔN GIA", "m": "chuyên gia"}, "説明会": {"w": "説明会", "f": "せつめいかい", "hv": "THUYẾT MINH HỘI", "m": "buổi hướng dẫn, giải thích"}, "解決策": {"w": "解決策", "f": "かいけつさく", "hv": "GIẢI QUYẾT SÁCH", "m": "biện pháp giải quyết"}, "計画書": {"w": "計画書", "f": "けいかくしょ", "hv": "KẾ HOẠCH THƯ", "m": "bản kế hoạch"}, "報告書": {"w": "報告書", "f": "ほうこくしょ", "hv": "BÁO CÁO THƯ", "m": "bản báo cáo"}, "案内図": {"w": "案内図", "f": "あんないず", "hv": "ÁN NỘI ĐỒ", "m": "bản đồ, sơ đồ chỉ dẫn"}, "可能性": {"w": "可能性", "f": "かのうせい", "hv": "KHẢ NĂNG TÍNH", "m": "khả năng, tính khả thi"}, "重要性": {"w": "重要性", "f": "じゅうようせい", "hv": "TRỌNG YẾU TÍNH", "m": "tầm quan trọng"}, "安全性": {"w": "安全性", "f": "あんぜんせい", "hv": "AN TOÀN TÍNH", "m": "độ an toàn"}, "安定感": {"w": "安定感", "f": "あんていかん", "hv": "AN ĐỊNH CẢM", "m": "cảm giác ổn định"}, "緊張感": {"w": "緊張感", "f": "きんちょうかん", "hv": "KHẨN TRƯƠNG CẢM", "m": "cảm giác căng thẳng"}, "責任感": {"w": "責任感", "f": "せきにんかん", "hv": "TRÁCH NHIỆM CẢM", "m": "tinh thần trách nhiệm"}, "違和感": {"w": "違和感", "f": "いわかん", "hv": "VI HÒA CẢM", "m": "cảm giác gượng gạo, khác lạ"}, "満足感": {"w": "満足感", "f": "まんぞくかん", "hv": "MÃN TÚC CẢM", "m": "cảm giác thỏa mãn"}, "積極的": {"w": "積極的", "f": "せっきょくてき", "hv": "TÍCH CỰC ĐÍCH", "m": "tích cực, chủ động"}, "奨学金": {"w": "奨学金", "f": "しょうがくきん", "hv": "TƯỞNG HỌC KIM", "m": "học bổng"}, "教科書": {"w": "教科書", "f": "きょうかしょ", "hv": "GIAO KHOA THƯ", "m": "sách giáo khoa"}, "不思議": {"w": "不思議", "f": "ふしぎ", "hv": "BẤT TƯ NGHỊ", "m": "kỳ lạ, huyền bí"}, "参考": {"w": "参考", "f": "さんこう", "hv": "SAM KHẢO", "m": "reference, consultation"}, "賛成": {"w": "賛成", "f": "さんせい", "hv": "TÁN THÀNH", "m": "approval, agreement"}, "酸性": {"w": "酸性", "f": "さんせい", "hv": "TOAN TÍNH", "m": "acidity"}, "酸素": {"w": "酸素", "f": "さんそ", "hv": "TOAN TỐ", "m": "oxygen"}, "四角": {"w": "四角", "f": "しかく", "hv": "TỨ CỐC", "m": "square"}, "支給": {"w": "支給", "f": "しきゅう", "hv": "CHI CẤP", "m": "payment, allowance"}, "至急": {"w": "至急", "f": "しきゅう", "hv": "CHÍ CẤP", "m": "urgent, pressing"}, "刺激": {"w": "刺激", "f": "しげき", "hv": "THÍCH KHÍCH", "m": "stimulus, impetus, incentive"}, "資源": {"w": "資源", "f": "しげん", "hv": "TƯ NGUYÊN", "m": "resources"}, "事件": {"w": "事件", "f": "じけん", "hv": "SỰ KIỆN", "m": "event, affair, incident"}, "時刻": {"w": "時刻", "f": "じこく", "hv": "THÌ HẶC", "m": "time, hour"}, "自殺": {"w": "自殺", "f": "じさつ", "hv": "TỰ SÁI", "m": "suicide"}, "事実": {"w": "事実", "f": "じじつ", "hv": "SỰ CHÍ", "m": "fact, truth, reality"}, "支出": {"w": "支出", "f": "ししゅつ", "hv": "CHI XUÝ", "m": "expenditure, expenses"}, "事情": {"w": "事情", "f": "じじょう", "hv": "SỰ TÌNH", "m": "circumstances, situation, reasons"}, "詩人": {"w": "詩人", "f": "しじん", "hv": "THI NHÂN", "m": "poet"}, "自身": {"w": "自身", "f": "じしん", "hv": "TỰ QUYÊN", "m": "oneself"}, "自然": {"w": "自然", "f": "しぜん", "hv": "TỰ NHIÊN", "m": "nature, spontaneous"}, "思想": {"w": "思想", "f": "しそう", "hv": "TAI TƯỞNG", "m": "thought, idea"}, "次第": {"w": "次第", "f": "しだい", "hv": "THỨ ĐỆ", "m": "order; circumstances; immediate(ly)"}, "失業": {"w": "失業", "f": "しつぎょう", "hv": "THẤT NGHIỆP", "m": "unemployment"}, "湿気": {"w": "湿気", "f": "しっけ", "hv": "CHẬP KHÍ", "m": "moisture, humidity, dampness"}, "実験": {"w": "実験", "f": "じっけん", "hv": "CHÍ NGHIỆM", "m": "lab work; experiment"}, "実現": {"w": "実現", "f": "じつげん", "hv": "CHÍ HIỆN", "m": "implementation, materialization, realization"}, "実行": {"w": "実行", "f": "じっこう", "hv": "CHÍ HÀNG", "m": "practice, execution (e.g., program), realization"}, "実際": {"w": "実際", "f": "じっさい", "hv": "CHÍ TẾ", "m": "in fact; in actuality"}, "実施": {"w": "実施", "f": "じっし", "hv": "CHÍ DI", "m": "enforcement, carry out, operation"}, "湿度": {"w": "湿度", "f": "しつど", "hv": "CHẬP ĐẠC", "m": "humidity"}, "失望": {"w": "失望", "f": "しつぼう", "hv": "THẤT VỌNG", "m": "disappointment, despair"}, "実力": {"w": "実力", "f": "じつりょく", "hv": "CHÍ LỰC", "m": "ability; force"}, "支店": {"w": "支店", "f": "してん", "hv": "CHI ĐIẾM", "m": "branch store (office)"}, "指導": {"w": "指導", "f": "しどう", "hv": "CHỈ ĐẠO", "m": "leadership, guidance, coaching"}, "自動": {"w": "自動", "f": "じどう", "hv": "TỰ ĐỘNG", "m": "automatic, self-motion"}, "児童": {"w": "児童", "f": "じどう", "hv": "NHI ĐỒNG", "m": "children, juvenile"}, "支配": {"w": "支配", "f": "しはい", "hv": "CHI PHỐI", "m": "rule, control, direction"}, "芝居": {"w": "芝居", "f": "しばい", "hv": "CHI CƯ", "m": "play, drama"}, "芝生": {"w": "芝生", "f": "しばふ", "hv": "CHI SANH", "m": "lawn"}, "支払": {"w": "支払", "f": "しはらい", "hv": "CHI BẬT", "m": "payment"}, "死亡": {"w": "死亡", "f": "しぼう", "hv": "TỬ VONG", "m": "death"}, "資本": {"w": "資本", "f": "しほん", "hv": "TƯ BÔN", "m": "funds, capital"}, "姉妹": {"w": "姉妹", "f": "しまい", "hv": "TỶ MUỘI", "m": "sisters"}, "自慢": {"w": "自慢", "f": "じまん", "hv": "TỰ MẠN", "m": "pride, boast"}, "地味": {"w": "地味", "f": "じみ", "hv": "ĐỊA VỊ", "m": "quiet, plain, conservative"}, "借金": {"w": "借金", "f": "しゃっきん", "hv": "TÁ KIM", "m": "debt, loan, liabilities"}, "周囲": {"w": "周囲", "f": "しゅうい", "hv": "CHU VY", "m": "surroundings, circumference, environs"}, "収穫": {"w": "収穫", "f": "しゅうかく", "hv": "THÂU HOẠCH", "m": "harvest, crop, ingathering"}, "宗教": {"w": "宗教", "f": "しゅうきょう", "hv": "TÔN GIAO", "m": "religion"}, "重視": {"w": "重視", "f": "じゅうし", "hv": "TRÙNG THỊ", "m": "importance, stress"}, "就職": {"w": "就職", "f": "しゅうしょく", "hv": "TỰU CHỨC", "m": "finding employment"}, "修正": {"w": "修正", "f": "しゅうせい", "hv": "TU CHINH", "m": "amendment, correction"}, "重体": {"w": "重体", "f": "じゅうたい", "hv": "TRÙNG BỔN", "m": "seriously ill, critical state"}, "渋滞": {"w": "渋滞", "f": "じゅうたい", "hv": "SÁP TRỆ", "m": "congestion (e.g., traffic), delay"}, "重大": {"w": "重大", "f": "じゅうだい", "hv": "TRÙNG THÁI", "m": "serious, important"}, "住宅": {"w": "住宅", "f": "じゅうたく", "hv": "TRÚ TRẠCH", "m": "resident, housing"}, "集団": {"w": "集団", "f": "しゅうだん", "hv": "TẬP ĐOÀN", "m": "group, mass"}, "収入": {"w": "収入", "f": "しゅうにゅう", "hv": "THÂU NHẬP", "m": "income, revenue"}, "住民": {"w": "住民", "f": "じゅうみん", "hv": "TRÚ DÂN", "m": "inhabitants, residents"}, "重要": {"w": "重要", "f": "じゅうよう", "hv": "TRÙNG YÊU", "m": "important, essential"}, "修理": {"w": "修理", "f": "しゅうり", "hv": "TU LÍ", "m": "repairing, mending"}, "主義": {"w": "主義", "f": "しゅぎ", "hv": "CHÚA NGHĨA", "m": "doctrine, cause, principle"}, "宿泊": {"w": "宿泊", "f": "しゅくはく", "hv": "TÚ BẠC", "m": "lodging"}, "手術": {"w": "手術", "f": "しゅじゅつ", "hv": "THỦ THUẬT", "m": "surgical operation"}, "首相": {"w": "首相", "f": "しゅしょう", "hv": "THÚ TƯƠNG", "m": "Prime Minister"}, "手段": {"w": "手段", "f": "しゅだん", "hv": "THỦ ĐOÀN", "m": "means, way, measure"}, "主張": {"w": "主張", "f": "しゅちょう", "hv": "CHÚA TRƯƠNG", "m": "claim, insistence, assertion"}, "出場": {"w": "出場", "f": "しゅつじょう", "hv": "XUÝ TRÀNG", "m": "participation"}, "出身": {"w": "出身", "f": "しゅっしん", "hv": "XUÝ QUYÊN", "m": "come from"}, "出版": {"w": "出版", "f": "しゅっぱん", "hv": "XUÝ BẢN", "m": "publication"}, "首都": {"w": "首都", "f": "しゅと", "hv": "THÚ ĐÔ", "m": "capital city"}, "主婦": {"w": "主婦", "f": "しゅふ", "hv": "CHÚA PHỤ", "m": "housewife"}, "主要": {"w": "主要", "f": "しゅよう", "hv": "CHÚA YÊU", "m": "chief, main"}, "需要": {"w": "需要", "f": "じゅよう", "hv": "NHU YÊU", "m": "demand"}, "種類": {"w": "種類", "f": "しゅるい", "hv": "CHÚNG LOẠI", "m": "variety, kind"}, "瞬間": {"w": "瞬間", "f": "しゅんかん", "hv": "THUẤN GIAN", "m": "moment, second"}, "順調": {"w": "順調", "f": "じゅんちょう", "hv": "THUẬN ĐIỀU", "m": "doing well"}, "順番": {"w": "順番", "f": "じゅんばん", "hv": "THUẬN BA", "m": "turn (in line), order of things"}, "使用": {"w": "使用", "f": "しよう", "hv": "SỨ DỤNG", "m": "use (same as 使うこと (つかうこと)), application, employment, utilization"}, "障害": {"w": "障害", "f": "しょうがい", "hv": "CHƯƠNG HẠI", "m": "obstacle, impediment"}, "乗客": {"w": "乗客", "f": "じょうきゃく", "hv": "THẶNG KHÁCH", "m": "passenger"}, "上京": {"w": "上京", "f": "じょうきょう", "hv": "THƯỚNG KINH", "m": "proceeding to the capital (Tokyo)"}, "条件": {"w": "条件", "f": "じょうけん", "hv": "THIÊU KIỆN", "m": "conditions, terms"}, "正午": {"w": "正午", "f": "しょうご", "hv": "CHINH NGỌ", "m": "noon, mid-day"}, "正直": {"w": "正直", "f": "しょうじき", "hv": "CHINH TRỊ", "m": "honesty, integrity, frankness"}, "常識": {"w": "常識", "f": "じょうしき", "hv": "THƯỜNG CHÍ", "m": "common sense"}, "少女": {"w": "少女", "f": "しょうじょ", "hv": "THIẾU NHỮ", "m": "young girl"}, "症状": {"w": "症状", "f": "しょうじょう", "hv": "CHỨNG TRẠNG", "m": "symptoms, condition"}, "上達": {"w": "上達", "f": "じょうたつ", "hv": "THƯỚNG ĐẠT", "m": "improvement, advance"}, "冗談": {"w": "冗談", "f": "じょうだん", "hv": "NHŨNG ĐÀM", "m": "a joke"}, "上等": {"w": "上等", "f": "じょうとう", "hv": "THƯỚNG ĐẲNG", "m": "first class, very good"}, "衝突": {"w": "衝突", "f": "しょうとつ", "hv": "XUNG GIA", "m": "collision, conflict"}, "商人": {"w": "商人", "f": "しょうにん", "hv": "THƯƠNG NHÂN", "m": "trader, shopkeeper, merchant"}, "承認": {"w": "承認", "f": "しょうにん", "hv": "CHỬNG NHẬN", "m": "recognition, approval"}, "少年": {"w": "少年", "f": "しょうねん", "hv": "THIẾU NIÊN", "m": "boys, juveniles"}, "商売": {"w": "商売", "f": "しょうばい", "hv": "THƯƠNG MẠI", "m": "trade, business, commerce"}, "消費": {"w": "消費", "f": "しょうひ", "hv": "TIÊU BÍ", "m": "consumption, expenditure"}, "商品": {"w": "商品", "f": "しょうひん", "hv": "THƯƠNG PHẨM", "m": "commodity, merchandise"}, "賞品": {"w": "賞品", "f": "しょうひん", "hv": "THƯỞNG PHẨM", "m": "prize, trophy"}, "消防": {"w": "消防", "f": "しょうぼう", "hv": "TIÊU PHÒNG", "m": "fire fighting, fire department"}, "証明": {"w": "証明", "f": "しょうめい", "hv": "CHỨNG MINH", "m": "proof, verification"}, "省略": {"w": "省略", "f": "しょうりゃく", "hv": "SẢNH LƯỢC", "m": "omission, abbreviation, abridgment"}, "女王": {"w": "女王", "f": "じょおう", "hv": "NHỮ VƯƠNG", "m": "queen"}, "職業": {"w": "職業", "f": "しょくぎょう", "hv": "CHỨC NGHIỆP", "m": "occupation, business"}, "食卓": {"w": "食卓", "f": "しょくたく", "hv": "THỰC TRÁC", "m": "dining table"}, "食品": {"w": "食品", "f": "しょくひん", "hv": "THỰC PHẨM", "m": "foodstuff"}, "植物": {"w": "植物", "f": "しょくぶつ", "hv": "THỰC VẬT", "m": "plant, vegetation"}, "食物": {"w": "食物", "f": "しょくもつ", "hv": "THỰC VẬT", "m": "food, foodstuff"}, "食欲": {"w": "食欲", "f": "しょくよく", "hv": "THỰC DỤC", "m": "appetite (for food)"}, "食料": {"w": "食料", "f": "しょくりょう", "hv": "THỰC LIÊU", "m": "food"}, "食糧": {"w": "食糧", "f": "しょくりょう", "hv": "THỰC LƯƠNG", "m": "provisions, rations"}, "書斎": {"w": "書斎", "f": "しょさい", "hv": "THƯ TRAI", "m": "study, den"}, "女子": {"w": "女子", "f": "じょし", "hv": "NHỮ TÍ", "m": "woman, girl"}, "助手": {"w": "助手", "f": "じょしゅ", "hv": "TRỢ THỦ", "m": "helper, assistant"}, "署名": {"w": "署名", "f": "しょめい", "hv": "THỬ DANH", "m": "signature"}, "書物": {"w": "書物", "f": "しょもつ", "hv": "THƯ VẬT", "m": "books"}, "女優": {"w": "女優", "f": "じょゆう", "hv": "NHỮ ƯU", "m": "actress"}, "処理": {"w": "処理", "f": "しょり", "hv": "XỨ LÍ", "m": "processing, treatment, disposition"}, "書類": {"w": "書類", "f": "しょるい", "hv": "THƯ LOẠI", "m": "documents, official papers"}, "進学": {"w": "進学", "f": "しんがく", "hv": "TIẾN HỌC", "m": "going on to university"}, "神経": {"w": "神経", "f": "しんけい", "hv": "THẦN KINH", "m": "nerve, sensitivity"}, "真剣": {"w": "真剣", "f": "しんけん", "hv": "CHÂN KIẾM", "m": "seriousness, earnestness"}, "信仰": {"w": "信仰", "f": "しんこう", "hv": "THÂN NGANG", "m": "(religious) faith, belief"}, "信号": {"w": "信号", "f": "しんごう", "hv": "THÂN HIỆU", "m": "traffic lights, signal, semaphore"}, "人工": {"w": "人工", "f": "じんこう", "hv": "NHÂN CÔNG", "m": "artificial, man made, human work,"}, "深刻": {"w": "深刻", "f": "しんこく", "hv": "THÂM HẶC", "m": "serious"}, "診察": {"w": "診察", "f": "しんさつ", "hv": "CHẨN SÁT", "m": "medical examination (of a patient)"}, "人種": {"w": "人種", "f": "じんしゅ", "hv": "NHÂN CHÚNG", "m": "race (of people)"}, "人生": {"w": "人生", "f": "じんせい", "hv": "NHÂN SANH", "m": "(human) life (e.g., conception to death)"}, "親戚": {"w": "親戚", "f": "しんせき", "hv": "THÂN THÍCH", "m": "relative(s)"}, "新鮮": {"w": "新鮮", "f": "しんせん", "hv": "TÂN TIÊN", "m": "fresh"}, "心臓": {"w": "心臓", "f": "しんぞう", "hv": "TÂM TẠNG", "m": "heart"}, "身体": {"w": "身体", "f": "しんたい", "hv": "QUYÊN BỔN", "m": "the body"}, "身長": {"w": "身長", "f": "しんちょう", "hv": "QUYÊN TRÀNG", "m": "height (of body), stature"}, "慎重": {"w": "慎重", "f": "しんちょう", "hv": "THẬN TRÙNG", "m": "careful, prudent, cautious"}, "審判": {"w": "審判", "f": "しんぱん", "hv": "THẨM PHÁN", "m": "umpire, referee, judgment"}, "人物": {"w": "人物", "f": "じんぶつ", "hv": "NHÂN VẬT", "m": "character, personality, talented man"}, "進歩": {"w": "進歩", "f": "しんぽ", "hv": "TIẾN BỘ", "m": "improvement, progress, development"}, "親友": {"w": "親友", "f": "しんゆう", "hv": "THÂN HỮU", "m": "close friend, buddy"}, "信用": {"w": "信用", "f": "しんよう", "hv": "THÂN DỤNG", "m": "confidence, dependence"}, "心理": {"w": "心理", "f": "しんり", "hv": "TÂM LÍ", "m": "mentality"}, "人類": {"w": "人類", "f": "じんるい", "hv": "NHÂN LOẠI", "m": "mankind, humanity"}, "水準": {"w": "水準", "f": "すいじゅん", "hv": "THUỶ CHUYẾT", "m": "level, standard"}, "推薦": {"w": "推薦", "f": "すいせん", "hv": "SUY TIẾN", "m": "recommendation"}, "睡眠": {"w": "睡眠", "f": "すいみん", "hv": "THUỴ MIÊN", "m": "sleep"}, "数字": {"w": "数字", "f": "すうじ", "hv": "SÁC TỰ", "m": "numeral, figure"}, "頭痛": {"w": "頭痛", "f": "ずつう", "hv": "ĐẦU THỐNG", "m": "headache"}, "所為": {"w": "所為", "f": "せい", "hv": "SỞ VI", "m": "cause, reason, fault"}, "性格": {"w": "性格", "f": "せいかく", "hv": "TÍNH CÁC", "m": "character, personality"}, "正確": {"w": "正確", "f": "せいかく", "hv": "CHINH XÁC", "m": "accurate, punctuality, exact"}, "世紀": {"w": "世紀", "f": "せいき", "hv": "THẾ KỈ", "m": "century"}, "請求": {"w": "請求", "f": "せいきゅう", "hv": "THỈNH CẦU", "m": "claim, demand, request"}, "税金": {"w": "税金", "f": "ぜいきん", "hv": "THOÁT KIM", "m": "tax, duty"}, "清潔": {"w": "清潔", "f": "せいけつ", "hv": "SẢNH KHIẾT", "m": "clean"}, "制限": {"w": "制限", "f": "せいげん", "hv": "CHẾ HẠN", "m": "restriction, restraint, limitation"}, "正式": {"w": "正式", "f": "せいしき", "hv": "CHINH THỨC", "m": "official, formal"}, "性質": {"w": "性質", "f": "せいしつ", "hv": "TÍNH CHÍ", "m": "nature, property, disposition"}, "精神": {"w": "精神", "f": "せいしん", "hv": "TINH THẦN", "m": "mind, soul, spirit"}, "成人": {"w": "成人", "f": "せいじん", "hv": "THÀNH NHÂN", "m": "adult"}, "成績": {"w": "成績", "f": "せいせき", "hv": "THÀNH TÍCH", "m": "grade (i.e., on a test), academic record"}, "製造": {"w": "製造", "f": "せいぞう", "hv": "CHẾ THÁO", "m": "manufacture, production"}, "贅沢": {"w": "贅沢", "f": "ぜいたく", "hv": "CHUẾ DỊCH", "m": "luxury, extravagance"}, "成長": {"w": "成長", "f": "せいちょう", "hv": "THÀNH TRÀNG", "m": "growth"}, "生長": {"w": "生長", "f": "せいちょう", "hv": "SANH TRÀNG", "m": "growth"}, "制度": {"w": "制度", "f": "せいど", "hv": "CHẾ ĐẠC", "m": "system, institution"}, "青年": {"w": "青年", "f": "せいねん", "hv": "THANH NIÊN", "m": "youth, young man"}, "製品": {"w": "製品", "f": "せいひん", "hv": "CHẾ PHẨM", "m": "manufactured goods, finished goods"}, "政府": {"w": "政府", "f": "せいふ", "hv": "CHINH PHỦ", "m": "government, administration"}, "生物": {"w": "生物", "f": "せいぶつ", "hv": "SANH VẬT", "m": "living thing, organism"}, "生命": {"w": "生命", "f": "せいめい", "hv": "SANH MỆNH", "m": "life"}, "整理": {"w": "整理", "f": "せいり", "hv": "CHỈNH LÍ", "m": "sorting, arrangement"}, "石炭": {"w": "石炭", "f": "せきたん", "hv": "THẠCH THÁN", "m": "coal"}, "石油": {"w": "石油", "f": "せきゆ", "hv": "THẠCH DU", "m": "oil, petroleum, kerosene"}, "世間": {"w": "世間", "f": "せけん", "hv": "THẾ GIAN", "m": "world, society"}, "設計": {"w": "設計", "f": "せっけい", "hv": "THIẾT KÊ", "m": "plan, design"}, "絶対": {"w": "絶対", "f": "ぜったい", "hv": "TUYỆT ĐỐI", "m": "definitely, without fail, absoluteness"}, "愛情": {"w": "愛情", "f": "あいじょう", "hv": "ÁI TÌNH", "m": "love, affection"}, "合図": {"w": "合図", "f": "あいず", "hv": "CÁP ĐỒ", "m": "sign, signal"}, "相手": {"w": "相手", "f": "あいて", "hv": "TƯƠNG THỦ", "m": "partner; addressee; the person you are talking to"}, "握手": {"w": "握手", "f": "あくしゅ", "hv": "ÁC THỦ", "m": "handshake"}, "悪魔": {"w": "悪魔", "f": "あくま", "hv": "ÁC MA", "m": "devil, demon, evil spirit"}, "案外": {"w": "案外", "f": "あんがい", "hv": "ÁN NGOẠI", "m": "unexpectedly"}, "暗記": {"w": "暗記", "f": "あんき", "hv": "ÁM KÍ", "m": "memorization, learning by heart"}, "安定": {"w": "安定", "f": "あんてい", "hv": "AN ĐÍNH", "m": "stability, equilibrium"}, "委員": {"w": "委員", "f": "いいん", "hv": "UY VIÊN", "m": "committee member"}, "意外": {"w": "意外", "f": "いがい", "hv": "Y NGOẠI", "m": "unexpected, surprising"}, "医師": {"w": "医師", "f": "いし", "hv": "Y SƯ", "m": "doctor, physician"}, "意思": {"w": "意思", "f": "いし", "hv": "Y TAI", "m": "intention, purpose"}, "意志": {"w": "意志", "f": "いし", "hv": "Y CHÍ", "m": "will, volition"}, "維持": {"w": "維持", "f": "いじ", "hv": "DUY TRÌ", "m": "maintenance, preservation"}, "異常": {"w": "異常", "f": "いじょう", "hv": "DI THƯỜNG", "m": "strangeness, abnormality, disorder"}, "意地悪": {"w": "意地悪", "f": "いじわる", "hv": "Y ĐỊA ÁC", "m": "malicious, mean, unkind"}, "以前": {"w": "以前", "f": "いぜん", "hv": "DĨ TIỀN", "m": "in the past; before"}, "偉大": {"w": "偉大", "f": "いだい", "hv": "VĨ THÁI", "m": "greatness"}, "位置": {"w": "位置", "f": "いち", "hv": "VỊ TRÍ", "m": "place, position"}, "一時": {"w": "一時", "f": "いちじ", "hv": "NHẤT THÌ", "m": "for a time, temporarily"}, "市場": {"w": "市場", "f": "いちば", "hv": "THỊ TRÀNG", "m": "market, bazaar"}, "一家": {"w": "一家", "f": "いっか", "hv": "NHẤT CÔ", "m": "family, clan"}, "一種": {"w": "一種", "f": "いっしゅ", "hv": "NHẤT CHÚNG", "m": "a species, a kind, a variety"}, "一瞬": {"w": "一瞬", "f": "いっしゅん", "hv": "NHẤT THUẤN", "m": "a moment, an instant"}, "一生": {"w": "一生", "f": "いっしょう", "hv": "NHẤT SANH", "m": "throughout (one's) life"}, "一層": {"w": "一層", "f": "いっそう", "hv": "NHẤT TẰNG", "m": "much more, still more"}, "一体": {"w": "一体", "f": "いったい", "hv": "NHẤT BỔN", "m": "one object; body; what on earth?; generally"}, "一致": {"w": "一致", "f": "いっち", "hv": "NHẤT TRÍ", "m": "agreement; conformity"}, "一般": {"w": "一般", "f": "いっぱん", "hv": "NHẤT BAN", "m": "general, average"}, "一方": {"w": "一方", "f": "いっぽう", "hv": "NHẤT BÀNG", "m": "on the other hand; meanwhile"}, "移動": {"w": "移動", "f": "いどう", "hv": "DI ĐỘNG", "m": "migration, movement"}, "従兄弟": {"w": "従兄弟", "f": "いとこ", "hv": "TÒNG HUYNH ĐỄ", "m": "cousin (male)"}, "従姉妹": {"w": "従姉妹", "f": "いとこ", "hv": "TÒNG TỶ MUỘI", "m": "cousin (female)"}, "違反": {"w": "違反", "f": "いはん", "hv": "VI PHIÊN", "m": "violation (of law), infringement"}, "衣服": {"w": "衣服", "f": "いふく", "hv": "Y PHỤC", "m": "clothes"}, "居間": {"w": "居間", "f": "いま", "hv": "CƯ GIAN", "m": "living room"}, "以来": {"w": "以来", "f": "いらい", "hv": "DĨ LAI", "m": "since, henceforth"}, "依頼": {"w": "依頼", "f": "いらい", "hv": "Y LẠI", "m": "request; dependence"}, "医療": {"w": "医療", "f": "いりょう", "hv": "Y LIỆU", "m": "medical care, medical treatment"}, "印刷": {"w": "印刷", "f": "いんさつ", "hv": "ẤN LOÁT", "m": "printing"}, "引退": {"w": "引退", "f": "いんたい", "hv": "DẤN THOÁI", "m": "retirement"}, "引用": {"w": "引用", "f": "いんよう", "hv": "DẤN DỤNG", "m": "quotation, citation"}, "宇宙": {"w": "宇宙", "f": "うちゅう", "hv": "VŨ TRỤ", "m": "universe, cosmos, space"}, "有無": {"w": "有無", "f": "うむ", "hv": "DỰU MÔ", "m": "yes or no, presence or absence"}, "運転": {"w": "運転", "f": "うんてん", "hv": "VẬN CHUYỂN", "m": "operation, driving"}, "永遠": {"w": "永遠", "f": "えいえん", "hv": "VĨNH VIẾN", "m": "eternity, perpetuity, immortality"}, "永久": {"w": "永久", "f": "えいきゅう", "hv": "VĨNH CỬU", "m": "eternity, perpetuity, immortality"}, "営業": {"w": "営業", "f": "えいぎょう", "hv": "DINH NGHIỆP", "m": "business, trade, management"}, "衛星": {"w": "衛星", "f": "えいせい", "hv": "VỆ TINH", "m": "satellite"}, "栄養": {"w": "栄養", "f": "えいよう", "hv": "VINH DƯỜNG", "m": "nutrition, nourishment"}, "延期": {"w": "延期", "f": "えんき", "hv": "DIÊN CƠ", "m": "postponement, adjournment"}, "演技": {"w": "演技", "f": "えんぎ", "hv": "DIỄN KĨ", "m": "acting, performance"}, "援助": {"w": "援助", "f": "えんじょ", "hv": "VIÊN TRỢ", "m": "assistance, aid, support"}, "演説": {"w": "演説", "f": "えんぜつ", "hv": "DIỄN DUYỆT", "m": "speech, address"}, "演奏": {"w": "演奏", "f": "えんそう", "hv": "DIỄN THẤU", "m": "musical performance"}, "応援": {"w": "応援", "f": "おうえん", "hv": "ƯNG VIÊN", "m": "aid, assistance, help"}, "王様": {"w": "王様", "f": "おうさま", "hv": "VƯƠNG DẠNG", "m": "king"}, "王子": {"w": "王子", "f": "おうじ", "hv": "VƯƠNG TÍ", "m": "prince"}, "横断": {"w": "横断", "f": "おうだん", "hv": "HOÀNH ĐOÁN", "m": "crossing"}, "大家": {"w": "大家", "f": "おおや", "hv": "THÁI CÔ", "m": "landlord"}, "汚染": {"w": "汚染", "f": "おせん", "hv": "Ô NHIỄM", "m": "pollution, contamination"}, "温暖": {"w": "温暖", "f": "おんだん", "hv": "UẨN HUYÊN", "m": "warmth"}, "温度": {"w": "温度", "f": "おんど", "hv": "UẨN ĐẠC", "m": "temperature"}, "会員": {"w": "会員", "f": "かいいん", "hv": "CỐI VIÊN", "m": "member, the membership"}, "絵画": {"w": "絵画", "f": "かいが", "hv": "HỘI HOẠ", "m": "picture, painting"}, "海外": {"w": "海外", "f": "かいがい", "hv": "HẢI NGOẠI", "m": "foreign, abroad, overseas"}, "会計": {"w": "会計", "f": "かいけい", "hv": "CỐI KÊ", "m": "account, finance"}, "会合": {"w": "会合", "f": "かいごう", "hv": "CỐI CÁP", "m": "meeting, assembly"}, "外交": {"w": "外交", "f": "がいこう", "hv": "NGOẠI GIAO", "m": "diplomacy"}, "開始": {"w": "開始", "f": "かいし", "hv": "KHAI THUỶ", "m": "start, commencement, beginning"}, "解釈": {"w": "解釈", "f": "かいしゃく", "hv": "GIÁI DỊCH", "m": "explanation, interpretation"}, "外出": {"w": "外出", "f": "がいしゅつ", "hv": "NGOẠI XUÝ", "m": "outing, going out"}, "改善": {"w": "改善", "f": "かいぜん", "hv": "CẢI THIẾN", "m": "betterment, improvement"}, "快適": {"w": "快適", "f": "かいてき", "hv": "KHOÁI QUÁT", "m": "pleasant, agreeable"}, "回復": {"w": "回復", "f": "かいふく", "hv": "HỐI PHÚ", "m": "recovery (from illness), rehabilitation, restoration"}, "画家": {"w": "画家", "f": "がか", "hv": "HOẠ CÔ", "m": "painter"}, "価格": {"w": "価格", "f": "かかく", "hv": "GIÁ CÁC", "m": "price, value"}, "化学": {"w": "化学", "f": "かがく", "hv": "HOA HỌC", "m": "chemistry"}, "家具": {"w": "家具", "f": "かぐ", "hv": "CÔ CỤ", "m": "furniture"}, "覚悟": {"w": "覚悟", "f": "かくご", "hv": "GIÁC NGỘ", "m": "resolution, resignation, readiness"}, "確実": {"w": "確実", "f": "かくじつ", "hv": "XÁC CHÍ", "m": "certainty, reliability, soundness"}, "学者": {"w": "学者", "f": "がくしゃ", "hv": "HỌC GIẢ", "m": "scholar"}, "学習": {"w": "学習", "f": "がくしゅう", "hv": "HỌC TẬP", "m": "study, learning"}, "拡大": {"w": "拡大", "f": "かくだい", "hv": "KHOÁC THÁI", "m": "magnification, enlargement"}, "学問": {"w": "学問", "f": "がくもん", "hv": "HỌC VẤN", "m": "scholarship, study, learning"}, "加減": {"w": "加減", "f": "かげん", "hv": "GIA GIẢM", "m": "adjustment; addition and subtraction"}, "過去": {"w": "過去", "f": "かこ", "hv": "QUA KHU", "m": "past"}, "火災": {"w": "火災", "f": "かさい", "hv": "HOẢ TAI", "m": "conflagration, fire"}, "菓子": {"w": "菓子", "f": "かし", "hv": "QUẢ TÍ", "m": "confectionery, sweet"}, "家事": {"w": "家事", "f": "かじ", "hv": "CÔ SỰ", "m": "household matters; housework (same as 家の仕事 (いえのしごと))"}, "歌手": {"w": "歌手", "f": "かしゅ", "hv": "CA THỦ", "m": "singer"}, "価値": {"w": "価値", "f": "かち", "hv": "GIÁ TRỊ", "m": "value, worth, merit"}, "活気": {"w": "活気", "f": "かっき", "hv": "HOẠT KHÍ", "m": "vigor; liveliness; vitality; energy"}, "楽器": {"w": "楽器", "f": "がっき", "hv": "LẠC KHÍ", "m": "musical instrument"}, "学期": {"w": "学期", "f": "がっき", "hv": "HỌC CƠ", "m": "term (school)"}, "活動": {"w": "活動", "f": "かつどう", "hv": "HOẠT ĐỘNG", "m": "action, activity"}, "活躍": {"w": "活躍", "f": "かつやく", "hv": "HOẠT DƯỢC", "m": "activity"}, "活用": {"w": "活用", "f": "かつよう", "hv": "HOẠT DỤNG", "m": "conjugation; practical use"}, "仮定": {"w": "仮定", "f": "かてい", "hv": "GIÁ ĐÍNH", "m": "assumption, supposition, hypothesis"}, "過程": {"w": "過程", "f": "かてい", "hv": "QUA TRÌNH", "m": "process"}, "課程": {"w": "課程", "f": "かてい", "hv": "KHOÁ TRÌNH", "m": "course, curriculum"}, "可能": {"w": "可能", "f": "かのう", "hv": "KHẢ NAI", "m": "possible, practicable, feasible"}, "我慢": {"w": "我慢", "f": "がまん", "hv": "NGÃ MẠN", "m": "patience, endurance, perseverance"}, "科目": {"w": "科目", "f": "かもく", "hv": "KHOA MỤC", "m": "(school) subject, curriculum, course"}, "歌謡": {"w": "歌謡", "f": "かよう", "hv": "CA DAO", "m": "song, ballad"}, "感覚": {"w": "感覚", "f": "かんかく", "hv": "CẢM GIÁC", "m": "sense, sensation"}, "間隔": {"w": "間隔", "f": "かんかく", "hv": "GIAN CÁCH", "m": "space, interval, SPC"}, "観客": {"w": "観客", "f": "かんきゃく", "hv": "QUAN KHÁCH", "m": "audience, spectator(s)"}, "歓迎": {"w": "歓迎", "f": "かんげい", "hv": "HOAN NGHINH", "m": "welcome, reception"}, "観光": {"w": "観光", "f": "かんこう", "hv": "QUAN QUANG", "m": "sightseeing"}, "観察": {"w": "観察", "f": "かんさつ", "hv": "QUAN SÁT", "m": "observation, survey"}, "患者": {"w": "患者", "f": "かんじゃ", "hv": "HOẠN GIẢ", "m": "patient"}, "勘定": {"w": "勘定", "f": "かんじょう", "hv": "KHÁM ĐÍNH", "m": "calculation, counting, consideration"}, "感情": {"w": "感情", "f": "かんじょう", "hv": "CẢM TÌNH", "m": "emotion(s), feeling(s), sentiment"}, "感心": {"w": "感心", "f": "かんしん", "hv": "CẢM TÂM", "m": "admiration"}, "関心": {"w": "関心", "f": "かんしん", "hv": "QUAN TÂM", "m": "concern, interest"}, "完全": {"w": "完全", "f": "かんぜん", "hv": "HOÀN TOÀN", "m": "perfection, completeness"}, "乾燥": {"w": "乾燥", "f": "かんそう", "hv": "CAN TÁO", "m": "dry, arid, dehydrated"}, "感想": {"w": "感想", "f": "かんそう", "hv": "CẢM TƯỞNG", "m": "(one's) impressions, (one's) thoughts"}, "感動": {"w": "感動", "f": "かんどう", "hv": "CẢM ĐỘNG", "m": "being deeply moved, excitement"}, "監督": {"w": "監督", "f": "かんとく", "hv": "GIAM ĐỐC", "m": "supervision, control, (movie) director"}, "管理": {"w": "管理", "f": "かんり", "hv": "QUẢN LÍ", "m": "control, management (e.g., of a business)"}, "完了": {"w": "完了", "f": "かんりょう", "hv": "HOÀN LIỄU", "m": "completion, conclusion"}, "関連": {"w": "関連", "f": "かんれん", "hv": "QUAN LIÊN", "m": "relation, connection, relevance"}, "議員": {"w": "議員", "f": "ぎいん", "hv": "NGHỊ VIÊN", "m": "member of the Diet, congress, or parliament"}, "気温": {"w": "気温", "f": "きおん", "hv": "KHÍ UẨN", "m": "temperature (weather - not used for things)"}, "機械": {"w": "機械", "f": "きかい", "hv": "CƠ GIỚI", "m": "machine, machinery"}, "器械": {"w": "器械", "f": "きかい", "hv": "KHÍ GIỚI", "m": "instrument"}, "議会": {"w": "議会", "f": "ぎかい", "hv": "NGHỊ CỐI", "m": "Diet, congress, parliament"}, "期間": {"w": "期間", "f": "きかん", "hv": "CƠ GIAN", "m": "period, term"}, "機関": {"w": "機関", "f": "きかん", "hv": "CƠ QUAN", "m": "engine; institution, organization"}, "企業": {"w": "企業", "f": "きぎょう", "hv": "XÍ NGHIỆP", "m": "industry, business, undertaking"}, "期限": {"w": "期限", "f": "きげん", "hv": "CƠ HẠN", "m": "deadline, term"}, "機嫌": {"w": "機嫌", "f": "きげん", "hv": "CƠ HIỀM", "m": "humor, temper, mood"}, "気候": {"w": "気候", "f": "きこう", "hv": "KHÍ HẬU", "m": "climate"}, "生地": {"w": "生地", "f": "きじ", "hv": "SANH ĐỊA", "m": "fabric; dough"}, "記事": {"w": "記事", "f": "きじ", "hv": "KÍ SỰ", "m": "article, news story"}, "技師": {"w": "技師", "f": "ぎし", "hv": "KĨ SƯ", "m": "engineer, technician"}, "記者": {"w": "記者", "f": "きしゃ", "hv": "KÍ GIẢ", "m": "reporter"}, "期待": {"w": "期待", "f": "きたい", "hv": "CƠ ĐÃI", "m": "expectation, anticipation, hope"}, "気体": {"w": "気体", "f": "きたい", "hv": "KHÍ BỔN", "m": "vapor, gas"}, "帰宅": {"w": "帰宅", "f": "きたく", "hv": "QUY TRẠCH", "m": "returning home"}, "貴重": {"w": "貴重", "f": "きちょう", "hv": "QUÝ TRÙNG", "m": "precious, valuable"}, "議長": {"w": "議長", "f": "ぎちょう", "hv": "NGHỊ TRÀNG", "m": "chairman"}, "記入": {"w": "記入", "f": "きにゅう", "hv": "KÍ NHẬP", "m": "entry, filling in of forms"}, "記念": {"w": "記念", "f": "きねん", "hv": "KÍ NIỆM", "m": "commemoration, memory"}, "機能": {"w": "機能", "f": "きのう", "hv": "CƠ NAI", "m": "function, faculty"}, "寄付": {"w": "寄付", "f": "きふ", "hv": "KÍ PHÓ", "m": "contribution, donation"}, "基本": {"w": "基本", "f": "きほん", "hv": "CƠ BÔN", "m": "basic, basis"}, "気味": {"w": "気味", "f": "きみ", "hv": "KHÍ VỊ", "m": "-like, -looking, -looked"}, "奇妙": {"w": "奇妙", "f": "きみょう", "hv": "CƠ DIỆU", "m": "strange, queer, curious"}, "義務": {"w": "義務", "f": "ぎむ", "hv": "NGHĨA VŨ", "m": "duty, obligation, responsibility"}, "疑問": {"w": "疑問", "f": "ぎもん", "hv": "NGHI VẤN", "m": "question, problem, doubt"}, "休暇": {"w": "休暇", "f": "きゅうか", "hv": "HU HẠ", "m": "vacation, holiday, day off"}, "休憩": {"w": "休憩", "f": "きゅうけい", "hv": "HU KHẾ", "m": "rest, break, intermission"}, "急激": {"w": "急激", "f": "きゅうげき", "hv": "CẤP KHÍCH", "m": "sudden, precipitous, radical"}, "吸収": {"w": "吸収", "f": "きゅうしゅう", "hv": "HẤP THÂU", "m": "absorption, suction"}, "救助": {"w": "救助", "f": "きゅうじょ", "hv": "CỨU TRỢ", "m": "relief, aid, rescue"}, "急速": {"w": "急速", "f": "きゅうそく", "hv": "CẤP TỐC", "m": "rapid (e.g., progress)"}, "休息": {"w": "休息", "f": "きゅうそく", "hv": "HU TỨC", "m": "rest, relief, relaxation"}, "給料": {"w": "給料", "f": "きゅうりょう", "hv": "CẤP LIÊU", "m": "salary, wages"}, "器用": {"w": "器用", "f": "きよう", "hv": "KHÍ DỤNG", "m": "skillful, handy"}, "競技": {"w": "競技", "f": "きょうぎ", "hv": "CẠNH KĨ", "m": "game, match, contest"}, "行儀": {"w": "行儀", "f": "ぎょうぎ", "hv": "HÀNG NGHI", "m": "manners"}, "供給": {"w": "供給", "f": "きょうきゅう", "hv": "CUNG CẤP", "m": "supply, provision"}, "教授": {"w": "教授", "f": "きょうじゅ", "hv": "GIAO THỌ", "m": "teaching, instruction; professor"}, "強調": {"w": "強調", "f": "きょうちょう", "hv": "CƯỜNG ĐIỀU", "m": "emphasis, stress, stressed point"}, "共通": {"w": "共通", "f": "きょうつう", "hv": "CUNG THÔNG", "m": "commonness, mutual"}, "共同": {"w": "共同", "f": "きょうどう", "hv": "CUNG ĐỒNG", "m": "cooperation, association, collaboration"}, "恐怖": {"w": "恐怖", "f": "きょうふ", "hv": "KHÚNG BỐ", "m": "fear, terror"}, "強力": {"w": "強力", "f": "きょうりょく", "hv": "CƯỜNG LỰC", "m": "powerful, strong"}, "許可": {"w": "許可", "f": "きょか", "hv": "HỔ KHẢ", "m": "permission, approval"}, "巨大": {"w": "巨大", "f": "きょだい", "hv": "CỰ THÁI", "m": "huge, gigantic, enormous"}, "記録": {"w": "記録", "f": "きろく", "hv": "KÍ LỤC", "m": "record, minutes, document"}, "議論": {"w": "議論", "f": "ぎろん", "hv": "NGHỊ LUÂN", "m": "argument, discussion, dispute"}, "禁煙": {"w": "禁煙", "f": "きんえん", "hv": "CÂM YÊN", "m": "No Smoking"}, "金額": {"w": "金額", "f": "きんがく", "hv": "KIM NGẠCH", "m": "amount of money"}, "金庫": {"w": "金庫", "f": "きんこ", "hv": "KIM KHỐ", "m": "safe, vault"}, "禁止": {"w": "禁止", "f": "きんし", "hv": "CÂM CHI", "m": "prohibition, ban"}, "金銭": {"w": "金銭", "f": "きんせん", "hv": "KIM TIỀN", "m": "money, cash"}, "金属": {"w": "金属", "f": "きんぞく", "hv": "KIM CHÚ", "m": "metal"}, "近代": {"w": "近代", "f": "きんだい", "hv": "CẤN ĐẠI", "m": "modern times"}, "筋肉": {"w": "筋肉", "f": "きんにく", "hv": "CÂN NHỤ", "m": "muscle, sinews"}, "金融": {"w": "金融", "f": "きんゆう", "hv": "KIM DONG", "m": "finance, money and banking"}, "偶然": {"w": "偶然", "f": "ぐうぜん", "hv": "NGẪU NHIÊN", "m": "(by) chance, unexpectedly"}, "具体": {"w": "具体", "f": "ぐたい", "hv": "CỤ BỔN", "m": "concrete, tangible, material"}, "苦痛": {"w": "苦痛", "f": "くつう", "hv": "CỔ THỐNG", "m": "pain, agony"}, "区別": {"w": "区別", "f": "くべつ", "hv": "KHU BIỆT", "m": "distinction, differentiation, classification"}, "組合": {"w": "組合", "f": "くみあい", "hv": "TỔ CÁP", "m": "association, union"}, "苦労": {"w": "苦労", "f": "くろう", "hv": "CỔ LAO", "m": "hardship; suffering"}, "軍隊": {"w": "軍隊", "f": "ぐんたい", "hv": "QUÂN TOẠI", "m": "army, troops"}, "訓練": {"w": "訓練", "f": "くんれん", "hv": "HUẤN LUYỆN", "m": "practice, training"}, "敬意": {"w": "敬意", "f": "けいい", "hv": "KÍNH Y", "m": "respect, honor"}, "経営": {"w": "経営", "f": "けいえい", "hv": "KINH DINH", "m": "management, administration"}, "景気": {"w": "景気", "f": "けいき", "hv": "CẢNH KHÍ", "m": "condition, state, business (condition)"}, "傾向": {"w": "傾向", "f": "けいこう", "hv": "KHUYNH HƯỚNG", "m": "tendency, trend, inclination"}, "警告": {"w": "警告", "f": "けいこく", "hv": "CẢNH CÁO", "m": "warning"}, "計算": {"w": "計算", "f": "けいさん", "hv": "KÊ TOÁN", "m": "calculation, reckoning"}, "掲示": {"w": "掲示", "f": "けいじ", "hv": "KHẾ KÌ", "m": "notice, bulletin"}, "刑事": {"w": "刑事", "f": "けいじ", "hv": "HÌNH SỰ", "m": "criminal case, (police) detective"}, "芸術": {"w": "芸術", "f": "げいじゅつ", "hv": "VÂN THUẬT", "m": "(fine) art, the arts"}, "契約": {"w": "契約", "f": "けいやく", "hv": "KHIẾT YÊU", "m": "contract, compact, agreement"}, "経由": {"w": "経由", "f": "けいゆ", "hv": "KINH DO", "m": "go by the way, via"}, "劇場": {"w": "劇場", "f": "げきじょう", "hv": "KỊCH TRÀNG", "m": "theater, playhouse"}, "化粧": {"w": "化粧", "f": "けしょう", "hv": "HOA TRANG", "m": "make-up (cosmetic)"}, "血液": {"w": "血液", "f": "けつえき", "hv": "HUYẾT DỊCH", "m": "blood"}, "欠陥": {"w": "欠陥", "f": "けっかん", "hv": "KHIẾM HÃM", "m": "defect, fault, deficiency"}, "結局": {"w": "結局", "f": "けっきょく", "hv": "KẾ CỤC", "m": "after all, eventually"}, "決心": {"w": "決心", "f": "けっしん", "hv": "HUYẾT TÂM", "m": "determination, resolution"}, "欠席": {"w": "欠席", "f": "けっせき", "hv": "KHIẾM TỊCH", "m": "absence, non-attendance"}, "決定": {"w": "決定", "f": "けってい", "hv": "HUYẾT ĐÍNH", "m": "decision, determination"}, "欠点": {"w": "欠点", "f": "けってん", "hv": "KHIẾM ĐIỂM", "m": "faults, defect, weakness"}, "結論": {"w": "結論", "f": "けつろん", "hv": "KẾ LUÂN", "m": "conclusion"}, "見解": {"w": "見解", "f": "けんかい", "hv": "HIỆN GIÁI", "m": "opinion, point of view"}, "現金": {"w": "現金", "f": "げんきん", "hv": "HIỆN KIM", "m": "cash"}, "言語": {"w": "言語", "f": "げんご", "hv": "NGÂN NGỨ", "m": "language"}, "健康": {"w": "健康", "f": "けんこう", "hv": "KIỆN KHANG", "m": "health(y)"}, "検査": {"w": "検査", "f": "けんさ", "hv": "KIỂM TRA", "m": "inspection, examination"}, "現在": {"w": "現在", "f": "げんざい", "hv": "HIỆN TẠI", "m": "now (same as 今 (いま)), present, current"}, "現実": {"w": "現実", "f": "げんじつ", "hv": "HIỆN CHÍ", "m": "reality"}, "現象": {"w": "現象", "f": "げんしょう", "hv": "HIỆN TƯƠNG", "m": "phenomenon"}, "現状": {"w": "現状", "f": "げんじょう", "hv": "HIỆN TRẠNG", "m": "present condition, status quo"}, "建設": {"w": "建設", "f": "けんせつ", "hv": "KIẾN THIẾT", "m": "construction, foundation"}, "現代": {"w": "現代", "f": "げんだい", "hv": "HIỆN ĐẠI", "m": "today, present-day"}, "建築": {"w": "建築", "f": "けんちく", "hv": "KIẾN TRÚC", "m": "construction, architecture"}, "見当": {"w": "見当", "f": "けんとう", "hv": "HIỆN ĐANG", "m": "estimate, guess"}, "検討": {"w": "検討", "f": "けんとう", "hv": "KIỂM THẢO", "m": "consideration, examination, investigation"}, "現場": {"w": "現場", "f": "げんば", "hv": "HIỆN TRÀNG", "m": "actual spot, scene, field"}, "憲法": {"w": "憲法", "f": "けんぽう", "hv": "HIẾN PHÁP", "m": "constitution"}, "権利": {"w": "権利", "f": "けんり", "hv": "QUYỀN LỢI", "m": "right, privilege"}, "恋人": {"w": "恋人", "f": "こいびと", "hv": "LUYẾN NHÂN", "m": "lover; sweetheart; girlfriend"}, "幸運": {"w": "幸運", "f": "こううん", "hv": "HẠNH VẬN", "m": "good luck, fortune"}, "講演": {"w": "講演", "f": "こうえん", "hv": "GIẢNG DIỄN", "m": "lecture, talk"}, "効果": {"w": "効果", "f": "こうか", "hv": "HIỆU QUẢ", "m": "effect, result"}, "硬貨": {"w": "硬貨", "f": "こうか", "hv": "NGẠNH HOÁ", "m": "coin"}, "高価": {"w": "高価", "f": "こうか", "hv": "CAO GIÁ", "m": "high price"}, "豪華": {"w": "豪華", "f": "ごうか", "hv": "HÀO HOA", "m": "luxurious, gorgeous, extravagance"}, "合格": {"w": "合格", "f": "ごうかく", "hv": "CÁP CÁC", "m": "success, passing (e.g., exam)"}, "交換": {"w": "交換", "f": "こうかん", "hv": "GIAO HOÁN", "m": "exchange, swap"}, "航空": {"w": "航空", "f": "こうくう", "hv": "HÀNG KHÔNG", "m": "aviation, flying"}, "光景": {"w": "光景", "f": "こうけい", "hv": "QUANG CẢNH", "m": "scene, spectacle"}, "合計": {"w": "合計", "f": "ごうけい", "hv": "CÁP KÊ", "m": "sum total, total amount"}, "攻撃": {"w": "攻撃", "f": "こうげき", "hv": "CÔNG KÍCH", "m": "attack, strike, offensive"}, "貢献": {"w": "貢献", "f": "こうけん", "hv": "CỐNG HIẾN", "m": "contribution, services"}, "広告": {"w": "広告", "f": "こうこく", "hv": "KHOÁT CÁO", "m": "advertisement"}, "交際": {"w": "交際", "f": "こうさい", "hv": "GIAO TẾ", "m": "friendship, association, acquaintance"}, "校舎": {"w": "校舎", "f": "こうしゃ", "hv": "GIÁO XÁ", "m": "school building"}, "後者": {"w": "後者", "f": "こうしゃ", "hv": "HẤU GIẢ", "m": "the latter"}, "工場": {"w": "工場", "f": "こうば", "hv": "CÔNG TRÀNG", "m": "factory, plant"}, "公正": {"w": "公正", "f": "こうせい", "hv": "CÔNG CHINH", "m": "justice, fairness, impartiality"}, "構成": {"w": "構成", "f": "こうせい", "hv": "CẤU THÀNH", "m": "organization, composition"}, "高速": {"w": "高速", "f": "こうそく", "hv": "CAO TỐC", "m": "high speed, high gear"}, "行動": {"w": "行動", "f": "こうどう", "hv": "HÀNG ĐỘNG", "m": "action, conduct, behavior"}, "強盗": {"w": "強盗", "f": "ごうとう", "hv": "CƯỜNG ĐẠO", "m": "robbery, burglary"}, "後輩": {"w": "後輩", "f": "こうはい", "hv": "HẤU BỐI", "m": "junior members of a group"}, "幸福": {"w": "幸福", "f": "こうふく", "hv": "HẠNH PHÚC", "m": "happiness, blessedness"}, "公平": {"w": "公平", "f": "こうへい", "hv": "CÔNG BIỀN", "m": "fairness, impartial, justice"}, "候補": {"w": "候補", "f": "こうほ", "hv": "HẬU BỔ", "m": "candidacy"}, "考慮": {"w": "考慮", "f": "こうりょ", "hv": "KHẢO LƯ", "m": "consideration, taking into account"}, "誤解": {"w": "誤解", "f": "ごかい", "hv": "NGỘ GIÁI", "m": "misunderstanding"}, "語学": {"w": "語学", "f": "ごがく", "hv": "NGỨ HỌC", "m": "language study"}, "呼吸": {"w": "呼吸", "f": "こきゅう", "hv": "HAO HẤP", "m": "breath, respiration"}, "故郷": {"w": "故郷", "f": "こきょう", "hv": "CỐ HƯƠNG", "m": "hometown"}, "国語": {"w": "国語", "f": "こくご", "hv": "QUỐC NGỨ", "m": "national language"}, "国籍": {"w": "国籍", "f": "こくせき", "hv": "QUỐC TẠ", "m": "nationality"}, "黒板": {"w": "黒板", "f": "こくばん", "hv": "HẮC BẢN", "m": "blackboard"}, "克服": {"w": "克服", "f": "こくふく", "hv": "KHẮC PHỤC", "m": "conquest, overcome"}, "国民": {"w": "国民", "f": "こくみん", "hv": "QUỐC DÂN", "m": "national, people, citizen"}, "穀物": {"w": "穀物", "f": "こくもつ", "hv": "CỐC VẬT", "m": "grain, cereal, corn"}, "胡椒": {"w": "胡椒", "f": "こしょう", "hv": "HỒ TIÊU", "m": "pepper"}, "個人": {"w": "個人", "f": "こじん", "hv": "CÁ NHÂN", "m": "individual, private person"}, "国家": {"w": "国家", "f": "こっか", "hv": "QUỐC CÔ", "m": "state, country, nation"}, "国会": {"w": "国会", "f": "こっかい", "hv": "QUỐC CỐI", "m": "National Diet, parliament, congress"}, "国境": {"w": "国境", "f": "こっきょう", "hv": "QUỐC CẢNH", "m": "national or state border"}, "骨折": {"w": "骨折", "f": "こっせつ", "hv": "CỐT CHIẾT", "m": "bone fracture"}, "小包": {"w": "小包", "f": "こづつみ", "hv": "TIỂU BAO", "m": "parcel, package"}, "小麦": {"w": "小麦", "f": "こむぎ", "hv": "TIỂU MẠCH", "m": "wheat"}, "小屋": {"w": "小屋", "f": "こや", "hv": "TIỂU ỐC", "m": "hut, cabin, shed"}, "今回": {"w": "今回", "f": "こんかい", "hv": "KIM HỐI", "m": "now, this time, lately"}, "今後": {"w": "今後", "f": "こんご", "hv": "KIM HẤU", "m": "from now on, hereafter"}, "混雑": {"w": "混雑", "f": "こんざつ", "hv": "CÔN TẠP", "m": "confusion, congestion"}, "困難": {"w": "困難", "f": "こんなん", "hv": "KHỐN NA", "m": "difficulty, distress"}, "今日": {"w": "今日", "f": "こんにち", "hv": "KIM NHẬT", "m": "today, this day"}, "婚約": {"w": "婚約", "f": "こんやく", "hv": "HÔN YÊU", "m": "engagement, betrothal"}, "混乱": {"w": "混乱", "f": "こんらん", "hv": "CÔN LOẠN", "m": "chaos, confusion, mayhem"}, "最高": {"w": "最高", "f": "さいこう", "hv": "TỐI CAO", "m": "highest, supreme, the most"}, "財産": {"w": "財産", "f": "ざいさん", "hv": "TÀI SẢN", "m": "property, fortune, assets"}, "最終": {"w": "最終", "f": "さいしゅう", "hv": "TỐI CHUNG", "m": "last, closing"}, "最中": {"w": "最中", "f": "さいちゅう", "hv": "TỐI TRUNG", "m": "in the middle of"}, "最低": {"w": "最低", "f": "さいてい", "hv": "TỐI ĐÊ", "m": "least, lowest, worst"}, "才能": {"w": "才能", "f": "さいのう", "hv": "TÀI NAI", "m": "talent, ability"}, "裁判": {"w": "裁判", "f": "さいばん", "hv": "TÀI PHÁN", "m": "trial, judgment"}, "材料": {"w": "材料", "f": "ざいりょう", "hv": "TÀI LIÊU", "m": "ingredients, material"}, "作業": {"w": "作業", "f": "さぎょう", "hv": "TÁ NGHIỆP", "m": "work, operation, manufacturing"}, "作品": {"w": "作品", "f": "さくひん", "hv": "TÁ PHẨM", "m": "work, opus, production"}, "作物": {"w": "作物", "f": "さくもつ", "hv": "TÁ VẬT", "m": "produce (e.g., agricultural), crops"}, "座席": {"w": "座席", "f": "ざせき", "hv": "TOÀ TỊCH", "m": "seat"}, "作家": {"w": "作家", "f": "さっか", "hv": "TÁ CÔ", "m": "author, writer, novelist"}, "作曲": {"w": "作曲", "f": "さっきょく", "hv": "TÁ KHÚC", "m": "composition (of music)"}, "砂漠": {"w": "砂漠", "f": "さばく", "hv": "SA MẠC", "m": "desert"}, "差別": {"w": "差別", "f": "さべつ", "hv": "SAI BIỆT", "m": "discrimination, differentiation"}, "万一": {"w": "万一", "f": "まんいち", "hv": "MẶC NHẤT", "m": "by some chance, if by any chance"}, "味方": {"w": "味方", "f": "みかた", "hv": "VỊ BÀNG", "m": "ally, supporter"}, "見事": {"w": "見事", "f": "みごと", "hv": "HIỆN SỰ", "m": "splendid, magnificent"}, "土産": {"w": "土産", "f": "みやげ", "hv": "THỔ SẢN", "m": "souvenir"}, "明後日": {"w": "明後日", "f": "みょうごにち", "hv": "MINH HẤU NHẬT", "m": "day after tomorrow"}, "未来": {"w": "未来", "f": "みらい", "hv": "MÙI LAI", "m": "future (life tense)"}, "魅力": {"w": "魅力", "f": "みりょく", "hv": "MỊ LỰC", "m": "charm, fascination, appeal"}, "無視": {"w": "無視", "f": "むし", "hv": "MÔ THỊ", "m": "disregard, ignore"}, "虫歯": {"w": "虫歯", "f": "むしば", "hv": "HUỶ XỈ", "m": "cavity, tooth decay"}, "無駄": {"w": "無駄", "f": "むだ", "hv": "MÔ ĐÀ", "m": "futility, uselessness"}, "夢中": {"w": "夢中", "f": "むちゅう", "hv": "MÔNG TRUNG", "m": "crush, crazy, be hooked on"}, "無料": {"w": "無料", "f": "むりょう", "hv": "MÔ LIÊU", "m": "free, no charge"}, "明確": {"w": "明確", "f": "めいかく", "hv": "MINH XÁC", "m": "clear, definite"}, "名刺": {"w": "名刺", "f": "めいし", "hv": "DANH THÍCH", "m": "(name) card; business card"}, "名詞": {"w": "名詞", "f": "めいし", "hv": "DANH TỪ", "m": "noun"}, "名人": {"w": "名人", "f": "めいじん", "hv": "DANH NHÂN", "m": "master, expert"}, "命令": {"w": "命令", "f": "めいれい", "hv": "MỆNH LINH", "m": "order, command, decree"}, "迷惑": {"w": "迷惑", "f": "めいわく", "hv": "MÊ HOẶC", "m": "trouble, bother, annoyance"}, "目上": {"w": "目上", "f": "めうえ", "hv": "MỤC THƯỚNG", "m": "person of higher status; one's senior"}, "免許": {"w": "免許", "f": "めんきょ", "hv": "MIỄN HỔ", "m": "license, permit, certificate"}, "面接": {"w": "面接", "f": "めんせつ", "hv": "DIỆN TIẾP", "m": "interview"}, "面倒": {"w": "面倒", "f": "めんどう", "hv": "DIỆN ĐÁO", "m": "trouble, attention"}, "毛布": {"w": "毛布", "f": "もうふ", "hv": "MAO BỐ", "m": "blanket"}, "目標": {"w": "目標", "f": "もくひょう", "hv": "MỤC PHIÊU", "m": "mark, objective, target"}, "文字": {"w": "文字", "f": "もじ", "hv": "VĂN TỰ", "m": "letter (of alphabet), character"}, "物音": {"w": "物音", "f": "ものおと", "hv": "VẬT ÂM", "m": "sounds"}, "物語": {"w": "物語", "f": "ものがたり", "hv": "VẬT NGỨ", "m": "tale, story, legend"}, "物事": {"w": "物事", "f": "ものごと", "hv": "VẬT SỰ", "m": "things, everything"}, "模様": {"w": "模様", "f": "もよう", "hv": "MÔ DẠNG", "m": "pattern, figure, design"}, "文句": {"w": "文句", "f": "もんく", "hv": "VĂN CÂU", "m": "a complaint"}, "役割": {"w": "役割", "f": "やくわり", "hv": "DỊCH CÁT", "m": "assigning (allotment of) parts, role, duties"}, "家賃": {"w": "家賃", "f": "やちん", "hv": "CÔ NHẤM", "m": "rent"}, "厄介": {"w": "厄介", "f": "やっかい", "hv": "NGOẢ GIỚI", "m": "trouble, burden, care"}, "屋根": {"w": "屋根", "f": "やね", "hv": "ỐC CĂN", "m": "roof"}, "唯一": {"w": "唯一", "f": "ゆいいつ", "hv": "DUY NHẤT", "m": "only, sole, unique"}, "勇気": {"w": "勇気", "f": "ゆうき", "hv": "DŨNG KHÍ", "m": "courage, bravery, boldness"}, "友好": {"w": "友好", "f": "ゆうこう", "hv": "HỮU HIẾU", "m": "friendship"}, "有効": {"w": "有効", "f": "ゆうこう", "hv": "DỰU HIỆU", "m": "valid, effectual"}, "優秀": {"w": "優秀", "f": "ゆうしゅう", "hv": "ƯU TÚ", "m": "superiority, excellence"}, "優勝": {"w": "優勝", "f": "ゆうしょう", "hv": "ƯU THĂNG", "m": "overall victory, championship"}, "友情": {"w": "友情", "f": "ゆうじょう", "hv": "HỮU TÌNH", "m": "friendship, fellowship"}, "友人": {"w": "友人", "f": "ゆうじん", "hv": "HỮU NHÂN", "m": "friend (formal)"}, "有能": {"w": "有能", "f": "ゆうのう", "hv": "DỰU NAI", "m": "able, capable, efficient"}, "郵便": {"w": "郵便", "f": "ゆうびん", "hv": "BƯU TIỆN", "m": "mail, postal service"}, "有利": {"w": "有利", "f": "ゆうり", "hv": "DỰU LỢI", "m": "advantageous, better"}, "愉快": {"w": "愉快", "f": "ゆかい", "hv": "DU KHOÁI", "m": "pleasant, happy"}, "容易": {"w": "容易", "f": "ようい", "hv": "DONG DỊ", "m": "easy, simple, plain"}, "容器": {"w": "容器", "f": "ようき", "hv": "DONG KHÍ", "m": "container, vessel"}, "陽気": {"w": "陽気", "f": "ようき", "hv": "DƯƠNG KHÍ", "m": "season, weather, cheerfulness"}, "要求": {"w": "要求", "f": "ようきゅう", "hv": "YÊU CẦU", "m": "request, demand"}, "用心": {"w": "用心", "f": "ようじん", "hv": "DỤNG TÂM", "m": "care, precaution, caution"}, "様子": {"w": "様子", "f": "ようす", "hv": "DẠNG TÍ", "m": "aspect, state, appearance"}, "要素": {"w": "要素", "f": "ようそ", "hv": "YÊU TỐ", "m": "element"}, "要点": {"w": "要点", "f": "ようてん", "hv": "YÊU ĐIỂM", "m": "gist, main point"}, "曜日": {"w": "曜日", "f": "ようび", "hv": "DIỆU NHẬT", "m": "day of the week"}, "予期": {"w": "予期", "f": "よき", "hv": "DƯ CƠ", "m": "expectation, forecast"}, "予算": {"w": "予算", "f": "よさん", "hv": "DƯ TOÁN", "m": "estimate, budget"}, "予測": {"w": "予測", "f": "よそく", "hv": "DƯ TRẮC", "m": "prediction, estimation"}, "夜中": {"w": "夜中", "f": "よなか", "hv": "DẠ TRUNG", "m": "midnight, dead of night"}, "余分": {"w": "余分", "f": "よぶん", "hv": "DƯ PHÂN", "m": "extra, excess, surplus"}, "予報": {"w": "予報", "f": "よほう", "hv": "DƯ BÁO", "m": "forecast, prediction"}, "予防": {"w": "予防", "f": "よぼう", "hv": "DƯ PHÒNG", "m": "prevention, protection against"}, "余裕": {"w": "余裕", "f": "よゆう", "hv": "DƯ DỤ", "m": "excess; surplus"}, "利益": {"w": "利益", "f": "りえき", "hv": "LỢI ÍCH", "m": "profits, gains"}, "理解": {"w": "理解", "f": "りかい", "hv": "LÍ GIÁI", "m": "understanding, comprehension"}, "利口": {"w": "利口", "f": "りこう", "hv": "LỢI KHẨU", "m": "clever, shrewd, bright"}, "離婚": {"w": "離婚", "f": "りこん", "hv": "LI HÔN", "m": "divorce"}, "理想": {"w": "理想", "f": "りそう", "hv": "LÍ TƯỞNG", "m": "ideal"}, "留学": {"w": "留学", "f": "りゅうがく", "hv": "LƯU HỌC", "m": "studying abroad"}, "流行": {"w": "流行", "f": "りゅうこう", "hv": "LƯU HÀNG", "m": "fashionable, fad, prevailing"}, "両替": {"w": "両替", "f": "りょうがえ", "hv": "LƯỠNG THẾ", "m": "change, money exchange"}, "料金": {"w": "料金", "f": "りょうきん", "hv": "LIÊU KIM", "m": "fee, charge, fare"}, "例外": {"w": "例外", "f": "れいがい", "hv": "LỆ NGOẠI", "m": "exception"}, "礼儀": {"w": "礼儀", "f": "れいぎ", "hv": "LỄ NGHI", "m": "manners, courtesy, etiquette"}, "冷静": {"w": "冷静", "f": "れいせい", "hv": "LÃNH TĨNH", "m": "calm, coolness"}, "列車": {"w": "列車", "f": "れっしゃ", "hv": "LIỆT XA", "m": "train (ordinary)"}, "連想": {"w": "連想", "f": "れんそう", "hv": "LIÊN TƯỞNG", "m": "association (of ideas), suggestion"}, "連続": {"w": "連続", "f": "れんぞく", "hv": "LIÊN TỤC", "m": "consecutive, continuity, continuing"}, "老人": {"w": "老人", "f": "ろうじん", "hv": "LÃO NHÂN", "m": "the aged, old person"}, "労働": {"w": "労働", "f": "ろうどう", "hv": "LAO ĐỘNG", "m": "labor, work"}, "論争": {"w": "論争", "f": "ろんそう", "hv": "LUÂN TRANH", "m": "controversy, dispute"}, "論文": {"w": "論文", "f": "ろんぶん", "hv": "LUÂN VĂN", "m": "thesis, paper"}, "話題": {"w": "話題", "f": "わだい", "hv": "THOẠI ĐỀ", "m": "topic, subject"}, "悪口": {"w": "悪口", "f": "わるくち", "hv": "ÁC KHẨU", "m": "abuse, insult"}, "医院": {"w": "医院", "f": "いいん", "hv": "Y VIỆN", "m": "doctor's office (surgery), clinic"}, "意地": {"w": "意地", "f": "いじ", "hv": "Y ĐỊA", "m": "disposition, spirit, obstinacy, appetite"}, "依然": {"w": "依然", "f": "いぜん", "hv": "Y NHIÊN", "m": "still, as yet"}, "一帯": {"w": "一帯", "f": "いったい", "hv": "NHẤT ĐÁI", "m": "a region, the whole place"}, "異動": {"w": "異動", "f": "いどう", "hv": "DI ĐỘNG", "m": "a change, transfer"}, "衣料": {"w": "衣料", "f": "いりょう", "hv": "Y LIÊU", "m": "clothing"}, "学歴": {"w": "学歴", "f": "がくれき", "hv": "HỌC LỊCH", "m": "academic background"}, "課題": {"w": "課題", "f": "かだい", "hv": "KHOÁ ĐỀ", "m": "subject, theme, task"}, "加味": {"w": "加味", "f": "かみ", "hv": "GIA VỊ", "m": "seasoning, flavoring"}, "刊行": {"w": "刊行", "f": "かんこう", "hv": "KHAN HÀNG", "m": "publication, issue"}, "慣行": {"w": "慣行", "f": "かんこう", "hv": "QUÁN HÀNG", "m": "customary practice, habit, traditional event"}, "歓声": {"w": "歓声", "f": "かんせい", "hv": "HOAN THANH", "m": "cheer, shout of joy"}, "官僚": {"w": "官僚", "f": "かんりょう", "hv": "QUAN LIÊU", "m": "bureaucrat, bureaucracy"}, "器官": {"w": "器官", "f": "きかん", "hv": "KHÍ QUAN", "m": "organ (of body, instrument)"}, "季刊": {"w": "季刊", "f": "きかん", "hv": "QUÝ KHAN", "m": "quarterly (e.g., magazine)"}, "起源": {"w": "起源", "f": "きげん", "hv": "KHỈ NGUYÊN", "m": "origin, beginning, rise"}, "機構": {"w": "機構", "f": "きこう", "hv": "CƠ CẤU", "m": "mechanism, organization"}, "規制": {"w": "規制", "f": "きせい", "hv": "QUY CHẾ", "m": "regulation"}, "丘陵": {"w": "丘陵", "f": "きゅうりょう", "hv": "KHIÊU LĂNG", "m": "hill"}, "協議": {"w": "協議", "f": "きょうぎ", "hv": "HIỆP NGHỊ", "m": "conference, discussion, negotiation"}, "享受": {"w": "享受", "f": "きょうじゅ", "hv": "HƯỞNG THÂU", "m": "enjoyment, being given"}, "協調": {"w": "協調", "f": "きょうちょう", "hv": "HIỆP ĐIỀU", "m": "co-operation, conciliation, harmony"}, "近視": {"w": "近視", "f": "きんし", "hv": "CẤN THỊ", "m": "nearsightedness"}, "経緯": {"w": "経緯", "f": "けいい", "hv": "KINH VĨ", "m": "sequence of events, course"}, "計器": {"w": "計器", "f": "けいき", "hv": "KÊ KHÍ", "m": "meter, gauge"}, "契機": {"w": "契機", "f": "けいき", "hv": "KHIẾT CƠ", "m": "opportunity, chance"}, "携帯": {"w": "携帯", "f": "けいたい", "hv": "HUỀ ĐÁI", "m": "carrying something; mobile telephone"}, "形態": {"w": "形態", "f": "けいたい", "hv": "HÌNH THÁI", "m": "form, shape, figure"}, "血管": {"w": "血管", "f": "けっかん", "hv": "HUYẾT QUẢN", "m": "blood vessel"}, "決行": {"w": "決行", "f": "けっこう", "hv": "HUYẾT HÀNG", "m": "doing (with resolve), carrying out (e.g., a plan)"}, "減少": {"w": "減少", "f": "げんしょう", "hv": "GIẢM THIẾU", "m": "decrease, reduction, decline"}, "公演": {"w": "公演", "f": "こうえん", "hv": "CÔNG DIỄN", "m": "public performance"}, "後悔": {"w": "後悔", "f": "こうかい", "hv": "HẤU HỐI", "m": "regret, repentance"}, "航海": {"w": "航海", "f": "こうかい", "hv": "HÀNG HẢI", "m": "sail, voyage"}, "拘束": {"w": "拘束", "f": "こうそく", "hv": "CÂU THÚ", "m": "restriction, restraint"}, "荒廃": {"w": "荒廃", "f": "こうはい", "hv": "HOANG PHẾ", "m": "ruin"}, "降伏": {"w": "降伏", "f": "こうふく", "hv": "GIÁNG BẶC", "m": "capitulation, surrender, submission"}, "興奮": {"w": "興奮", "f": "こうふん", "hv": "HƯNG PHẤN", "m": "excitement, stimulation"}, "語句": {"w": "語句", "f": "ごく", "hv": "NGỨ CÂU", "m": "words, phrases"}, "故人": {"w": "故人", "f": "こじん", "hv": "CỐ NHÂN", "m": "the deceased"}, "小銭": {"w": "小銭", "f": "こぜに", "hv": "TIỂU TIỀN", "m": "coins, small change"}, "採集": {"w": "採集", "f": "さいしゅう", "hv": "THÁI TẬP", "m": "collecting, gathering"}, "設備": {"w": "設備", "f": "せつび", "hv": "THIẾT BỊ", "m": "equipment, device, facilities"}, "絶滅": {"w": "絶滅", "f": "ぜつめつ", "hv": "TUYỆT DIỆT", "m": "destruction, extinction"}, "節約": {"w": "節約", "f": "せつやく", "hv": "TIẾT YÊU", "m": "economizing, saving"}, "全員": {"w": "全員", "f": "ぜんいん", "hv": "TOÀN VIÊN", "m": "all members"}, "専攻": {"w": "専攻", "f": "せんこう", "hv": "CHUYÊN CÔNG", "m": "major subject, special study"}, "全国": {"w": "全国", "f": "ぜんこく", "hv": "TOÀN QUỐC", "m": "the entire nation, country-wide, nation-wide"}, "洗剤": {"w": "洗剤", "f": "せんざい", "hv": "TIỂN TỄ", "m": "detergent"}, "先日": {"w": "先日", "f": "せんじつ", "hv": "TIÊN NHẬT", "m": "the other day, a few days ago"}, "前者": {"w": "前者", "f": "ぜんしゃ", "hv": "TIỀN GIẢ", "m": "the former"}, "選手": {"w": "選手", "f": "せんしゅ", "hv": "SOÁT THỦ", "m": "player selected for a team (usually athletic)"}, "全身": {"w": "全身", "f": "ぜんしん", "hv": "TOÀN QUYÊN", "m": "the whole body, full-length (portrait)"}, "前進": {"w": "前進", "f": "ぜんしん", "hv": "TIỀN TIẾN", "m": "advance, drive, progress"}, "全体": {"w": "全体", "f": "ぜんたい", "hv": "TOÀN BỔN", "m": "whole, entirety, whatever (is the matter)"}, "選択": {"w": "選択", "f": "せんたく", "hv": "SOÁT TRẠCH", "m": "selection, choice"}, "宣伝": {"w": "宣伝", "f": "せんでん", "hv": "TUYÊN TRUYỀN", "m": "advertisement, publicity"}, "騒音": {"w": "騒音", "f": "そうおん", "hv": "TAO ÂM", "m": "noise"}, "増加": {"w": "増加", "f": "ぞうか", "hv": "TĂNG GIA", "m": "increase, addition"}, "操作": {"w": "操作", "f": "そうさ", "hv": "THAO TÁ", "m": "operation, management, processing"}, "想像": {"w": "想像", "f": "そうぞう", "hv": "TƯỞNG TƯƠNG", "m": "imagination, guess"}, "相続": {"w": "相続", "f": "そうぞく", "hv": "TƯƠNG TỤC", "m": "succession, inheritance"}, "装置": {"w": "装置", "f": "そうち", "hv": "TRANG TRÍ", "m": "equipment, installation, apparatus"}, "相当": {"w": "相当", "f": "そうとう", "hv": "TƯƠNG ĐANG", "m": "considerably, fairly; worth ~"}, "速度": {"w": "速度", "f": "そくど", "hv": "TỐC ĐẠC", "m": "speed, velocity, rate"}, "組織": {"w": "組織", "f": "そしき", "hv": "TỔ CHÍ", "m": "organization; structure; tissue"}, "蕎麦": {"w": "蕎麦", "f": "そば", "hv": "KIỀU MẠCH", "m": "soba (buckwheat noodles)"}, "粗末": {"w": "粗末", "f": "そまつ", "hv": "THÔ MẠT", "m": "humble, miserable, crude"}, "損害": {"w": "損害", "f": "そんがい", "hv": "TỔN HẠI", "m": "damage, loss"}, "存在": {"w": "存在", "f": "そんざい", "hv": "TỒN TẠI", "m": "existence, being"}, "尊重": {"w": "尊重", "f": "そんちょう", "hv": "TÔN TRÙNG", "m": "respect, esteem, regard"}, "体育": {"w": "体育", "f": "たいいく", "hv": "BỔN DỤC", "m": "physical education, gymnastics, athletics"}, "体温": {"w": "体温", "f": "たいおん", "hv": "BỔN UẨN", "m": "temperature (body)"}, "大会": {"w": "大会", "f": "たいかい", "hv": "THÁI CỐI", "m": "convention, (big) tournament, mass meeting"}, "大気": {"w": "大気", "f": "たいき", "hv": "THÁI KHÍ", "m": "atmosphere"}, "代金": {"w": "代金", "f": "だいきん", "hv": "ĐẠI KIM", "m": "price, cost"}, "退屈": {"w": "退屈", "f": "たいくつ", "hv": "THOÁI KHUẤT", "m": "tedium, boring"}, "滞在": {"w": "滞在", "f": "たいざい", "hv": "TRỆ TẠI", "m": "stay, sojourn"}, "大使": {"w": "大使", "f": "たいし", "hv": "THÁI SỨ", "m": "ambassador"}, "体重": {"w": "体重", "f": "たいじゅう", "hv": "BỔN TRÙNG", "m": "(body) weight"}, "対象": {"w": "対象", "f": "たいしょう", "hv": "ĐỐI TƯƠNG", "m": "target; object (of worship, study, etc.); subject (i.e., of taxation)"}, "対照": {"w": "対照", "f": "たいしょう", "hv": "ĐỐI CHIẾU", "m": "contrast, antithesis, comparison"}, "大臣": {"w": "大臣", "f": "だいじん", "hv": "THÁI THẦN", "m": "cabinet minister"}, "大戦": {"w": "大戦", "f": "たいせん", "hv": "THÁI CHIẾN", "m": "great war, great battle"}, "大統領": {"w": "大統領", "f": "だいとうりょう", "hv": "THÁI THỐNG LÃNH", "m": "president"}, "大半": {"w": "大半", "f": "たいはん", "hv": "THÁI BÁN", "m": "most of, majority, mostly"}, "代表": {"w": "代表", "f": "だいひょう", "hv": "ĐẠI BIỂU", "m": "representative, delegation"}, "大部分": {"w": "大部分", "f": "だいぶぶん", "hv": "THÁI BẪU PHÂN", "m": "most part, majority"}, "逮捕": {"w": "逮捕", "f": "たいほ", "hv": "ĐÃI BỔ", "m": "arrest, apprehension, capture"}, "題名": {"w": "題名", "f": "だいめい", "hv": "ĐỀ DANH", "m": "title"}, "太陽": {"w": "太陽", "f": "たいよう", "hv": "THÁI DƯƠNG", "m": "sun"}, "代理": {"w": "代理", "f": "だいり", "hv": "ĐẠI LÍ", "m": "representation, proxy, deputy"}, "大陸": {"w": "大陸", "f": "たいりく", "hv": "THÁI LỤC", "m": "continent"}, "多少": {"w": "多少", "f": "たしょう", "hv": "ĐA THIẾU", "m": "a little (same as 少し (すこし))"}, "立場": {"w": "立場", "f": "たちば", "hv": "LẬP TRÀNG", "m": "standpoint, position, situation"}, "他人": {"w": "他人", "f": "たにん", "hv": "THA NHÂN", "m": "unrelated person, stranger"}, "足袋": {"w": "足袋", "f": "たび", "hv": "TÚ ĐẠI", "m": "Japanese socks (with split toe)"}, "単位": {"w": "単位", "f": "たんい", "hv": "ĐAN VỊ", "m": "credit (for a course in school); unit, denomination"}, "単語": {"w": "単語", "f": "たんご", "hv": "ĐAN NGỨ", "m": "word; vocabulary"}, "男子": {"w": "男子", "f": "だんし", "hv": "NAM TÍ", "m": "young man"}, "単純": {"w": "単純", "f": "たんじゅん", "hv": "ĐAN CHUẨN", "m": "simplicity"}, "誕生": {"w": "誕生", "f": "たんじょう", "hv": "ĐẢN SANH", "m": "birth"}, "団体": {"w": "団体", "f": "だんたい", "hv": "ĐOÀN BỔN", "m": "organization, association"}, "担当": {"w": "担当", "f": "たんとう", "hv": "ĐAM ĐANG", "m": "(in) charge"}, "地位": {"w": "地位", "f": "ちい", "hv": "ĐỊA VỊ", "m": "(social) position, status"}, "地域": {"w": "地域", "f": "ちいき", "hv": "ĐỊA VỰC", "m": "area, region"}, "知恵": {"w": "知恵", "f": "ちえ", "hv": "TRI HUỆ", "m": "wisdom, wit, intelligence"}, "地下": {"w": "地下", "f": "ちか", "hv": "ĐỊA HÁ", "m": "basement, underground"}, "近頃": {"w": "近頃", "f": "ちかごろ", "hv": "CẤN KHOẢNH", "m": "lately, recently, nowadays"}, "地球": {"w": "地球", "f": "ちきゅう", "hv": "ĐỊA CẦU", "m": "the earth"}, "地区": {"w": "地区", "f": "ちく", "hv": "ĐỊA KHU", "m": "district, section"}, "遅刻": {"w": "遅刻", "f": "ちこく", "hv": "TRÌ HẶC", "m": "lateness, late coming"}, "知事": {"w": "知事", "f": "ちじ", "hv": "TRI SỰ", "m": "prefectural governor"}, "知識": {"w": "知識", "f": "ちしき", "hv": "TRI CHÍ", "m": "knowledge, information"}, "父親": {"w": "父親", "f": "ちちおや", "hv": "PHỤ THÂN", "m": "father"}, "知能": {"w": "知能", "f": "ちのう", "hv": "TRI NAI", "m": "intelligence, brains"}, "地平線": {"w": "地平線", "f": "ちへいせん", "hv": "ĐỊA BIỀN TUYẾN", "m": "horizon"}, "地方": {"w": "地方", "f": "ちほう", "hv": "ĐỊA BÀNG", "m": "area, locality, region"}, "中央": {"w": "中央", "f": "ちゅうおう", "hv": "TRUNG ƯƠNG", "m": "central, center, middle"}, "中学": {"w": "中学", "f": "ちゅうがく", "hv": "TRUNG HỌC", "m": "middle school, junior high school"}, "中古": {"w": "中古", "f": "ちゅうこ", "hv": "TRUNG CỔ", "m": "used, second-hand"}, "中止": {"w": "中止", "f": "ちゅうし", "hv": "TRUNG CHI", "m": "suspension, stoppage, discontinuance"}, "駐車": {"w": "駐車", "f": "ちゅうしゃ", "hv": "TRÚ XA", "m": "parking (e.g., car)"}, "昼食": {"w": "昼食", "f": "ちゅうしょく", "hv": "TRÚ THỰC", "m": "lunch (same as 昼ご飯 (ひるごはん))"}, "中心": {"w": "中心", "f": "ちゅうしん", "hv": "TRUNG TÂM", "m": "center, core"}, "注目": {"w": "注目", "f": "ちゅうもく", "hv": "CHÚ MỤC", "m": "notice, attention, observation"}, "注文": {"w": "注文", "f": "ちゅうもん", "hv": "CHÚ VĂN", "m": "order, request"}, "長期": {"w": "長期", "f": "ちょうき", "hv": "TRÀNG CƠ", "m": "long time period"}, "調査": {"w": "調査", "f": "ちょうさ", "hv": "ĐIỀU TRA", "m": "survey; investigation"}, "調子": {"w": "調子", "f": "ちょうし", "hv": "ĐIỀU TÍ", "m": "condition, state, tune, tone"}, "頂上": {"w": "頂上", "f": "ちょうじょう", "hv": "ĐÍNH THƯỚNG", "m": "top, summit, peak"}, "貯金": {"w": "貯金", "f": "ちょきん", "hv": "TRỮ KIM", "m": "(bank) savings"}, "直接": {"w": "直接", "f": "ちょくせつ", "hv": "TRỊ TIẾP", "m": "direct, immediate, firsthand"}, "著者": {"w": "著者", "f": "ちょしゃ", "hv": "TRƯỚC GIẢ", "m": "author, writer"}, "通過": {"w": "通過", "f": "つうか", "hv": "THÔNG QUA", "m": "passage through, passing"}, "通貨": {"w": "通貨", "f": "つうか", "hv": "THÔNG HOÁ", "m": "currency"}, "通学": {"w": "通学", "f": "つうがく", "hv": "THÔNG HỌC", "m": "commuting to school"}, "通勤": {"w": "通勤", "f": "つうきん", "hv": "THÔNG CẦN", "m": "commuting to work"}, "通行": {"w": "通行", "f": "つうこう", "hv": "THÔNG HÀNG", "m": "passage, passing"}, "通信": {"w": "通信", "f": "つうしん", "hv": "THÔNG THÂN", "m": "correspondence, communications"}, "通訳": {"w": "通訳", "f": "つうやく", "hv": "THÔNG DỊCH", "m": "interpretation; interpreter"}, "梅雨": {"w": "梅雨", "f": "つゆ", "hv": "MAI VÚ", "m": "rainy season"}, "提案": {"w": "提案", "f": "ていあん", "hv": "THÌ ÁN", "m": "proposal, proposition, suggestion"}, "定期": {"w": "定期", "f": "ていき", "hv": "ĐÍNH CƠ", "m": "fixed term"}, "抵抗": {"w": "抵抗", "f": "ていこう", "hv": "CHỈ KHÁNG", "m": "resistance, opposition"}, "提出": {"w": "提出", "f": "ていしゅつ", "hv": "THÌ XUÝ", "m": "presentation, submission, filing"}, "停電": {"w": "停電", "f": "ていでん", "hv": "ĐÌNH ĐIỆN", "m": "failure of electricity"}, "程度": {"w": "程度", "f": "ていど", "hv": "TRÌNH ĐẠC", "m": "degree, amount, level"}, "停留所": {"w": "停留所", "f": "ていりゅうじょ", "hv": "ĐÌNH LƯU SỞ", "m": "bus or tram stop"}, "出来事": {"w": "出来事", "f": "できごと", "hv": "XUÝ LAI SỰ", "m": "incident happening, event"}, "適切": {"w": "適切", "f": "てきせつ", "hv": "QUÁT THIẾT", "m": "appropriate, adequate, relevance"}, "適度": {"w": "適度", "f": "てきど", "hv": "QUÁT ĐẠC", "m": "moderate"}, "適用": {"w": "適用", "f": "てきよう", "hv": "QUÁT DỤNG", "m": "applying"}, "手品": {"w": "手品", "f": "てじな", "hv": "THỦ PHẨM", "m": "conjuring trick, magic"}, "哲学": {"w": "哲学", "f": "てつがく", "hv": "TRIẾT HỌC", "m": "philosophy"}, "徹底": {"w": "徹底", "f": "てってい", "hv": "TRIỆT ĐỂ", "m": "thoroughness, completeness"}, "鉄道": {"w": "鉄道", "f": "てつどう", "hv": "THIẾT ĐÁO", "m": "railway; railroad"}, "徹夜": {"w": "徹夜", "f": "てつや", "hv": "TRIỆT DẠ", "m": "staying up all night, sleepless night"}, "手間": {"w": "手間", "f": "てま", "hv": "THỦ GIAN", "m": "time, labor"}, "典型": {"w": "典型", "f": "てんけい", "hv": "ĐIỂN HÌNH", "m": "type, pattern, archetypal"}, "天候": {"w": "天候", "f": "てんこう", "hv": "THIÊN HẬU", "m": "weather"}, "電子": {"w": "電子", "f": "でんし", "hv": "ĐIỆN TÍ", "m": "electron; electronic"}, "伝統": {"w": "伝統", "f": "でんとう", "hv": "TRUYỀN THỐNG", "m": "tradition, convention"}, "天然": {"w": "天然", "f": "てんねん", "hv": "THIÊN NHIÊN", "m": "nature, spontaneity"}, "答案": {"w": "答案", "f": "とうあん", "hv": "ĐÁP ÁN", "m": "examination paper, examination script"}, "同一": {"w": "同一", "f": "どういつ", "hv": "ĐỒNG NHẤT", "m": "identity, sameness, similarity"}, "銅貨": {"w": "銅貨", "f": "どうか", "hv": "ĐỒNG HOÁ", "m": "copper coin"}, "当時": {"w": "当時", "f": "とうじ", "hv": "ĐANG THÌ", "m": "at that time, in those days (same as そのころ)"}, "動詞": {"w": "動詞", "f": "どうし", "hv": "ĐỘNG TỪ", "m": "verb"}, "同時": {"w": "同時", "f": "どうじ", "hv": "ĐỒNG THÌ", "m": "simultaneous(ly), same time"}, "到着": {"w": "到着", "f": "とうちゃく", "hv": "ĐÁO HỒ", "m": "arrival"}, "道徳": {"w": "道徳", "f": "どうとく", "hv": "ĐÁO ĐỨC", "m": "morals"}, "投票": {"w": "投票", "f": "とうひょう", "hv": "ĐẦU PHIÊU", "m": "voting, poll"}, "東洋": {"w": "東洋", "f": "とうよう", "hv": "ĐÔNG DƯƠNG", "m": "Orient"}, "同様": {"w": "同様", "f": "どうよう", "hv": "ĐỒNG DẠNG", "m": "identical, same (kind), like"}, "童謡": {"w": "童謡", "f": "どうよう", "hv": "ĐỒNG DAO", "m": "children's song, nursery rhyme"}, "同僚": {"w": "同僚", "f": "どうりょう", "hv": "ĐỒNG LIÊU", "m": "colleague; co-worker"}, "道路": {"w": "道路", "f": "どうろ", "hv": "ĐÁO LẠC", "m": "road"}, "都会": {"w": "都会", "f": "とかい", "hv": "ĐÔ CỐI", "m": "city"}, "得意": {"w": "得意", "f": "とくい", "hv": "ĐẮC Y", "m": "pride, triumph, prosperity"}, "読書": {"w": "読書", "f": "どくしょ", "hv": "ĐẬU THƯ", "m": "reading"}, "独身": {"w": "独身", "f": "どくしん", "hv": "ĐỘC QUYÊN", "m": "single, unmarried"}, "特徴": {"w": "特徴", "f": "とくちょう", "hv": "ĐẶC CHUỶ", "m": "characteristic(s); feature(s); trait(s)"}, "特長": {"w": "特長", "f": "とくちょう", "hv": "ĐẶC TRÀNG", "m": "forte, merit"}, "独特": {"w": "独特", "f": "どくとく", "hv": "ĐỘC ĐẶC", "m": "peculiarity, uniqueness, characteristic"}, "独立": {"w": "独立", "f": "どくりつ", "hv": "ĐỘC LẬP", "m": "independence (e.g., Ind. Day), self-support"}, "登山": {"w": "登山", "f": "とざん", "hv": "ĐĂNG SAN", "m": "mountain-climbing"}, "都市": {"w": "都市", "f": "とし", "hv": "ĐÔ THỊ", "m": "town, city, urban"}, "年月": {"w": "年月", "f": "としつき", "hv": "NIÊN NGUYỆT", "m": "months and years"}, "図書": {"w": "図書", "f": "としょ", "hv": "ĐỒ THƯ", "m": "books"}, "年寄": {"w": "年寄", "f": "としより", "hv": "NIÊN KÍ", "m": "old people, the aged"}, "途端": {"w": "途端", "f": "とたん", "hv": "ĐỒ ĐOAN", "m": "just (now, at the moment, etc.)"}, "土地": {"w": "土地", "f": "とち", "hv": "THỔ ĐỊA", "m": "plot of land, lot, soil"}, "突然": {"w": "突然", "f": "とつぜん", "hv": "GIA NHIÊN", "m": "abruptly, suddenly, unexpectedly"}, "内容": {"w": "内容", "f": "ないよう", "hv": "NẠP DONG", "m": "subject, contents, detail"}, "仲間": {"w": "仲間", "f": "なかま", "hv": "TRỌNG GIAN", "m": "company, fellow, colleague, associate"}, "中身": {"w": "中身", "f": "なかみ", "hv": "TRUNG QUYÊN", "m": "content(s); substance"}, "中味": {"w": "中味", "f": "なかみ", "hv": "TRUNG VỊ", "m": "contents, interior, filling"}, "納得": {"w": "納得", "f": "なっとく", "hv": "NẠP ĐẮC", "m": "consent, assent, understanding"}, "苦手": {"w": "苦手", "f": "にがて", "hv": "CỔ THỦ", "m": "poor (at), weak (in), dislike (of)"}, "日常": {"w": "日常", "f": "にちじょう", "hv": "NHẬT THƯỜNG", "m": "ordinary, regular, everyday"}, "日光": {"w": "日光", "f": "にっこう", "hv": "NHẬT QUANG", "m": "sunlight"}, "日中": {"w": "日中", "f": "にっちゅう", "hv": "NHẬT TRUNG", "m": "daytime, broad daylight"}, "日本": {"w": "日本", "f": "にっぽん", "hv": "NHẬT BÔN", "m": "Japan"}, "入場": {"w": "入場", "f": "にゅうじょう", "hv": "NHẬP TRÀNG", "m": "entrance, admission, entering"}, "人気": {"w": "人気", "f": "にんき", "hv": "NHÂN KHÍ", "m": "popularity"}, "人間": {"w": "人間", "f": "にんげん", "hv": "NHÂN GIAN", "m": "human being, person"}, "熱帯": {"w": "熱帯", "f": "ねったい", "hv": "NHIỆT ĐÁI", "m": "tropics"}, "熱中": {"w": "熱中", "f": "ねっちゅう", "hv": "NHIỆT TRUNG", "m": "enthusiasm, zeal, mania"}, "年間": {"w": "年間", "f": "ねんかん", "hv": "NIÊN GIAN", "m": "year"}, "年中": {"w": "年中", "f": "ねんじゅう", "hv": "NIÊN TRUNG", "m": "whole year, always, everyday"}, "年代": {"w": "年代", "f": "ねんだい", "hv": "NIÊN ĐẠI", "m": "age, era, period"}, "年齢": {"w": "年齢", "f": "ねんれい", "hv": "NIÊN LINH", "m": "age, years"}, "農家": {"w": "農家", "f": "のうか", "hv": "NÔNG CÔ", "m": "farmer, farm family"}, "農業": {"w": "農業", "f": "のうぎょう", "hv": "NÔNG NGHIỆP", "m": "agriculture"}, "農民": {"w": "農民", "f": "のうみん", "hv": "NÔNG DÂN", "m": "farmers, peasants"}, "能力": {"w": "能力", "f": "のうりょく", "hv": "NAI LỰC", "m": "ability, faculty"}, "配達": {"w": "配達", "f": "はいたつ", "hv": "PHỐI ĐẠT", "m": "delivery, distribution"}, "俳優": {"w": "俳優", "f": "はいゆう", "hv": "BÀI ƯU", "m": "actor, actress, performer"}, "馬鹿": {"w": "馬鹿", "f": "ばか", "hv": "MÃ LỘC", "m": "fool, idiot"}, "博士": {"w": "博士", "f": "はかせ", "hv": "BÁC SĨ", "m": "doctorate, PhD., doctor"}, "拍手": {"w": "拍手", "f": "はくしゅ", "hv": "BÁC THỦ", "m": "clapping hands, applause"}, "莫大": {"w": "莫大", "f": "ばくだい", "hv": "BÁ THÁI", "m": "enormous, vast"}, "爆発": {"w": "爆発", "f": "ばくはつ", "hv": "BẠC PHÁT", "m": "explosion, detonation, eruption"}, "博物館": {"w": "博物館", "f": "はくぶつかん", "hv": "BÁC VẬT QUÁN", "m": "museum"}, "破産": {"w": "破産", "f": "はさん", "hv": "PHÁ SẢN", "m": "(personal) bankruptcy"}, "発見": {"w": "発見", "f": "はっけん", "hv": "PHÁT HIỆN", "m": "discovery, detection, finding"}, "発行": {"w": "発行", "f": "はっこう", "hv": "PHÁT HÀNG", "m": "issue (publications)"}, "発車": {"w": "発車", "f": "はっしゃ", "hv": "PHÁT XA", "m": "departure of a vehicle"}, "発射": {"w": "発射", "f": "はっしゃ", "hv": "PHÁT DẠ", "m": "firing, shooting, discharge"}, "発達": {"w": "発達", "f": "はったつ", "hv": "PHÁT ĐẠT", "m": "development, growth"}, "発表": {"w": "発表", "f": "はっぴょう", "hv": "PHÁT BIỂU", "m": "announcement; publication; presentation"}, "発明": {"w": "発明", "f": "はつめい", "hv": "PHÁT MINH", "m": "invention"}, "派手": {"w": "派手", "f": "はで", "hv": "BA THỦ", "m": "showy, flashy, gaudy"}, "羽根": {"w": "羽根", "f": "はね", "hv": "VŨ CĂN", "m": "feather"}, "母親": {"w": "母親", "f": "ははおや", "hv": "MÔ THÂN", "m": "mother"}, "場面": {"w": "場面", "f": "ばめん", "hv": "TRÀNG DIỆN", "m": "scene, setting (e.g., of novel)"}, "範囲": {"w": "範囲", "f": "はんい", "hv": "PHẠM VY", "m": "extent, scope, range"}, "反抗": {"w": "反抗", "f": "はんこう", "hv": "PHIÊN KHÁNG", "m": "opposition, resistance"}, "犯罪": {"w": "犯罪", "f": "はんざい", "hv": "PHẠM TỘI", "m": "crime"}, "反省": {"w": "反省", "f": "はんせい", "hv": "PHIÊN SẢNH", "m": "reflection, reconsideration, regret"}, "犯人": {"w": "犯人", "f": "はんにん", "hv": "PHẠM NHÂN", "m": "offender, criminal"}, "販売": {"w": "販売", "f": "はんばい", "hv": "PHIẾN MẠI", "m": "sale, selling, marketing"}, "被害": {"w": "被害", "f": "ひがい", "hv": "BÍ HẠI", "m": "damage"}, "比較": {"w": "比較", "f": "ひかく", "hv": "BÌ GIÁC", "m": "comparison"}, "悲劇": {"w": "悲劇", "f": "ひげき", "hv": "BI KỊCH", "m": "tragedy"}, "飛行": {"w": "飛行", "f": "ひこう", "hv": "PHI HÀNG", "m": "aviation, flight"}, "非常": {"w": "非常", "f": "ひじょう", "hv": "PHI THƯỜNG", "m": "emergency, extraordinary, unusual"}, "美人": {"w": "美人", "f": "びじん", "hv": "MĨ NHÂN", "m": "beautiful person (woman)"}, "日付": {"w": "日付", "f": "ひづけ", "hv": "NHẬT PHÓ", "m": "date, dating"}, "必死": {"w": "必死", "f": "ひっし", "hv": "TẤT TỬ", "m": "desperation, frantic, inevitable result"}, "否定": {"w": "否定", "f": "ひてい", "hv": "BĨ ĐÍNH", "m": "negation, denial"}, "一言": {"w": "一言", "f": "ひとこと", "hv": "NHẤT NGÂN", "m": "one word"}, "批判": {"w": "批判", "f": "ひはん", "hv": "PHÊ PHÁN", "m": "criticism"}, "批評": {"w": "批評", "f": "ひひょう", "hv": "PHÊ BÌNH", "m": "criticism, review, commentary"}, "秘密": {"w": "秘密", "f": "ひみつ", "hv": "BÍ MẬT", "m": "secret, secrecy"}, "微妙": {"w": "微妙", "f": "びみょう", "hv": "VI DIỆU", "m": "delicate, subtle"}, "費用": {"w": "費用", "f": "ひよう", "hv": "BÍ DỤNG", "m": "cost, expense"}, "評価": {"w": "評価", "f": "ひょうか", "hv": "BÌNH GIÁ", "m": "assessment, evaluation"}, "表現": {"w": "表現", "f": "ひょうげん", "hv": "BIỂU HIỆN", "m": "expression, presentation"}, "表情": {"w": "表情", "f": "ひょうじょう", "hv": "BIỂU TÌNH", "m": "facial expression"}, "平等": {"w": "平等", "f": "びょうどう", "hv": "BIỀN ĐẲNG", "m": "equality, impartiality, evenness"}, "評判": {"w": "評判", "f": "ひょうばん", "hv": "BÌNH PHÁN", "m": "fame, reputation"}, "表面": {"w": "表面", "f": "ひょうめん", "hv": "BIỂU DIỆN", "m": "surface, outside, face"}, "風景": {"w": "風景", "f": "ふうけい", "hv": "PHONG CẢNH", "m": "scenery"}, "夫婦": {"w": "夫婦", "f": "ふうふ", "hv": "PHU PHỤ", "m": "married couple, husband and wife"}, "不可": {"w": "不可", "f": "ふか", "hv": "BƯU KHẢ", "m": "wrong, bad, impossible"}, "武器": {"w": "武器", "f": "ぶき", "hv": "VÕ KHÍ", "m": "weapon, arms"}, "服装": {"w": "服装", "f": "ふくそう", "hv": "PHỤC TRANG", "m": "clothes, attire"}, "不幸": {"w": "不幸", "f": "ふこう", "hv": "BƯU HẠNH", "m": "unhappiness, sorrow, misfortune"}, "無事": {"w": "無事", "f": "ぶじ", "hv": "MÔ SỰ", "m": "safety, peace"}, "不自由": {"w": "不自由", "f": "ふじゆう", "hv": "BƯU TỰ DO", "m": "discomfort, disability, inconvenience"}, "夫人": {"w": "夫人", "f": "ふじん", "hv": "PHU NHÂN", "m": "wife, Mrs, madam"}, "婦人": {"w": "婦人", "f": "ふじん", "hv": "PHỤ NHÂN", "m": "woman (same as 女性 (じょせい)、女の人 (おんなのひと))"}, "不正": {"w": "不正", "f": "ふせい", "hv": "BƯU CHINH", "m": "injustice, unfairness"}, "不足": {"w": "不足", "f": "ふそく", "hv": "BƯU TÚ", "m": "insufficiency, shortage"}, "舞台": {"w": "舞台", "f": "ぶたい", "hv": "VŨ DI", "m": "stage (theater)"}, "双子": {"w": "双子", "f": "ふたご", "hv": "SONG TÍ", "m": "twins, a twin"}, "普段": {"w": "普段", "f": "ふだん", "hv": "PHỔ ĐOÀN", "m": "in everyday situations, usually, ordinarily"}, "不通": {"w": "不通", "f": "ふつう", "hv": "BƯU THÔNG", "m": "blockade, interruption, stoppage"}, "物価": {"w": "物価", "f": "ぶっか", "hv": "VẬT GIÁ", "m": "(commodity/consumer) prices"}, "物質": {"w": "物質", "f": "ぶっしつ", "hv": "VẬT CHÍ", "m": "material, substance"}, "物理": {"w": "物理", "f": "ぶつり", "hv": "VẬT LÍ", "m": "physics"}, "部分": {"w": "部分", "f": "ぶぶん", "hv": "BẪU PHÂN", "m": "portion, section, part"}, "不平": {"w": "不平", "f": "ふへい", "hv": "BƯU BIỀN", "m": "complaint, discontent, dissatisfaction"}, "不満": {"w": "不満", "f": "ふまん", "hv": "BƯU MÃN", "m": "dissatisfaction, discontent, complaints"}, "不利": {"w": "不利", "f": "ふり", "hv": "BƯU LỢI", "m": "disadvantage, drawback"}, "雰囲気": {"w": "雰囲気", "f": "ふんいき", "hv": "PHÂN VY KHÍ", "m": "atmosphere (e.g., musical), mood, ambiance"}, "分析": {"w": "分析", "f": "ぶんせき", "hv": "PHÂN TÍCH", "m": "analysis"}, "文明": {"w": "文明", "f": "ぶんめい", "hv": "VĂN MINH", "m": "civilization"}, "分野": {"w": "分野", "f": "ぶんや", "hv": "PHÂN DÃ", "m": "field, sphere"}, "平均": {"w": "平均", "f": "へいきん", "hv": "BIỀN QUÂN", "m": "equilibrium, balance, average"}, "平和": {"w": "平和", "f": "へいわ", "hv": "BIỀN HOÀ", "m": "peace"}, "変更": {"w": "変更", "f": "へんこう", "hv": "BIẾN CANH", "m": "change, modification, alteration"}, "弁当": {"w": "弁当", "f": "べんとう", "hv": "BIỀN ĐANG", "m": "box lunch"}, "冒険": {"w": "冒険", "f": "ぼうけん", "hv": "MẠO HIỂM", "m": "risk, venture, adventure"}, "方向": {"w": "方向", "f": "ほうこう", "hv": "BÀNG HƯỚNG", "m": "direction, course, way"}, "宝石": {"w": "宝石", "f": "ほうせき", "hv": "BẢO THẠCH", "m": "gem, jewel"}, "包装": {"w": "包装", "f": "ほうそう", "hv": "BAO TRANG", "m": "packing, wrapping"}, "豊富": {"w": "豊富", "f": "ほうふ", "hv": "LỄ PHÚ", "m": "abundance, plenty"}, "方法": {"w": "方法", "f": "ほうほう", "hv": "BÀNG PHÁP", "m": "method, means, technique"}, "訪問": {"w": "訪問", "f": "ほうもん", "hv": "PHÓNG VẤN", "m": "call, visit"}, "保証": {"w": "保証", "f": "ほしょう", "hv": "BẢO CHỨNG", "m": "guarantee, assurance, warranty"}, "保存": {"w": "保存", "f": "ほぞん", "hv": "BẢO TỒN", "m": "preservation, conservation"}, "歩道": {"w": "歩道", "f": "ほどう", "hv": "BỘ ĐÁO", "m": "walkway"}, "本当": {"w": "本当", "f": "ほんと", "hv": "BÔN ĐANG", "m": "truth, reality"}, "本人": {"w": "本人", "f": "ほんにん", "hv": "BÔN NHÂN", "m": "the person himself"}, "本物": {"w": "本物", "f": "ほんもの", "hv": "BÔN VẬT", "m": "genuine article"}, "迷子": {"w": "迷子", "f": "まいご", "hv": "MÊ TÍ", "m": "lost (stray) child"}, "真似": {"w": "真似", "f": "まね", "hv": "CHÂN TỰ", "m": "mimicry, imitation, behavior"}, "酸化": {"w": "酸化", "f": "さんか", "hv": "TOAN HOA", "m": "oxidation"}, "資格": {"w": "資格", "f": "しかく", "hv": "TƯ CÁC", "m": "qualifications, requirements, capabilities"}, "視覚": {"w": "視覚", "f": "しかく", "hv": "THỊ GIÁC", "m": "sense of sight, vision"}, "指揮": {"w": "指揮", "f": "しき", "hv": "CHỈ HUY", "m": "command, direction"}, "磁気": {"w": "磁気", "f": "じき", "hv": "TỪ KHÍ", "m": "magnetism"}, "磁器": {"w": "磁器", "f": "じき", "hv": "TỪ KHÍ", "m": "porcelain, china"}, "自己": {"w": "自己", "f": "じこ", "hv": "TỰ KỈ", "m": "self, oneself"}, "字体": {"w": "字体", "f": "じたい", "hv": "TỰ BỔN", "m": "font, lettering"}, "辞退": {"w": "辞退", "f": "じたい", "hv": "TỪ THOÁI", "m": "refusal"}, "視点": {"w": "視点", "f": "してん", "hv": "THỊ ĐIỂM", "m": "opinion, point of view, visual point"}, "脂肪": {"w": "脂肪", "f": "しぼう", "hv": "CHI PHƯƠNG", "m": "fat, grease"}, "志望": {"w": "志望", "f": "しぼう", "hv": "CHÍ VỌNG", "m": "wish, desire, ambition"}, "修飾": {"w": "修飾", "f": "しゅうしょく", "hv": "TU SỨC", "m": "ornamentation; modification (gram)"}, "私用": {"w": "私用", "f": "しよう", "hv": "TƯ DỤNG", "m": "personal use, private business"}, "仕様": {"w": "仕様", "f": "しよう", "hv": "SĨ DẠNG", "m": "way, method, specification"}, "生涯": {"w": "生涯", "f": "しょうがい", "hv": "SANH NHAI", "m": "one's lifetime"}, "上司": {"w": "上司", "f": "じょうし", "hv": "THƯỚNG TI", "m": "one's superior"}, "正体": {"w": "正体", "f": "しょうたい", "hv": "CHINH BỔN", "m": "natural shape, one's true colors, true character"}, "照明": {"w": "照明", "f": "しょうめい", "hv": "CHIẾU MINH", "m": "illumination"}, "女史": {"w": "女史", "f": "じょし", "hv": "NHỮ SỬ", "m": "Ms."}, "助詞": {"w": "助詞", "f": "じょし", "hv": "TRỢ TỪ", "m": "(gram) particle(s), postposition"}, "進行": {"w": "進行", "f": "しんこう", "hv": "TIẾN HÀNG", "m": "advance"}, "新興": {"w": "新興", "f": "しんこう", "hv": "TÂN HƯNG", "m": "rising, developing, emergent"}, "振興": {"w": "振興", "f": "しんこう", "hv": "CHÂN HƯNG", "m": "promotion, encouragement"}, "申告": {"w": "申告", "f": "しんこく", "hv": "THÂN CÁO", "m": "report, statement"}, "真理": {"w": "真理", "f": "しんり", "hv": "CHÂN LÍ", "m": "truth"}, "水洗": {"w": "水洗", "f": "すいせん", "hv": "THUỶ TIỂN", "m": "flushing"}, "正規": {"w": "正規", "f": "せいき", "hv": "CHINH QUY", "m": "regular, legitimate"}, "精巧": {"w": "精巧", "f": "せいこう", "hv": "TINH XẢO", "m": "elaborate, delicate, exquisite"}, "精算": {"w": "精算", "f": "せいさん", "hv": "TINH TOÁN", "m": "exact calculation, adjustment"}, "成年": {"w": "成年", "f": "せいねん", "hv": "THÀNH NIÊN", "m": "majority, adult age"}, "声明": {"w": "声明", "f": "せいめい", "hv": "THANH MINH", "m": "declaration, statement, proclamation"}, "姓名": {"w": "姓名", "f": "せいめい", "hv": "TÍNH DANH", "m": "full name"}, "生理": {"w": "生理", "f": "せいり", "hv": "SANH LÍ", "m": "physiology, menses"}, "選挙": {"w": "選挙", "f": "せんきょ", "hv": "SOÁT CỬ", "m": "election"}, "先行": {"w": "先行", "f": "せんこう", "hv": "TIÊN HÀNG", "m": "preceding, going first"}, "選考": {"w": "選考", "f": "せんこう", "hv": "SOÁT KHẢO", "m": "selection, screening"}, "捜査": {"w": "捜査", "f": "そうさ", "hv": "SẢO TRA", "m": "search (esp. in criminal investigations, investigation)"}, "操縦": {"w": "操縦", "f": "そうじゅう", "hv": "THAO TÚNG", "m": "management, control, manipulation"}, "創造": {"w": "創造", "f": "そうぞう", "hv": "SANG THÁO", "m": "creation"}, "退学": {"w": "退学", "f": "たいがく", "hv": "THOÁI HỌC", "m": "dropping out of school"}, "挑戦": {"w": "挑戦", "f": "ちょうせん", "hv": "KHIÊU CHIẾN", "m": "challenge, defiance"}, "治療": {"w": "治療", "f": "ちりょう", "hv": "TRÌ LIỆU", "m": "medical treatment"}, "転校": {"w": "転校", "f": "てんこう", "hv": "CHUYỂN GIÁO", "m": "change schools"}, "伝言": {"w": "伝言", "f": "でんごん", "hv": "TRUYỀN NGÂN", "m": "verbal message"}, "倒産": {"w": "倒産", "f": "とうさん", "hv": "ĐÁO SẢN", "m": "(corporate) bankruptcy, insolvency"}, "同士": {"w": "同士", "f": "どうし", "hv": "ĐỒNG SĨ", "m": "one another, companion, comrade"}, "同志": {"w": "同志", "f": "どうし", "hv": "ĐỒNG CHÍ", "m": "same mind, comrade, kindred soul"}, "当然": {"w": "当然", "f": "とうぜん", "hv": "ĐANG NHIÊN", "m": "obvious; natural"}, "動揺": {"w": "動揺", "f": "どうよう", "hv": "ĐỘNG DAO", "m": "disturbance, flutter shock"}, "年鑑": {"w": "年鑑", "f": "ねんかん", "hv": "NIÊN GIÁM", "m": "yearbook"}, "非行": {"w": "非行", "f": "ひこう", "hv": "PHI HÀNG", "m": "delinquency, misconduct"}, "保護": {"w": "保護", "f": "ほご", "hv": "BẢO HỘ", "m": "care, protection, shelter"}, "保障": {"w": "保障", "f": "ほしょう", "hv": "BẢO CHƯƠNG", "m": "guarantee, security, warranty"}, "補償": {"w": "補償", "f": "ほしょう", "hv": "BỔ THƯỜNG", "m": "compensation, reparation"}, "野党": {"w": "野党", "f": "やとう", "hv": "DÃ ĐẢNG", "m": "opposition party"}, "有機": {"w": "有機", "f": "ゆうき", "hv": "DỰU CƠ", "m": "organic"}, "予想": {"w": "予想", "f": "よそう", "hv": "DƯ TƯỞNG", "m": "expectation, anticipation, prediction"}, "表示": {"w": "表示", "f": "ひょうじ", "hv": "BIỂU KÌ", "m": "display, indication"}};
+
+    // Color Palette mapping for Candies
+    const CANDY_COLORS = ['color-pink', 'color-purple', 'color-blue', 'color-green', 'color-orange', 'color-gold'];
+
+    // Game State
+    let currentLevel = 1;
+    let score = 0;
+    let movesLeft = 25;
+    let targetWordsNeeded = 5;
+    let wordsMatchedThisLevel = 0;
+    let isProcessing = false;
+    let soundEnabled = true;
+    let playMode = 'swap'; // 'swap' or 'connect'
+    let selectedTile = null; // for swap mode
+    let connectSelection = []; // for connect mode
+    let lastMatchedWord = null;
+    let collectedLexicon = new Set();
+
+    // 6x6 Grid Model
+    const GRID_SIZE = 6;
+    let board = []; // 6x6 2D array of objects: { char, color, id }
+
+    // Web Audio API Synthesizer (Zero asset dependency)
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.2) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playPopSound() {
+      if (!soundEnabled) return;
+      playTone(587.33, 'triangle', 0.12, 0.25); // D5
+      setTimeout(() => playTone(880, 'sine', 0.15, 0.3), 50); // A5
+    }
+
+    function playSwapSound() {
+      if (!soundEnabled) return;
+      playTone(440, 'sine', 0.08, 0.15);
+    }
+
+    function playComboFanfare(comboLevel) {
+      if (!soundEnabled) return;
+      const baseFreq = 440 + comboLevel * 80;
+      [0, 100, 200].forEach((delay, i) => {
+        setTimeout(() => playTone(baseFreq * (1 + i * 0.25), 'triangle', 0.18, 0.25), delay);
+      });
+    }
+
+    function playVictoryFanfare() {
+      if (!soundEnabled) return;
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
+        setTimeout(() => playTone(freq, 'triangle', 0.3, 0.3), idx * 120);
+      });
+    }
+
+    // DUAL-ENGINE JAPANESE TTS PRONUNCIATION
+    let ttsAudio = new Audio();
+    ttsAudio.preload = 'auto';
+    let voices = [];
+    let jaVoice = null;
+
+    function initVoices() {
+      if ('speechSynthesis' in window) {
+        voices = window.speechSynthesis.getVoices();
+        jaVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja_JP' || v.lang.startsWith('ja')) || null;
+      }
+    }
+    if ('speechSynthesis' in window) {
+      initVoices();
+      window.speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    function speakWord(text) {
+      if (!soundEnabled || !text) return;
+      try {
+        const url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=" + encodeURIComponent(text);
+        ttsAudio.pause();
+        ttsAudio.currentTime = 0;
+        ttsAudio.onerror = () => fallbackSpeech(text);
+        ttsAudio.src = url;
+        ttsAudio.play().catch(() => fallbackSpeech(text));
+      } catch (e) {
+        fallbackSpeech(text);
+      }
+    }
+
+    function fallbackSpeech(text) {
+      if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ja-JP';
+        u.rate = 0.95;
+        if (!jaVoice) initVoices();
+        if (jaVoice) u.voice = jaVoice;
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
+    }
+
+    // Toast Notice
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // Level Management
+    function initLevel(lvl) {
+      currentLevel = lvl;
+      const targetWordsMap = { 1: 5, 2: 8, 3: 10, 4: 12, 5: 8 };
+      const movesMap = { 1: 25, 2: 25, 3: 30, 4: 30, 5: 35 };
+      targetWordsNeeded = targetWordsMap[lvl] || 15;
+      movesLeft = movesMap[lvl] || 30;
+      wordsMatchedThisLevel = 0;
+
+      const titles = {
+        1: "🌟 Màn 1: 報連相 & Giao Tiếp",
+        2: "🚀 Màn 2: Kỹ Sư IT & Hành Động",
+        3: "💖 Màn 3: Cảm Xúc & Tính Cách",
+        4: "🌐 Màn 4: Xã Hội & Đời Sống",
+        5: "👑 Màn 5: Hán Tự 3 Chữ (Sanji-jukugo)"
+      };
+      document.getElementById('stage-badge').innerText = titles[lvl] || ("🌟 Màn Vô Tận: " + lvl);
+      updateStatsUI();
+      generateValidBoard();
+    }
+
+    function updateStatsUI() {
+      document.getElementById('score-val').innerText = score.toLocaleString();
+      document.getElementById('target-val').innerText = `${wordsMatchedThisLevel} / ${targetWordsNeeded}`;
+      document.getElementById('moves-val').innerText = movesLeft;
+      const pct = Math.min(100, Math.round((wordsMatchedThisLevel / targetWordsNeeded) * 100));
+      document.getElementById('target-bar').style.width = pct + '%';
+      document.getElementById('lexicon-count').innerText = collectedLexicon.size;
+    }
+
+    // BOARD GENERATION & KANJI POOL
+    function getLevelKanjiPool() {
+      const list = LEVEL_CONFIG[currentLevel] || LEVEL_CONFIG[1];
+      const kanjiSet = new Set();
+      list.forEach(item => {
+        for (const char of item.w) kanjiSet.add(char);
+      });
+      return Array.from(kanjiSet);
+    }
+
+    function getRandomColor() {
+      return CANDY_COLORS[Math.floor(Math.random() * CANDY_COLORS.length)];
+    }
+
+    let tileIdSeq = 1;
+    function createCandyTile(char) {
+      return {
+        id: tileIdSeq++,
+        char: char,
+        color: getRandomColor()
+      };
+    }
+
+    function generateValidBoard() {
+      const pool = getLevelKanjiPool();
+      let attempts = 0;
+      let valid = false;
+
+      while (!valid && attempts < 100) {
+        attempts++;
+        board = [];
+        for (let r = 0; r < GRID_SIZE; r++) {
+          const row = [];
+          for (let c = 0; c < GRID_SIZE; c++) {
+            const randChar = pool[Math.floor(Math.random() * pool.length)];
+            row.push(createCandyTile(randChar));
+          }
+          board.push(row);
+        }
+
+        // Remove any initial instant matches so player has control
+        const initialMatches = findBoardMatches(board);
+        if (initialMatches.length === 0) {
+          // Check if at least 1 valid swap move exists
+          const moves = findPossibleMoves(board);
+          if (moves.length >= 2) {
+            valid = true;
+          }
+        }
+      }
+
+      // Fallback: If random couldn't find a clean board, plant a move deliberately
+      if (!valid) {
+        plantGuaranteedMove(pool);
+      }
+
+      renderGrid();
+    }
+
+    function plantGuaranteedMove(pool) {
+      const levelWords = LEVEL_CONFIG[currentLevel] || LEVEL_CONFIG[1];
+      const wordObj = levelWords[Math.floor(Math.random() * levelWords.length)];
+      const w = wordObj.w;
+      if (w.length === 2) {
+        // Place w[0] at (2, 2) and w[1] at (2, 4), and a random tile at (2, 3)
+        // Swapping (2,3) with (2,4) creates the word!
+        board[2][2] = createCandyTile(w[0]);
+        board[2][4] = createCandyTile(w[1]);
+        board[2][3] = createCandyTile(pool[0] === w[1] ? pool[1] : pool[0]);
+      }
+    }
+
+    // MATCH DETECTION (Length 3 then Length 2)
+    function findBoardMatches(currentBoard) {
+      const matches = [];
+      const matchedCells = new Set();
+
+      function cellKey(r, c) { return `${r},${c}`; }
+
+      // 1. Horizontal Check
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          // Check length 3
+          if (c + 2 < GRID_SIZE) {
+            const w3 = currentBoard[r][c].char + currentBoard[r][c+1].char + currentBoard[r][c+2].char;
+            if (FULL_DICTIONARY[w3]) {
+              matches.push({
+                word: w3,
+                data: FULL_DICTIONARY[w3],
+                cells: [{r, c}, {r, c: c+1}, {r, c: c+2}]
+              });
+              matchedCells.add(cellKey(r, c));
+              matchedCells.add(cellKey(r, c+1));
+              matchedCells.add(cellKey(r, c+2));
+            }
+          }
+          // Check length 2
+          if (c + 1 < GRID_SIZE) {
+            const w2 = currentBoard[r][c].char + currentBoard[r][c+1].char;
+            if (FULL_DICTIONARY[w2] && !matchedCells.has(cellKey(r, c)) && !matchedCells.has(cellKey(r, c+1))) {
+              matches.push({
+                word: w2,
+                data: FULL_DICTIONARY[w2],
+                cells: [{r, c}, {r, c: c+1}]
+              });
+            }
+          }
+        }
+      }
+
+      // 2. Vertical Check
+      for (let c = 0; c < GRID_SIZE; c++) {
+        for (let r = 0; r < GRID_SIZE; r++) {
+          // Check length 3
+          if (r + 2 < GRID_SIZE) {
+            const w3 = currentBoard[r][c].char + currentBoard[r+1][c].char + currentBoard[r+2][c].char;
+            if (FULL_DICTIONARY[w3]) {
+              matches.push({
+                word: w3,
+                data: FULL_DICTIONARY[w3],
+                cells: [{r, c}, {r: r+1, c}, {r: r+2, c}]
+              });
+              matchedCells.add(cellKey(r, c));
+              matchedCells.add(cellKey(r+1, c));
+              matchedCells.add(cellKey(r+2, c));
+            }
+          }
+          // Check length 2
+          if (r + 1 < GRID_SIZE) {
+            const w2 = currentBoard[r][c].char + currentBoard[r+1][c].char;
+            if (FULL_DICTIONARY[w2] && !matchedCells.has(cellKey(r, c)) && !matchedCells.has(cellKey(r+1, c))) {
+              matches.push({
+                word: w2,
+                data: FULL_DICTIONARY[w2],
+                cells: [{r, c}, {r: r+1, c}]
+              });
+            }
+          }
+        }
+      }
+
+      return matches;
+    }
+
+    // FIND VALID MOVES (FOR HINTS & SOLVER)
+    function findPossibleMoves(currentBoard) {
+      const possibleMoves = [];
+
+      function trySwap(r1, c1, r2, c2) {
+        // Clone board
+        const temp = currentBoard.map(row => [...row]);
+        const swapTemp = temp[r1][c1];
+        temp[r1][c1] = temp[r2][c2];
+        temp[r2][c2] = swapTemp;
+
+        const matches = findBoardMatches(temp);
+        if (matches.length > 0) {
+          possibleMoves.push({
+            from: {r: r1, c: c1},
+            to: {r: r2, c: c2},
+            word: matches[0].word
+          });
+        }
+      }
+
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          if (c + 1 < GRID_SIZE) trySwap(r, c, r, c + 1); // Right
+          if (r + 1 < GRID_SIZE) trySwap(r, c, r + 1, c); // Down
+        }
+      }
+
+      return possibleMoves;
+    }
+
+    // RENDERING GRID TO DOM
+    function renderGrid() {
+      const gridEl = document.getElementById('grid');
+      gridEl.innerHTML = '';
+
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          const tile = board[r][c];
+          const el = document.createElement('div');
+          el.className = `candy-tile ${tile.color}`;
+          el.id = `tile-${r}-${c}`;
+          el.innerText = tile.char;
+          el.dataset.r = r;
+          el.dataset.c = c;
+
+          // Selection highlight
+          if (selectedTile && selectedTile.r === r && selectedTile.c === c) {
+            el.classList.add('selected');
+          }
+          if (connectSelection.some(item => item.r === r && item.c === c)) {
+            el.classList.add('selected');
+          }
+
+          // Touch and click handlers
+          setupTileInteractions(el, r, c);
+          gridEl.appendChild(el);
+        }
+      }
+    }
+
+    // TILE INTERACTION & SWIPE/CLICK LOGIC
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    function setupTileInteractions(el, r, c) {
+      // Touch swipe
+      el.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      el.addEventListener('touchend', (e) => {
+        const diffX = e.changedTouches[0].clientX - touchStartX;
+        const diffY = e.changedTouches[0].clientY - touchStartY;
+        const threshold = 28;
+
+        if (playMode === 'swap' && (Math.abs(diffX) > threshold || Math.abs(diffY) > threshold)) {
+          if (Math.abs(diffX) > Math.abs(diffY)) {
+            // Horizontal swipe
+            if (diffX > 0 && c + 1 < GRID_SIZE) performSwap(r, c, r, c + 1);
+            else if (diffX < 0 && c - 1 >= 0) performSwap(r, c, r, c - 1);
+          } else {
+            // Vertical swipe
+            if (diffY > 0 && r + 1 < GRID_SIZE) performSwap(r, c, r + 1, c);
+            else if (diffY < 0 && r - 1 >= 0) performSwap(r, c, r - 1, c);
+          }
+        } else {
+          // Regular tap
+          handleTileClick(r, c);
+        }
+      });
+
+      // Mouse click
+      el.addEventListener('click', () => {
+        handleTileClick(r, c);
+      });
+    }
+
+    function handleTileClick(r, c) {
+      if (isProcessing) return;
+
+      if (playMode === 'swap') {
+        if (!selectedTile) {
+          selectedTile = { r, c };
+          playSwapSound();
+          renderGrid();
+        } else {
+          const isAdjacent = (Math.abs(selectedTile.r - r) + Math.abs(selectedTile.c - c)) === 1;
+          if (isAdjacent) {
+            const from = selectedTile;
+            selectedTile = null;
+            performSwap(from.r, from.c, r, c);
+          } else {
+            // Deselect or pick new
+            selectedTile = (selectedTile.r === r && selectedTile.c === c) ? null : { r, c };
+            playSwapSound();
+            renderGrid();
+          }
+        }
+      } else if (playMode === 'connect') {
+        handleConnectModeClick(r, c);
+      }
+    }
+
+    // SWAP EXECUTION & VALIDATION
+    async function performSwap(r1, c1, r2, c2) {
+      if (isProcessing) return;
+      isProcessing = true;
+      clearHints();
+
+      // Visual swap
+      const temp = board[r1][c1];
+      board[r1][c1] = board[r2][c2];
+      board[r2][c2] = temp;
+      playSwapSound();
+      renderGrid();
+
+      await new Promise(res => setTimeout(res, 180));
+
+      const matches = findBoardMatches(board);
+      if (matches.length > 0) {
+        movesLeft--;
+        updateStatsUI();
+        await processMatchesCascade(1);
+      } else {
+        // Revert invalid swap
+        const revert = board[r1][c1];
+        board[r1][c1] = board[r2][c2];
+        board[r2][c2] = revert;
+        playTone(220, 'sawtooth', 0.15, 0.2); // Error buzzer
+        renderGrid();
+        showToast("Không tạo được từ vựng N3 nào!");
+      }
+
+      isProcessing = false;
+      checkGameState();
+    }
+
+    // CONNECT MODE (Direct tap 2 or 3 adjacent kanji)
+    function handleConnectModeClick(r, c) {
+      const idx = connectSelection.findIndex(item => item.r === r && item.c === c);
+      if (idx !== -1) {
+        connectSelection.splice(idx, 1);
+        renderGrid();
+        return;
+      }
+
+      if (connectSelection.length > 0) {
+        const last = connectSelection[connectSelection.length - 1];
+        const isAdj = (Math.abs(last.r - r) + Math.abs(last.c - c)) === 1;
+        if (!isAdj) {
+          connectSelection = [{ r, c }];
+          playSwapSound();
+          renderGrid();
+          return;
+        }
+      }
+
+      connectSelection.push({ r, c });
+      playSwapSound();
+      renderGrid();
+
+      // If 2 or 3 tiles selected, check if forms a valid word!
+      if (connectSelection.length >= 2) {
+        const candidateWord = connectSelection.map(item => board[item.r][item.c].char).join('');
+        if (FULL_DICTIONARY[candidateWord]) {
+          isProcessing = true;
+          const wordObj = FULL_DICTIONARY[candidateWord];
+          const cells = [...connectSelection];
+          connectSelection = [];
+
+          movesLeft--;
+          triggerWordMatch(wordObj, cells, 1);
+          setTimeout(async () => {
+            await applyGravityAndRefill();
+            await processMatchesCascade(2);
+            isProcessing = false;
+            checkGameState();
+          }, 350);
+        } else if (connectSelection.length === 3) {
+          // Failed 3-char match, reset
+          setTimeout(() => {
+            connectSelection = [];
+            renderGrid();
+          }, 250);
+        }
+      }
+    }
+
+    // CASCADE & GRAVITY ENGINE
+    async function processMatchesCascade(comboStep = 1) {
+      const matches = findBoardMatches(board);
+      if (matches.length === 0) return;
+
+      for (const m of matches) {
+        triggerWordMatch(m.data, m.cells, comboStep);
+      }
+
+      await new Promise(res => setTimeout(res, 350));
+      await applyGravityAndRefill();
+      await new Promise(res => setTimeout(res, 220));
+
+      // Recursive cascade check!
+      await processMatchesCascade(comboStep + 1);
+    }
+
+    function triggerWordMatch(wordObj, cells, comboStep) {
+      lastMatchedWord = wordObj;
+      collectedLexicon.add(wordObj.w);
+
+      // Score bonus
+      const basePoints = (wordObj.w.length === 3) ? 300 : 120;
+      const comboBonus = (comboStep > 1) ? (comboStep * 50) : 0;
+      score += basePoints + comboBonus;
+      wordsMatchedThisLevel++;
+
+      // Sound & Pronunciation
+      playPopSound();
+      if (comboStep > 1) {
+        playComboFanfare(comboStep);
+        showComboBanner(`SUGAR COMBO x${comboStep}!`);
+      }
+      speakWord(wordObj.w);
+
+      // Particle explosions on canvas
+      cells.forEach(pos => {
+        const el = document.getElementById(`tile-${pos.r}-${pos.c}`);
+        if (el) {
+          el.classList.add('matched');
+          spawnParticles(el);
+        }
+        board[pos.r][pos.c] = null; // Mark empty
+      });
+
+      // Show floating word card
+      displayWordPopup(wordObj);
+      updateStatsUI();
+    }
+
+    function displayWordPopup(wordObj) {
+      const popup = document.getElementById('word-card');
+      document.getElementById('popup-kanji').innerText = wordObj.w;
+      document.getElementById('popup-furi').innerText = wordObj.f;
+      document.getElementById('popup-hv').innerText = wordObj.hv || 'HÁN VIỆT';
+      document.getElementById('popup-mean').innerText = wordObj.m || '';
+      popup.style.display = 'flex';
+    }
+
+    function playPopupAudio() {
+      if (lastMatchedWord) speakWord(lastMatchedWord.w);
+    }
+
+    function showComboBanner(text) {
+      const banner = document.getElementById('combo-banner');
+      banner.innerText = text;
+      banner.classList.add('show');
+      setTimeout(() => banner.classList.remove('show'), 1200);
+    }
+
+    // GRAVITY & REFILL NEW CANDIES
+    async function applyGravityAndRefill() {
+      const pool = getLevelKanjiPool();
+
+      // Drop downward
+      for (let c = 0; c < GRID_SIZE; c++) {
+        let emptyRow = GRID_SIZE - 1;
+        for (let r = GRID_SIZE - 1; r >= 0; r--) {
+          if (board[r][c] !== null) {
+            if (emptyRow !== r) {
+              board[emptyRow][c] = board[r][c];
+              board[r][c] = null;
+            }
+            emptyRow--;
+          }
+        }
+
+        // Fill remaining top with new candies
+        for (let r = emptyRow; r >= 0; r--) {
+          const randChar = pool[Math.floor(Math.random() * pool.length)];
+          board[r][c] = createCandyTile(randChar);
+        }
+      }
+
+      renderGrid();
+    }
+
+    // GAME STATE CHECK
+    function checkGameState() {
+      updateStatsUI();
+
+      if (wordsMatchedThisLevel >= targetWordsNeeded) {
+        // Stage Cleared!
+        playVictoryFanfare();
+        showModal(
+          "🎉 XUẤT SẮC! HOÀN THÀNH MÀN!",
+          "⭐⭐⭐",
+          `Bạn đã ghép được ${wordsMatchedThisLevel} từ vựng Hán tự N3!<br>Điểm số đạt: <strong>${score.toLocaleString()}</strong> điểm.`,
+          "Sang Màn Tiếp Theo ➡️",
+          () => initLevel(currentLevel + 1)
+        );
+        return;
+      }
+
+      if (movesLeft <= 0) {
+        // Out of moves
+        showModal(
+          "😢 HẾT LƯỢT ĐỔI KẸO!",
+          "⭐",
+          `Bạn chưa đạt đủ mục tiêu ${targetWordsNeeded} từ.<br>Đừng nản lòng, hãy thử lại để rèn luyện trí nhớ Hán tự nhé!`,
+          "Thử Lại Màn Này 🔄",
+          () => initLevel(currentLevel)
+        );
+        return;
+      }
+
+      // Check if board has valid moves left
+      const moves = findPossibleMoves(board);
+      if (moves.length === 0) {
+        showToast("Không còn nước đi! Đang tự động đổi bàn...");
+        setTimeout(() => shuffleBoard(false), 900);
+      }
+    }
+
+    // HINT & SHUFFLE SYSTEM
+    function giveHint() {
+      clearHints();
+      const moves = findPossibleMoves(board);
+      if (moves.length > 0) {
+        const m = moves[0];
+        const el1 = document.getElementById(`tile-${m.from.r}-${m.from.c}`);
+        const el2 = document.getElementById(`tile-${m.to.r}-${m.to.c}`);
+        if (el1) el1.classList.add('hint-pulse');
+        if (el2) el2.classList.add('hint-pulse');
+        showToast(`💡 Gợi ý: Đổi để tạo từ「${m.word}」!`);
+      } else {
+        showToast("Không có nước đi khả dụng, hãy bấm Đổi bàn!");
+      }
+    }
+
+    function clearHints() {
+      document.querySelectorAll('.hint-pulse').forEach(el => el.classList.remove('hint-pulse'));
+    }
+
+    function shuffleBoard(costMove = true) {
+      clearHints();
+      playSwapSound();
+      const pool = getLevelKanjiPool();
+      let tiles = [];
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          tiles.push(board[r][c]);
+        }
+      }
+      // Shuffle
+      for (let i = tiles.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+      }
+
+      let idx = 0;
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          board[r][c] = tiles[idx++];
+        }
+      }
+
+      // Ensure at least 1 move
+      if (findPossibleMoves(board).length === 0) {
+        plantGuaranteedMove(pool);
+      }
+
+      renderGrid();
+      showToast("🔀 Đã xáo trộn kẹo trên bàn!");
+    }
+
+    function setPlayMode(mode) {
+      playMode = mode;
+      selectedTile = null;
+      connectSelection = [];
+      document.getElementById('mode-swap-btn').classList.toggle('active', mode === 'swap');
+      document.getElementById('mode-connect-btn').classList.toggle('active', mode === 'connect');
+      renderGrid();
+      showToast(mode === 'swap' ? '🍬 Chế độ Đổi Kẹo (Vuốt / Đổi 2 viên kẹo)' : '👆 Chế độ Chạm Nối (Chạm trực tiếp các chữ liền nhau)');
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('sound-btn');
+      btn.innerText = soundEnabled ? '🔊' : '🔇';
+      showToast(soundEnabled ? 'Đã bật âm thanh' : 'Đã tắt âm thanh');
+    }
+
+    // MODAL DIALOG
+    let modalActionCallback = null;
+    function showModal(title, stars, bodyHtml, btnText, onAction) {
+      document.getElementById('modal-title').innerHTML = title;
+      document.getElementById('modal-stars').innerText = stars;
+      document.getElementById('modal-body').innerHTML = bodyHtml;
+      document.getElementById('modal-action-btn').innerText = btnText;
+      modalActionCallback = onAction;
+      document.getElementById('end-modal').classList.add('active');
+    }
+
+    function nextStageOrRetry() {
+      document.getElementById('end-modal').classList.remove('active');
+      if (modalActionCallback) modalActionCallback();
+    }
+
+    // LEXICON MODAL
+    function openLexiconModal() {
+      const listEl = document.getElementById('lexicon-list-content');
+      if (collectedLexicon.size === 0) {
+        listEl.innerHTML = '<div style="text-align:center; padding:15px; color:#94a3b8;">Chưa ghép được từ nào. Hãy nổ kẹo để thu thập từ vựng N3 nhé!</div>';
+      } else {
+        let html = '';
+        collectedLexicon.forEach(word => {
+          const info = FULL_DICTIONARY[word] || { w: word, f: '', hv: '', m: '' };
+          html += `
+            <div class="lexicon-item">
+              <div>
+                <div style="font-weight:900; font-size:1.1rem; color:#1e1b4b;">
+                  ${info.w} <span style="font-size:0.85rem; color:#ec4899; font-weight:700;">${info.f}</span>
+                </div>
+                <div style="font-size:0.75rem; color:#be185d; font-weight:700;">${info.hv}</div>
+                <div style="font-size:0.8rem; color:#475569;">${info.m}</div>
+              </div>
+              <button class="word-btn-audio" style="width:34px; height:34px; font-size:0.95rem;" onclick="speakWord('${info.w}')">🔊</button>
+            </div>
+          `;
+        });
+        listEl.innerHTML = html;
+      }
+      document.getElementById('lexicon-modal').classList.add('active');
+    }
+
+    function closeLexiconModal() {
+      document.getElementById('lexicon-modal').classList.remove('active');
+    }
+
+    // PARTICLE FX CANVAS
+    const canvas = document.getElementById('fx-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function spawnParticles(tileEl) {
+      const boardRect = canvas.getBoundingClientRect();
+      const tileRect = tileEl.getBoundingClientRect();
+      const centerX = (tileRect.left + tileRect.width / 2) - boardRect.left;
+      const centerY = (tileRect.top + tileRect.height / 2) - boardRect.top;
+
+      const colors = ['#ec4899', '#f59e0b', '#8b5cf6', '#10b981', '#06b6d4', '#ffffff'];
+      for (let i = 0; i < 18; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 4;
+        particles.push({
+          x: centerX,
+          y: centerY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: 4 + Math.random() * 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          decay: 0.025 + Math.random() * 0.03
+        });
+      }
+    }
+
+    function renderParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.15; // Gravity
+        p.alpha -= p.decay;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      requestAnimationFrame(renderParticles);
+    }
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      resizeCanvas();
+      renderParticles();
+      initLevel(1);
+    });
+  </script>
+</body>
+</html>
