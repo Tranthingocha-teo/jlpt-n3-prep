@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
+  <title>Luyện Nói Giới Thiệu Bản Thân - Trần Thị Ngọc Hà</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #e0e7ff;
+      --dark: #0f172a;
+      --bg: #f8fafc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+    }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #1e1b4b;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    p.sub {
+      font-size: 0.8rem;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .play-all-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #4f46e5, #ec4899);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      margin-bottom: 16px;
+      transition: transform 0.15s;
+    }
+    .play-all-btn:active { transform: scale(0.97); }
+    .sentence-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sentence-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    .sentence-item.speaking {
+      border-color: #4f46e5;
+      background: #eef2ff;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+    .ja-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+    .romaji-text {
+      font-size: 0.75rem;
+      color: #6366f1;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .vi-text {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 1px;
+    }
+    .audio-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #4f46e5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .audio-btn:active { transform: scale(0.9); background: #4f46e5; color: #fff; }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Luyện Nói Giới Thiệu Bản Thân 45s</h1>
+    <p class="sub">Trần Thị Ngọc Hà • Phỏng vấn Doanh nghiệp Hokkaido (12/11/2026)</p>
+    
+    <button class="play-all-btn" onclick="playAllSentences()">
+      ▶ Nghe Toàn Bộ Bài Nói (45 Giây)
+    </button>
+
+    <div class="sentence-list" id="sentence-container"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const SCRIPT_DATA = [
+      {
+        ja: "はじめまして。",
+        romaji: "Hajimemashite.",
+        vi: "Rất vui được gặp thầy/cô."
+      },
+      {
+        ja: "チャン・ティ・ゴック・ハと申します。",
+        romaji: "Chan Ti Gokku Ha to moushimasu.",
+        vi: "Em tên là Trần Thị Ngọc Hà."
+      },
+      {
+        ja: "ハと呼んでください。",
+        romaji: "Ha to yonde kudasai.",
+        vi: "Xin hãy gọi em là Hà."
+      },
+      {
+        ja: "名前の「ハ」は、ベトナム語で「川」という意味です。",
+        romaji: "Namae no「Ha」wa, Betonamu-go de「kawa」to iu imi desu.",
+        vi: "Tên 'Hà' trong tiếng Việt có nghĩa là dòng sông."
+      },
+      {
+        ja: "VKU大学の4年生で、専門はコンピュータサイエンスです。",
+        romaji: "VKU daigaku no yo-nensei de, senmon wa konpyuuta saiensu desu.",
+        vi: "Em là sinh viên năm 4 trường VKU, chuyên ngành Khoa học Máy tính."
+      },
+      {
+        ja: "得意な言語は、Java と C/C++ です。",
+        romaji: "Tokui na gengo wa, Java to C/C++ desu.",
+        vi: "Ngôn ngữ sở trường của em là Java và C/C++."
+      },
+      {
+        ja: "Napa Global と Safebelievers でインターンを行い、アプリとウェブ開発を担当しました。",
+        romaji: "Napa Global to Safebelievers de intaan wo okonai, apuri to webu kaihatsu wo tantou shimashita.",
+        vi: "Em đã thực tập tại Napa Global và Safebelievers, phụ trách phát triển ứng dụng và web."
+      },
+      {
+        ja: "趣味は、GitHubで新しい技術を調べることです。",
+        romaji: "Shumi wa, GitHub de atarashii gijutsu wo shiraberu koto desu.",
+        vi: "Sở thích của em là tìm hiểu công nghệ mới trên GitHub."
+      },
+      {
+        ja: "本日はどうぞよろしくお願いいたします。",
+        romaji: "Honjitsu wa douzo yoroshiku onegai itashimasu.",
+        vi: "Hôm nay em rất mong nhận được sự giúp đỡ của thầy/cô."
+      }
+    ];
+
+    const audioPlayer = new Audio();
+    let voices = [];
+    let jaVoice = null;
+
+    function initVoices() {
+      if ('speechSynthesis' in window) {
+        voices = window.speechSynthesis.getVoices();
+        jaVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja_JP' || v.lang.startsWith('ja')) || null;
+      }
+    }
+    if ('speechSynthesis' in window) {
+      initVoices();
+      window.speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    function speakText(text, onEnd = null) {
+      showToast("🔊 Đang đọc: " + text.slice(0, 25));
+      try {
+        const clean = text.replace(/[\n\r]/g, ' ').trim();
+        const url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=" + encodeURIComponent(clean);
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        audioPlayer.onended = () => { if (onEnd) onEnd(); };
+        audioPlayer.onerror = () => fallbackSpeech(clean, onEnd);
+        audioPlayer.src = url;
+        audioPlayer.play().catch(() => fallbackSpeech(clean, onEnd));
+      } catch (e) {
+        fallbackSpeech(text, onEnd);
+      }
+    }
+
+    function fallbackSpeech(text, onEnd = null) {
+      if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+        if (onEnd) onEnd();
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ja-JP';
+        u.rate = 0.95;
+        if (!jaVoice) initVoices();
+        if (jaVoice) u.voice = jaVoice;
+        u.onend = () => { if (onEnd) onEnd(); };
+        u.onerror = () => { if (onEnd) onEnd(); };
+        window.speechSynthesis.speak(u);
+      } catch (e) {
+        if (onEnd) onEnd();
+      }
+    }
+
+    function renderSentences() {
+      const c = document.getElementById('sentence-container');
+      c.innerHTML = SCRIPT_DATA.map((item, idx) => `
+        <div class="sentence-item" id="item-${idx}">
+          <div>
+            <div class="ja-text">${item.ja}</div>
+            <div class="romaji-text">${item.romaji}</div>
+            <div class="vi-text">${item.vi}</div>
+          </div>
+          <button class="audio-btn" onclick="playSingleSentence(${idx})">🔊</button>
+        </div>
+      `).join('');
+    }
+
+    function playSingleSentence(idx) {
+      document.querySelectorAll('.sentence-item').forEach(el => el.classList.remove('speaking'));
+      const itemEl = document.getElementById('item-' + idx);
+      if (itemEl) itemEl.classList.add('speaking');
+      speakText(SCRIPT_DATA[idx].ja, () => {
+        if (itemEl) itemEl.classList.remove('speaking');
+      });
+    }
+
+    let isPlayingAll = false;
+    function playAllSentences(idx = 0) {
+      if (idx >= SCRIPT_DATA.length) {
+        document.querySelectorAll('.sentence-item').forEach(el => el.classList.remove('speaking'));
+        showToast("✅ Đã hoàn thành bài giới thiệu!");
+        return;
+      }
+      document.querySelectorAll('.sentence-item').forEach(el => el.classList.remove('speaking'));
+      const itemEl = document.getElementById('item-' + idx);
+      if (itemEl) itemEl.classList.add('speaking');
+      speakText(SCRIPT_DATA[idx].ja, () => {
+        setTimeout(() => playAllSentences(idx + 1), 350);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderSentences();
+    });
+  </script>
+</body>
+</html>
