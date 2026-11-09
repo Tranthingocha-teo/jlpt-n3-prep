@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="referrer" content="no-referrer">
-  <title>Luyện Nói Giới Thiệu Bản Thân - Trần Thị Ngọc Hà</title>
+  <title>Luyện Nói Phỏng Vấn N5 - Trần Thị Ngọc Hà</title>
   <style>
     :root {
       --primary: #4f46e5;
@@ -17,41 +17,67 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif;
       background: var(--bg);
       color: var(--dark);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
     }
     .card {
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       background: #fff;
       border-radius: 20px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
       border: 1px solid #e2e8f0;
     }
     h1 {
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 900;
       color: #1e1b4b;
       text-align: center;
       margin-bottom: 4px;
     }
     p.sub {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: #64748b;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+    }
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 14px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 8px 6px;
+      border-radius: 10px;
+      border: none;
+      background: none;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: #fff;
+      color: #4f46e5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
     .play-all-btn {
       width: 100%;
       background: linear-gradient(135deg, #4f46e5, #ec4899);
       color: #fff;
       border: none;
-      padding: 12px;
-      border-radius: 14px;
-      font-size: 0.95rem;
+      padding: 11px;
+      border-radius: 12px;
+      font-size: 0.88rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -59,24 +85,24 @@
       justify-content: center;
       gap: 8px;
       box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       transition: transform 0.15s;
     }
     .play-all-btn:active { transform: scale(0.97); }
     .sentence-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
     }
     .sentence-item {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 9px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       transition: all 0.2s;
     }
     .sentence-item.speaking {
@@ -85,7 +111,7 @@
       box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
     }
     .ja-text {
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 700;
       color: #1e293b;
       line-height: 1.4;
@@ -97,13 +123,13 @@
       margin-top: 2px;
     }
     .vi-text {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       color: #64748b;
       margin-top: 1px;
     }
     .audio-btn {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       border: 1px solid #cbd5e1;
       background: #fff;
@@ -112,7 +138,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 0.95rem;
       flex-shrink: 0;
       transition: all 0.15s;
     }
@@ -134,11 +160,17 @@
 </head>
 <body>
   <div class="card">
-    <h1>Luyện Nói Giới Thiệu Bản Thân 45s</h1>
-    <p class="sub">Trần Thị Ngọc Hà • Phỏng vấn Doanh nghiệp Hokkaido (12/11/2026)</p>
+    <h1>Luyện Nói Phỏng Vấn N5 Thực Chiến</h1>
+    <p class="sub">Trần Thị Ngọc Hà • Hokkaido (12/11/2026)</p>
     
-    <button class="play-all-btn" onclick="playAllSentences()">
-      ▶ Nghe Toàn Bộ Bài Nói (45 Giây)
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchSection('jikoshoukai')">1. Tự Giới Thiệu</button>
+      <button class="tab-btn" onclick="switchSection('tsuyomi')">2. Điểm Mạnh (PREP)</button>
+      <button class="tab-btn" onclick="switchSection('tansho')">3. Điểm Yếu (PREP)</button>
+    </div>
+
+    <button class="play-all-btn" id="play-all-btn" onclick="playAllCurrent()">
+      ▶ Nghe Toàn Bộ Phần Này
     </button>
 
     <div class="sentence-list" id="sentence-container"></div>
@@ -147,54 +179,40 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const SCRIPT_DATA = [
-      {
-        ja: "はじめまして。",
-        romaji: "Hajimemashite.",
-        vi: "Rất vui được gặp thầy/cô."
-      },
-      {
-        ja: "チャン・ティ・ゴック・ハと申します。",
-        romaji: "Chan Ti Gokku Ha to moushimasu.",
-        vi: "Em tên là Trần Thị Ngọc Hà."
-      },
-      {
-        ja: "ハと呼んでください。",
-        romaji: "Ha to yonde kudasai.",
-        vi: "Xin hãy gọi em là Hà."
-      },
-      {
-        ja: "名前の「ハ」は、ベトナム語で「川」という意味です。",
-        romaji: "Namae no「Ha」wa, Betonamu-go de「kawa」to iu imi desu.",
-        vi: "Tên 'Hà' trong tiếng Việt có nghĩa là dòng sông."
-      },
-      {
-        ja: "VKU大学の4年生で、専門はコンピュータサイエンスです。",
-        romaji: "VKU daigaku no yo-nensei de, senmon wa konpyuuta saiensu desu.",
-        vi: "Em là sinh viên năm 4 trường VKU, chuyên ngành Khoa học Máy tính."
-      },
-      {
-        ja: "得意な言語は、Java と C/C++ です。",
-        romaji: "Tokui na gengo wa, Java to C/C++ desu.",
-        vi: "Ngôn ngữ sở trường của em là Java và C/C++."
-      },
-      {
-        ja: "Napa Global と Safebelievers でインターンを行い、アプリとウェブ開発を担当しました。",
-        romaji: "Napa Global to Safebelievers de intaan wo okonai, apuri to webu kaihatsu wo tantou shimashita.",
-        vi: "Em đã thực tập tại Napa Global và Safebelievers, phụ trách phát triển ứng dụng và web."
-      },
-      {
-        ja: "趣味は、GitHubで新しい技術を調べることです。",
-        romaji: "Shumi wa, GitHub de atarashii gijutsu wo shiraberu koto desu.",
-        vi: "Sở thích của em là tìm hiểu công nghệ mới trên GitHub."
-      },
-      {
-        ja: "本日はどうぞよろしくお願いいたします。",
-        romaji: "Honjitsu wa douzo yoroshiku onegai itashimasu.",
-        vi: "Hôm nay em rất mong nhận được sự giúp đỡ của thầy/cô."
-      }
-    ];
+    const SECTIONS = {
+      jikoshoukai: [
+        { ja: "はじめまして。", romaji: "Hajimemashite.", vi: "Rất vui được gặp thầy/cô." },
+        { ja: "チャン・ティ・ゴック・ハと申します。", romaji: "Chan Ti Gokku Ha to moushimasu.", vi: "Em tên là Trần Thị Ngọc Hà." },
+        { ja: "ハと呼んでください。", romaji: "Ha to yonde kudasai.", vi: "Xin hãy gọi em là Hà." },
+        { ja: "名前の「ハ」は、ベトナム語で「川」という意味です。", romaji: "Namae no「Ha」wa, Betonamu-go de「kawa」to iu imi desu.", vi: "Tên 'Hà' trong tiếng Việt có nghĩa là con sông." },
+        { ja: "VKU大学の4年生で、専門はコンピュータサイエンスです。", romaji: "VKU daigaku no yo-nensei de, senmon wa konpyuuta saiensu desu.", vi: "Em là sinh viên năm 4 trường VKU, chuyên ngành Khoa học Máy tính." },
+        { ja: "得意な言語は、Java と C/C++ です。", romaji: "Tokui na gengo wa, Java to C/C++ desu.", vi: "Ngôn ngữ sở trường của em là Java và C/C++." },
+        { ja: "Napa Global と Safebelievers でインターンを行い、アプリとウェブ開発を担当しました。", romaji: "Napa Global to Safebelievers de intaan wo okonai, apuri to webu kaihatsu wo tantou shimashita.", vi: "Em đã thực tập tại Napa Global và Safebelievers, phụ trách làm app và web." },
+        { ja: "趣味は、GitHubで新しい技術を調べることです。", romaji: "Shumi wa, GitHub de atarashii gijutsu wo shiraberu koto desu.", vi: "Sở thích của em là tìm hiểu công nghệ mới trên GitHub." },
+        { ja: "本日はどうぞよろしくお願いいたします。", romaji: "Honjitsu wa douzo yoroshiku onegai itashimasu.", vi: "Hôm nay em rất mong nhận được sự giúp đỡ của thầy/cô." }
+      ],
+      tsuyomi: [
+        { ja: "私の強みは、「バグを出さない、丁寧な開発」です。", romaji: "Watashi no tsuyomi wa,「bagu wo dasanai, teinei na kaihatsu」desu.", vi: "[P] Điểm mạnh của em là: Phát triển cẩn thận, không để có lỗi." },
+        { ja: "プログラムは「動けば終わり」ではありません。", romaji: "Puroguramu wa「ugokeba owari」dewa arimasen.", vi: "[R] Lập trình không phải cứ chạy là xong việc." },
+        { ja: "使う人が安心して使えることが大切です。", romaji: "Tsukau hito ga anshin shite tsukaeru koto ga taisetsu desu.", vi: "[R] Quan trọng nhất là người dùng có thể an tâm sử dụng." },
+        { ja: "Napa Global のインターンで、私はバックエンドを担当しました。", romaji: "Napa Global no intaan de, watashi wa bakkuendo wo tantou shimashita.", vi: "[E] Khi thực tập ở Napa Global, em phụ trách phần Backend." },
+        { ja: "チームで、エラーがたくさん出ました。", romaji: "Chiimu de, eraa ga takusan demashita.", vi: "[E] Lúc đó, trong nhóm đã bị xảy ra rất nhiều lỗi." },
+        { ja: "でも、私は丁寧にテストをしました。", romaji: "Demo, watashi wa teinei ni tesuto wo shimashita.", vi: "[E] Nhưng em đã test rất cẩn thận." },
+        { ja: "だから、私の作った部分はエラーがありませんでした。", romaji: "Dakara, watashi no tsukutta bubun wa eraa ga arimasen deshita.", vi: "[E] Vì thế, phần do em làm không hề có lỗi nào cả." },
+        { ja: "仕事も遅れませんでした。", romaji: "Shigoto mo okuremasen deshita.", vi: "[E] Công việc cũng không hề bị trễ." },
+        { ja: "貴社でも、丁寧に頑張りたいです。", romaji: "Kisha demo, teinei ni gambaritai desu.", vi: "[P] Vào công ty, em cũng muốn làm việc thật cẩn thận như vậy ạ." }
+      ],
+      tansho: [
+        { ja: "私の短所は、心配することです。", romaji: "Watashi no tansho wa, shinpai suru koto desu.", vi: "[P] Điểm yếu của em là: Hay lo lắng." },
+        { ja: "丁寧に作りたいですから、たくさん考えます。", romaji: "Teinei ni tsukuritai desu kara, takusan kangaemasu.", vi: "[R] Vì muốn làm cho thật cẩn thận, nên em suy nghĩ nhiều." },
+        { ja: "Napa Global のインターンで、新しい仕事が心配でした。", romaji: "Napa Global no intaan de, atarashii shigoto ga shinpai deshita.", vi: "[E] Lúc thực tập ở Napa Global, khi gặp việc mới em đã rất lo." },
+        { ja: "でも、ノートにメモを書いて、先輩に聞きました。", romaji: "Demo, nooto ni memo wo kaite, senpai ni kikimashita.", vi: "[E] Nhưng em đã viết ghi chép vào sổ và hỏi tiền bối." },
+        { ja: "だから、エラーはありませんでした。", romaji: "Dakara, eraa wa arimasen deshita.", vi: "[E] Vì thế, công việc không hề có lỗi nào cả." },
+        { ja: "会社でも、よく確認して、丁寧に頑張ります。", romaji: "Kaisha demo, yoku kakunin shite, teinei ni gambarimasu.", vi: "[P] Vào công ty, em cũng sẽ luôn kiểm tra kỹ và làm việc thật cẩn thận ạ." }
+      ]
+    };
 
+    let curSec = 'jikoshoukai';
     const audioPlayer = new Audio();
     let voices = [];
     let jaVoice = null;
@@ -254,9 +272,18 @@
       }
     }
 
-    function renderSentences() {
+    function switchSection(secKey) {
+      curSec = secKey;
+      document.querySelectorAll('.tab-btn').forEach((b, idx) => {
+        b.classList.toggle('active', (idx === 0 && secKey === 'jikoshoukai') || (idx === 1 && secKey === 'tsuyomi') || (idx === 2 && secKey === 'tansho'));
+      });
+      renderList();
+    }
+
+    function renderList() {
+      const list = SECTIONS[curSec];
       const c = document.getElementById('sentence-container');
-      c.innerHTML = SCRIPT_DATA.map((item, idx) => `
+      c.innerHTML = list.map((item, idx) => `
         <div class="sentence-item" id="item-${idx}">
           <div>
             <div class="ja-text">${item.ja}</div>
@@ -272,28 +299,28 @@
       document.querySelectorAll('.sentence-item').forEach(el => el.classList.remove('speaking'));
       const itemEl = document.getElementById('item-' + idx);
       if (itemEl) itemEl.classList.add('speaking');
-      speakText(SCRIPT_DATA[idx].ja, () => {
+      speakText(SECTIONS[curSec][idx].ja, () => {
         if (itemEl) itemEl.classList.remove('speaking');
       });
     }
 
-    let isPlayingAll = false;
-    function playAllSentences(idx = 0) {
-      if (idx >= SCRIPT_DATA.length) {
+    function playAllCurrent(idx = 0) {
+      const list = SECTIONS[curSec];
+      if (idx >= list.length) {
         document.querySelectorAll('.sentence-item').forEach(el => el.classList.remove('speaking'));
-        showToast("✅ Đã hoàn thành bài giới thiệu!");
+        showToast("✅ Đã đọc xong!");
         return;
       }
       document.querySelectorAll('.sentence-item').forEach(el => el.classList.remove('speaking'));
       const itemEl = document.getElementById('item-' + idx);
       if (itemEl) itemEl.classList.add('speaking');
-      speakText(SCRIPT_DATA[idx].ja, () => {
-        setTimeout(() => playAllSentences(idx + 1), 350);
+      speakText(list[idx].ja, () => {
+        setTimeout(() => playAllCurrent(idx + 1), 350);
       });
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      renderSentences();
+      renderList();
     });
   </script>
 </body>
